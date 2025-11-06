@@ -28,3 +28,27 @@ type DeepPartial<T> = T extends object
 type OptionalRecord<K extends keyof any, T> = {
 	[P in K]?: T;
 };
+
+interface WebAppData {
+	query_id?: string;
+	auth_date?: number;
+	hash?: string;
+	start_param?: string;
+	user?: {
+		id: number;
+		first_name?: string;
+		last_name?: string;
+		username?: string;
+		language_code: string;
+		photo_url?: string;
+	};
+}
+
+interface WebApp {
+	initData?: string;
+	initDataUnsafe?: WebAppData;
+}
+
+interface Window {
+	WebApp: WebApp;
+}
