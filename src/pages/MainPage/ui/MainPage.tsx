@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
 
 const MainPage = () => {
-	const initdata = window.initData;
 	const { max, user } = useMax();
 	const { t } = useTranslation();
 
@@ -25,7 +24,7 @@ const MainPage = () => {
 			<p>{t("язык")}</p>
 			<p>{user.language_code || "—"}</p>
 			<p>initdata</p>
-			<p>{initdata}</p>
+			<p>{max?.initData}</p>
 			{user.photo_url && (
 				<img
 					src={user.photo_url}
