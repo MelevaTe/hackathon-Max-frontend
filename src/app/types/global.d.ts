@@ -34,19 +34,23 @@ interface WebAppData {
 	auth_date?: number;
 	hash?: string;
 	start_param?: string;
-	user?: {
-		id: number;
-		first_name?: string;
-		last_name?: string;
-		username?: string;
-		language_code: string;
-		photo_url?: string;
-	};
+	user?: WebAppUser;
+}
+
+interface WebAppUser {
+	id: number;
+	first_name?: string;
+	last_name?: string;
+	username?: string;
+	language_code: string;
+	photo_url?: string;
 }
 
 interface WebApp {
 	initData?: string;
 	initDataUnsafe?: WebAppData;
+	close(): void;
+	ready(): void;
 }
 
 interface Window {
