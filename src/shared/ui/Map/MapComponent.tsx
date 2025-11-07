@@ -15,7 +15,7 @@ interface MapProps {
 	onResetRoute?: () => void;
 }
 
-export const Map = ({
+export const MapComponent = ({
 	className,
 	markers = [],
 	onMapClick,
