@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { AppRouter } from "@/app/providers/router";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
 
 function App() {
 	const { max, user } = useMax();
-	const { t, i18n } = useTranslation();
+	const { i18n } = useTranslation();
 
 	useEffect(() => {
 		if (user?.language_code) {
@@ -17,40 +18,16 @@ function App() {
 	}, [user?.language_code, i18n]);
 
 	useEffect(() => {
-		max.ready();
-	}, []);
-
-	if (!user) {
-		return (
-			<div className={classNames("app", {}, [])}>
-				<div className="content-page">
-					<p>Не удалось получить данные пользователя.</p>
-				</div>
-			</div>
-		);
-	}
+		if (max) {
+			max.ready();
+		}
+	}, [max]);
 
 	return (
 		<div className={classNames("app", {}, [])}>
-			<div className="content-page">
-				<h1>Привет:</h1>
-				<p>имя</p>
-				<p>{user.first_name || "—"}</p>
-				<p>id</p>
-				<p>{user.id || "—"}</p>
-				<p>фамилия</p>
-				<p>{user.last_name || "—"}</p>
-				<p>username</p>
-				<p>{user.username || "—"}</p>
-				<p>{t("язык")}</p>
-				<p>{user.language_code || "—"}</p>
-				{user.photo_url && (
-					<img
-						src={user.photo_url}
-						alt="user avatar"
-					/>
-				)}
-			</div>
+			<Suspense fallback="">
+				<div className="content-page">{<AppRouter />}</div>
+			</Suspense>
 		</div>
 	);
 }

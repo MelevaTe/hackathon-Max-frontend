@@ -54,5 +54,6 @@ interface WebApp {
 }
 
 interface Window {
+	initData: string;
 	WebApp: WebApp;
 }
