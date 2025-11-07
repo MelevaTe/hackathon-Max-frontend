@@ -11,19 +11,20 @@ const MainPage = () => {
 
 	return (
 		<div className={cls["main-page"]}>
-			<MapComponent />
-			<div className={cls["avatar"]}>
-				<Avatar.Container
-					size={50}
-					form={"circle"}
-					rightBottomCorner={<Avatar.OnlineDot />}
-				>
-					<Avatar.Image
-						fallback="ME"
-						src={user?.photo_url}
-					/>
-				</Avatar.Container>
-			</div>
+			<Avatar.Container
+				size={50}
+				form={"circle"}
+				rightBottomCorner={<Avatar.OnlineDot />}
+			>
+				<Avatar.Image
+					fallback="ME"
+					fallbackGradient={"blue"}
+					src={user?.photo_url}
+				/>
+			</Avatar.Container>
+			{/*<MapComponent />*/}
+			{/*<div className={cls["avatar"]}>*/}
+			{/*</div>*/}
 		</div>
 	);
 };
