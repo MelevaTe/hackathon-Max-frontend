@@ -5,16 +5,16 @@ import { useMax } from "@/shared/lib/hooks/useMax.ts";
 
 function App() {
 	const { max, user } = useMax();
-	const { t, i18n } = useTranslation();
+	// const { t, i18n } = useTranslation();
 
-	useEffect(() => {
-		if (user?.language_code) {
-			const lang = user.language_code.startsWith("ru") ? "ru" : "en";
-			if (i18n.language !== lang) {
-				i18n.changeLanguage(lang);
-			}
-		}
-	}, [user?.language_code, i18n]);
+	// useEffect(() => {
+	// 	if (user?.language_code) {
+	// 		const lang = user.language_code.startsWith("ru") ? "ru" : "en";
+	// 		if (i18n.language !== lang) {
+	// 			i18n.changeLanguage(lang);
+	// 		}
+	// 	}
+	// }, [user?.language_code, i18n]);
 
 	useEffect(() => {
 		max.ready();
@@ -42,7 +42,7 @@ function App() {
 				<p>{user.last_name || "—"}</p>
 				<p>username</p>
 				<p>{user.username || "—"}</p>
-				<p>{t("язык")}</p>
+				<p>язык</p>
 				<p>{user.language_code || "—"}</p>
 				{user.photo_url && (
 					<img
