@@ -16,7 +16,6 @@ const MainPage = () => {
 				<Avatar.Container
 					size={50}
 					form={"circle"}
-					rightBottomCorner={<Avatar.OnlineDot />}
 				>
 					<Avatar.Image
 						fallback="ME"
