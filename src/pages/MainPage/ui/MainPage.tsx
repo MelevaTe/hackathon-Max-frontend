@@ -1,7 +1,7 @@
-import { Avatar } from "@maxhub/max-ui";
 import React, { memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
+import { ClickableAvatar } from "@/shared/ui/ClickableAvatar/ClickableAvatar.tsx";
 import { MapComponent } from "@/shared/ui/Map/MapComponent.tsx";
 import { Select, type SelectOption } from "@/shared/ui/Select/Select.tsx";
 import cls from "./MainPage.module.scss";
@@ -22,16 +22,12 @@ const MainPage = () => {
 		<div className={cls["main-page"]}>
 			<MapComponent />
 			<div className={cls.avatar}>
-				<Avatar.Container
+				<ClickableAvatar
+					userId={user?.id}
+					photoUrl={user?.photo_url}
+					fallback="ME"
 					size={50}
-					form={"circle"}
-				>
-					<Avatar.Image
-						fallback="ME"
-						fallbackGradient={"blue"}
-						src={user?.photo_url}
-					/>
-				</Avatar.Container>
+				/>
 			</div>
 			<div className={cls.filter}>
 				<Select
