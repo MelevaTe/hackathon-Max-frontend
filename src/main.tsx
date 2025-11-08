@@ -8,17 +8,20 @@ import { ErrorBoundary } from "@/app/providers/ErrorBoundary";
 import { ThemeProvider } from "@/app/providers/ThemeProvider";
 import { MaxUI } from "@maxhub/max-ui";
 import "@maxhub/max-ui/dist/styles.css";
+import { StoreProvider } from "@/app/providers/StoreProvider";
 
 const Root = () => (
 	<BrowserRouter>
 		<StrictMode>
-			<ErrorBoundary>
-				<ThemeProvider>
-					<MaxUI>
-						<App />
-					</MaxUI>
-				</ThemeProvider>
-			</ErrorBoundary>
+			<StoreProvider>
+				<ErrorBoundary>
+					<ThemeProvider>
+						<MaxUI>
+							<App />
+						</MaxUI>
+					</ThemeProvider>
+				</ErrorBoundary>
+			</StoreProvider>
 		</StrictMode>
 	</BrowserRouter>
 );
