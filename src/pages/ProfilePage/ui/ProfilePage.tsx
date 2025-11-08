@@ -27,6 +27,7 @@ const ProfilePage = () => {
 			<Flex
 				direction="column"
 				gap={24}
+				style={{ height: "100%" }}
 			>
 				<Container className={cls.header}>
 					<Flex
@@ -57,6 +58,7 @@ const ProfilePage = () => {
 					direction="column"
 					gap={16}
 					className={cls.content}
+					justify="space-between"
 				>
 					<CellList
 						mode="island"
