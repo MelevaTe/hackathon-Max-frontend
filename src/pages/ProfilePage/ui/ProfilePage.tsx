@@ -13,17 +13,21 @@ import { Sun } from "lucide-react";
 import { CloudHail } from "lucide-react";
 import { memo } from "react";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
+import cls from "./ProfilePage.module.scss";
 
 const ProfilePage = () => {
 	const { user } = useMax();
 
 	return (
-		<Panel mode="secondary">
+		<Panel
+			mode="secondary"
+			className={cls.page}
+		>
 			<Flex
 				direction="column"
 				gap={24}
 			>
-				<Container>
+				<Container className={cls.header}>
 					<Flex
 						direction="column"
 						align="center"
@@ -47,9 +51,11 @@ const ProfilePage = () => {
 						</Flex>
 					</Flex>
 				</Container>
+
 				<Flex
 					direction="column"
 					gap={16}
+					className={cls.content}
 				>
 					<CellList
 						mode="island"
@@ -58,14 +64,21 @@ const ProfilePage = () => {
 						<CellSimple
 							after={
 								<Button
-									key="icon"
-									mode="secondary"
-									size="small"
+									appearance="themed"
+									asChild
+									mode="primary"
+									size="medium"
 								>
-									Построить маршрут
+									<a
+										href="/"
+										rel="noreferrer"
+										target="_blank"
+									>
+										Маршурт
+									</a>
 								</Button>
 							}
-							before={<Sun />}
+							before={<Sun color="#007bff" />}
 							height="normal"
 							overline=""
 							subtitle="2025-11-12 • 14:00"
@@ -74,14 +87,21 @@ const ProfilePage = () => {
 						<CellSimple
 							after={
 								<Button
-									key="icon"
-									mode="secondary"
-									size="small"
+									appearance="themed"
+									asChild
+									mode="primary"
+									size="medium"
 								>
-									Построить маршрут
+									<a
+										href="/"
+										rel="noreferrer"
+										target="_blank"
+									>
+										Маршурт
+									</a>
 								</Button>
 							}
-							before={<CloudHail />}
+							before={<CloudHail color="#007bff" />}
 							height="normal"
 							overline=""
 							subtitle="2025-11-12 • 14:00"
@@ -90,14 +110,21 @@ const ProfilePage = () => {
 						<CellSimple
 							after={
 								<Button
-									key="icon"
-									mode="secondary"
-									size="small"
+									appearance="themed"
+									asChild
+									mode="primary"
+									size="medium"
 								>
-									Построить маршрут
+									<a
+										href="/"
+										rel="noreferrer"
+										target="_blank"
+									>
+										Маршурт
+									</a>
 								</Button>
 							}
-							before={<Sun />}
+							before={<Sun color="#007bff" />}
 							height="normal"
 							overline=""
 							subtitle="2025-11-12 • 14:00"
