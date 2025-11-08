@@ -1,0 +1,60 @@
+.Select {
+  display: flex;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border-radius: 1rem;
+  background-color: var(--select-bg-color);
+  color: var(--text-color);
+  cursor: pointer;
+
+  &[data-headlessui-state] {
+    width: 100%;
+    padding: 0;
+    border: none;
+    background-color: var(--select-bg-color);
+    outline: none;
+    text-align: left;
+  }
+}
+
+.SelectOptions {
+  position: absolute;
+  z-index: 100;
+  top: 100%;
+  right: 0;
+  left: auto;
+  width: 150px;
+  max-height: 200px;
+  border-radius: 1rem;
+  margin-top: 4px;
+  background-color: var(--select-bg-color);
+  color: var(--text-color);
+  outline: none;
+  overflow-y: auto;
+}
+
+.SelectOption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  color: var(--text-color);
+  cursor: pointer;
+  outline: none;
+  text-align: center;
+
+  &:not(&_selected):hover {
+    opacity: 64%;
+  }
+
+  &_selected {
+    color: darkgrey;
+  }
+}
+
+.SelectOption_focus {
+  background-color: var(--select-bg-color);
+  outline: none;
+}
