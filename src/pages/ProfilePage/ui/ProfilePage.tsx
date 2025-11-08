@@ -12,6 +12,7 @@ import {
 import { Sun } from "lucide-react";
 import { CloudHail } from "lucide-react";
 import { memo } from "react";
+import { Link } from "react-router-dom";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
 import cls from "./ProfilePage.module.scss";
 
@@ -69,13 +70,7 @@ const ProfilePage = () => {
 									mode="primary"
 									size="medium"
 								>
-									<a
-										href="/"
-										rel="noreferrer"
-										target="_blank"
-									>
-										Маршурт
-									</a>
+									<Link to="/">Маршурт</Link>
 								</Button>
 							}
 							before={<Sun color="#007bff" />}
@@ -92,13 +87,7 @@ const ProfilePage = () => {
 									mode="primary"
 									size="medium"
 								>
-									<a
-										href="/"
-										rel="noreferrer"
-										target="_blank"
-									>
-										Маршурт
-									</a>
+									<Link to="/">Маршурт</Link>
 								</Button>
 							}
 							before={<CloudHail color="#007bff" />}
@@ -115,13 +104,7 @@ const ProfilePage = () => {
 									mode="primary"
 									size="medium"
 								>
-									<a
-										href="/"
-										rel="noreferrer"
-										target="_blank"
-									>
-										Маршурт
-									</a>
+									<Link to="/">Маршурт</Link>
 								</Button>
 							}
 							before={<Sun color="#007bff" />}
