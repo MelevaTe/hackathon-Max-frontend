@@ -1,7 +1,6 @@
 import React, { memo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { CourtType } from "@/entities/Court";
-import cls from "@/pages/MainPage/ui/MainPage.module.scss";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import { useAppDispatch } from "@/shared/lib/hooks/useAppDispatch.ts";
 import { Select, type SelectOption } from "@/shared/ui/Select/Select";
