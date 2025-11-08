@@ -140,7 +140,7 @@ const ProfilePage = () => {
 					</CellList>
 				</Flex>
 
-				<Container>
+				<Container className={cls.footerButton}>
 					<Flex gap={8}>
 						<Button
 							size="large"

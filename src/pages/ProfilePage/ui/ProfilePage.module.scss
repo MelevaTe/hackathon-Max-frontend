@@ -1,19 +1,31 @@
 .page {
+  display: flex;
   overflow: hidden;
   height: 100dvh;
+  flex-direction: column;
   padding: 20px 0;
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
 }
 
 .header {
   width: 100%;
   box-sizing: border-box;
+  flex-shrink: 0;
+
 }
 
 .content {
   width: 100%;
   max-height: calc(100dvh - 280px);
+  flex: 1;
   padding: 0 20px;
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+.footerButton {
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  padding: 0 20px;
 }
