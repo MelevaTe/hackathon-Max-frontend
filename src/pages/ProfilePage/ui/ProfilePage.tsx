@@ -114,12 +114,132 @@ const ProfilePage = () => {
 							subtitle="2025-11-12 • 14:00"
 							title="Теннисный корт Спортивный"
 						/>
+						<CellSimple
+							after={
+								<Button
+									appearance="themed"
+									asChild
+									mode="primary"
+									size="medium"
+								>
+									<Link to="/">Маршурт</Link>
+								</Button>
+							}
+							before={<Sun color="#007bff" />}
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							after={
+								<Button
+									appearance="themed"
+									asChild
+									mode="primary"
+									size="medium"
+								>
+									<Link to="/">Маршурт</Link>
+								</Button>
+							}
+							before={<CloudHail color="#007bff" />}
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							after={
+								<Button
+									appearance="themed"
+									asChild
+									mode="primary"
+									size="medium"
+								>
+									<Link to="/">Маршурт</Link>
+								</Button>
+							}
+							before={<Sun color="#007bff" />}
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							after={
+								<Button
+									appearance="themed"
+									asChild
+									mode="primary"
+									size="medium"
+								>
+									<Link to="/">Маршурт</Link>
+								</Button>
+							}
+							before={<Sun color="#007bff" />}
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							after={
+								<Button
+									appearance="themed"
+									asChild
+									mode="primary"
+									size="medium"
+								>
+									<Link to="/">Маршурт</Link>
+								</Button>
+							}
+							before={<CloudHail color="#007bff" />}
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							after={
+								<Button
+									appearance="themed"
+									asChild
+									mode="primary"
+									size="medium"
+								>
+									<Link to="/">Маршурт</Link>
+								</Button>
+							}
+							before={<Sun color="#007bff" />}
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
 					</CellList>
 					<CellList
 						filled
 						mode="island"
 						header={<CellHeader>История записей</CellHeader>}
 					>
+						<CellSimple
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
 						<CellSimple
 							height="normal"
 							overline=""
