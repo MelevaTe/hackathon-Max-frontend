@@ -5,7 +5,12 @@ import {
 	Avatar,
 	Button,
 	Typography,
+	CellList,
+	CellHeader,
+	CellSimple,
 } from "@maxhub/max-ui";
+import { Sun } from "lucide-react";
+import { CloudHail } from "lucide-react";
 import { memo } from "react";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
 
@@ -42,6 +47,88 @@ const ProfilePage = () => {
 						</Flex>
 					</Flex>
 				</Container>
+				<Flex
+					direction="column"
+					gap={16}
+				>
+					<CellList
+						mode="island"
+						header={<CellHeader>Активные записи</CellHeader>}
+					>
+						<CellSimple
+							after={
+								<Button
+									key="icon"
+									mode="secondary"
+									size="small"
+								>
+									Построить маршрут
+								</Button>
+							}
+							before={<Sun />}
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							after={
+								<Button
+									key="icon"
+									mode="secondary"
+									size="small"
+								>
+									Построить маршрут
+								</Button>
+							}
+							before={<CloudHail />}
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							after={
+								<Button
+									key="icon"
+									mode="secondary"
+									size="small"
+								>
+									Построить маршрут
+								</Button>
+							}
+							before={<Sun />}
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+					</CellList>
+					<CellList
+						filled
+						mode="island"
+						header={<CellHeader>История записей</CellHeader>}
+					>
+						<CellSimple
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+						<CellSimple
+							height="normal"
+							overline=""
+							subtitle="2025-11-12 • 14:00"
+							title="Теннисный корт Спортивный"
+						/>
+					</CellList>
+				</Flex>
 
 				<Container>
 					<Flex gap={8}>
