@@ -58,7 +58,6 @@ const ProfilePage = () => {
 					direction="column"
 					gap={16}
 					className={cls.content}
-					justify="space-between"
 				>
 					<CellList
 						mode="island"
