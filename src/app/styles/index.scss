@@ -11,6 +11,8 @@ html {
 }
 
 body {
+	overscroll-behavior: none;
+	touch-action: manipulation;
 }
 
 .app {
