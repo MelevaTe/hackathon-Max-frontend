@@ -4,6 +4,7 @@ import { SportFilter } from "@/features/sportFilter";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
 import { ClickableAvatar } from "@/shared/ui/ClickableAvatar/ClickableAvatar.tsx";
 import { MapComponent } from "@/shared/ui/Map/MapComponent.tsx";
+import { CourtListAndDetails } from "@/widgets/CourtListAndDetails";
 import cls from "./MainPage.module.scss";
 
 const MainPage = () => {
@@ -22,6 +23,7 @@ const MainPage = () => {
 				/>
 			</div>
 			<SportFilter className={cls.filter} />
+			<CourtListAndDetails />
 		</div>
 	);
 };

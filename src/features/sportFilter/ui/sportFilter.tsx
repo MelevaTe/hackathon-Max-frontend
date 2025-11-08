@@ -17,10 +17,7 @@ export const SportFilter = memo((props: SportFilterProps) => {
 	const dispatch = useAppDispatch();
 	const currentSport = useSelector(getSport);
 
-	console.log("спорт из стора:", currentSport);
-
 	const handleChange = (option: SelectOption) => {
-		console.log("диспатч нового спорта", option.id);
 		dispatch(sportFilterActions.setSport(option.id as CourtType));
 	};
 

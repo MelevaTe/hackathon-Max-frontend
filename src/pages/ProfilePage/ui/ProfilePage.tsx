@@ -17,8 +17,9 @@ import { useMax } from "@/shared/lib/hooks/useMax.ts";
 import cls from "./ProfilePage.module.scss";
 
 const ProfilePage = () => {
-	const { user } = useMax();
+	const { user, max } = useMax();
 
+	console.log(max?.initData);
 	return (
 		<Panel
 			mode="secondary"
@@ -35,12 +36,10 @@ const ProfilePage = () => {
 						align="center"
 						gap={16}
 					>
-						<Avatar.Container
-							size={96}
-							rightBottomCorner={<Avatar.OnlineDot />}
-						>
+						<Avatar.Container size={96}>
 							<Avatar.Image
 								fallback="ME"
+								fallbackGradient={"blue"}
 								src={user?.photo_url}
 							/>
 						</Avatar.Container>
@@ -79,6 +78,7 @@ const ProfilePage = () => {
 							overline=""
 							subtitle="2025-11-12 • 14:00"
 							title="Теннисный корт Спортивный"
+							className={cls.cell}
 						/>
 						<CellSimple
 							after={
@@ -91,6 +91,7 @@ const ProfilePage = () => {
 									<Link to="/">Маршурт</Link>
 								</Button>
 							}
+							onClick={() => {}}
 							before={<CloudHail color="#007bff" />}
 							height="normal"
 							overline=""
@@ -109,11 +110,13 @@ const ProfilePage = () => {
 									<Link to="/">Маршурт</Link>
 								</Button>
 							}
+							onClick={() => {}}
 							before={<Sun color="#007bff" />}
 							height="normal"
 							overline=""
 							subtitle="2025-11-12 • 14:00"
 							title="Теннисный корт Спортивный"
+							className={cls.cell}
 						/>
 						<CellSimple
 							after={

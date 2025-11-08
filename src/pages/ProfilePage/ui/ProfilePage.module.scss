@@ -29,3 +29,10 @@
   flex-shrink: 0;
   padding: 0 20px;
 }
+
+.cell {
+}
+
+.cell:hover {
+  background-color: var(--hover-max-color);
+}
