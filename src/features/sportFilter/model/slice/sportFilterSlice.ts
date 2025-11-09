@@ -1,9 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { CourtType } from "@/entities/Court";
+import type { CourtType } from "@/entities/Court";
 import type { sportFilterSchema } from "../types/sportFilterSchema.ts";
 
 const initialState: sportFilterSchema = {
-	sport: CourtType.FOOTBALL,
+	sport: "football",
 };
 
 export const sportFilterSlice = createSlice({

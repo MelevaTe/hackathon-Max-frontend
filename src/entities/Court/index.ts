@@ -1,3 +1,2 @@
 export type { CourtSchema } from "./model/types/courtSchema.ts";
-import { CourtType } from "./model/consts/CourtConsts.ts";
-export { CourtType };
+export type { CourtType } from "./model/types/court.ts";

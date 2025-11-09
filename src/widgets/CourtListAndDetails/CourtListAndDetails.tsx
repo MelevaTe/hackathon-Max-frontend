@@ -2,15 +2,22 @@ import { Button, IconButton } from "@maxhub/max-ui";
 import { X } from "lucide-react";
 import { List } from "lucide-react";
 import { memo, useState } from "react";
+import type { Court } from "@/entities/Court/model/types/court.ts";
+import { CourtList } from "@/entities/Court/ui/CourtList/CourtList.tsx";
 import { Panel } from "@/shared/ui/Panel/Panel.tsx";
 import cls from "./CourtListAndDetails.module.scss";
 
-interface SidebarProps {
+interface CourtListAndDetailsProps {
 	className?: string;
+	courts?: Court[];
+	isLoading?: boolean;
+	error?: string;
 }
 
-export const CourtListAndDetails = memo(({ className }: SidebarProps) => {
+export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
+	const { className, courts } = props;
 	const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
+
 
 	return (
 		<>
@@ -42,19 +49,7 @@ export const CourtListAndDetails = memo(({ className }: SidebarProps) => {
 						>
 							<X />
 						</IconButton>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
-						<h1>тест тест</h1>
+						<CourtList courts={courts || []} />
 					</Panel>
 				</div>
 			)}

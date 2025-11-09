@@ -1,10 +1,12 @@
-import type { CourtType } from "../consts/CourtConsts.ts";
+export type CourtType = "football" | "basketball" | "tennis" | "volleyball";
 
 export interface Court {
 	id: string;
 	title: string;
+	address: string;
 	description: string;
 	paid: boolean;
-	img: string;
+	rating: number;
+	img?: string;
 	type: CourtType;
 }
