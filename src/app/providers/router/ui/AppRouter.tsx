@@ -5,7 +5,6 @@ import { Route } from "react-router-dom";
 import { routeConfig } from "@/app/providers/router/config/routeConfig";
 import { RequireMaxEnv } from "@/app/providers/router/ui/RequireMaxEnv.tsx";
 import type { AppRoutesProps } from "@/shared/types/router";
-import { PageLoader } from "@/shared/ui/PageLoader/PageLoader";
 
 const AppRouter = () => {
 	const renderWithWrapper = useCallback((route: AppRoutesProps) => {
