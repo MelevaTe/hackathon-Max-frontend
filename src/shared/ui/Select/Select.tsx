@@ -4,6 +4,7 @@ import {
 	ListboxOption,
 	ListboxOptions,
 } from "@headlessui/react";
+import { ChevronDown, Check } from "lucide-react";
 import type { FC } from "react";
 import React, { memo } from "react";
 import { classNames, type Mods } from "@/shared/lib/classNames/classNames.ts";
@@ -32,6 +33,7 @@ export const Select: FC<SelectProps> = memo((props) => {
 		>
 			<ListboxButton className={classNames(cls.Select, {}, [className])}>
 				{value.name}
+				<ChevronDown />
 			</ListboxButton>
 			<ListboxOptions
 				anchor="bottom"
@@ -49,7 +51,22 @@ export const Select: FC<SelectProps> = memo((props) => {
 							return classNames(cls.SelectOption, mods, []);
 						}}
 					>
-						{option.name}
+						{({ selected }) => (
+							<div className={cls.SelectOptionContent}>
+								<Check
+									className={classNames(
+										cls.SelectOptionCheck,
+										{
+											[cls.SelectOptionCheck_visible]:
+												selected,
+										}
+									)}
+								/>
+								<div className={cls.SelectOptionText}>
+									{option.name}
+								</div>
+							</div>
+						)}
 					</ListboxOption>
 				))}
 			</ListboxOptions>

@@ -5,11 +5,11 @@
 }
 
 .star {
+  display: block;
+  flex-shrink: 0;
   fill: transparent;
   stroke: #ccc;
   stroke-width: 1.5;
-  flex-shrink: 0;
-  display: block;
 
   &--filled {
     fill: #ffd700;

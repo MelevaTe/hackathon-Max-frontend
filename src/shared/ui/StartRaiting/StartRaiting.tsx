@@ -7,10 +7,11 @@ interface StarRatingProps {
 	className?: string;
 	rating: number;
 	max?: number;
+	size: number;
 }
 
 export const StarRating = (props: StarRatingProps) => {
-	const { className, rating, max } = props;
+	const { className, rating, max, size } = props;
 	const fullStars = Math.floor(rating);
 
 	return (
@@ -29,13 +30,13 @@ export const StarRating = (props: StarRatingProps) => {
 				return (
 					<Star
 						key={i}
-						size={12}
+						size={size}
 						className={starClass}
 					/>
 				);
 			})}
 			<Typography.Body
-				variant="medium"
+				variant="large"
 				className={cls["star-rating"]}
 			>
 				{rating.toFixed(1)}

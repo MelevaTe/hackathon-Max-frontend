@@ -1,4 +1,5 @@
-import { Typography } from "@maxhub/max-ui";
+import { IconButton, Typography } from "@maxhub/max-ui";
+import { RussianRuble } from "lucide-react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { classNames } from "@/shared/lib/classNames/classNames";
@@ -10,16 +11,23 @@ import type { Court } from "../../model/types/court.ts";
 export interface CourtListItemProps {
 	className?: string;
 	court: Court;
+	onClick?: (court: Court) => void;
 }
 
 export const CourtListItem = memo((props: CourtListItemProps) => {
-	const { className, court } = props;
+	const { className, court, onClick } = props;
 	const { t } = useTranslation();
+
+	const handleClick = () => {
+		if (onClick) {
+			onClick(court);
+		}
+	};
 
 	return (
 		<Card
 			className={classNames(cls.FieldCard, {}, [className])}
-			// onClick={handleClick}
+			onClick={handleClick}
 		>
 			<img
 				src={court.img}
@@ -37,13 +45,22 @@ export const CourtListItem = memo((props: CourtListItemProps) => {
 					<StarRating
 						rating={court.rating}
 						max={5}
+						size={15}
 					/>
+					<IconButton
+						appearance="themed"
+						aria-label="цена"
+						mode="primary"
+						size="small"
+					>
+						<RussianRuble size={15} />
+					</IconButton>
 				</div>
 				<Typography.Body
 					variant="medium"
 					className={cls.description}
 				>
-					{court.description}
+					{court.address}
 				</Typography.Body>
 			</div>
 		</Card>

@@ -1,4 +1,6 @@
 import { Typography } from "@maxhub/max-ui";
+import { IconButton } from "@maxhub/max-ui";
+import { X } from "lucide-react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { CourtListItem } from "@/entities/Court/ui/CourtListItem/CourtListItem.tsx";
@@ -10,21 +12,12 @@ interface CourtListProps {
 	className?: string;
 	courts: Court[];
 	isLoading?: boolean;
+	onItemClick: (court: Court) => void;
+	onClose: () => void;
 }
 
-// const getSkeletons = (view: ArticleView) =>
-//     new Array(view === ArticleView.SMALL ? 9 : 3)
-//         .fill(0)
-//         .map((item, index) => (
-//             <ArticleListItemSkeleton
-//                 className={cls.card}
-//                 key={index}
-//                 view={view}
-//             />
-//         ));
-
 export const CourtList = memo((props: CourtListProps) => {
-	const { className, courts, isLoading } = props;
+	const { className, courts, isLoading, onItemClick, onClose } = props;
 	const { t } = useTranslation();
 
 	if (!isLoading && !courts.length) {
@@ -39,14 +32,26 @@ export const CourtList = memo((props: CourtListProps) => {
 
 	return (
 		<div className={classNames(cls.CourtList, {}, [className])}>
-			{courts.map((item) => (
-				<CourtListItem
-					court={item}
-					key={item.id}
-					className={cls.card}
-				/>
-			))}
-			{/*{isLoading && getSkeletons(view)}*/}
+			<div className={cls.header}>
+				<IconButton
+					appearance="neutral"
+					aria-label="Закрыть"
+					mode="tertiary"
+					size="medium"
+					onClick={onClose}
+				>
+					<X />
+				</IconButton>
+			</div>
+			<div className={cls.content}>
+				{courts.map((court) => (
+					<CourtListItem
+						key={court.id}
+						court={court}
+						onClick={() => onItemClick(court)}
+					/>
+				))}
+			</div>
 		</div>
 	);
 });

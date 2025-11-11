@@ -28,11 +28,9 @@ const MainPage = () => {
 	const currentSport = useSelector(getSport);
 	const courts = useSelector(getCourtsData);
 
-
 	useEffect(() => {
 		dispatch(fetchCourts({ courtType: currentSport }));
 	}, [dispatch, currentSport]);
-
 
 	return (
 		<DynamicModuleLoader reducers={reducers}>

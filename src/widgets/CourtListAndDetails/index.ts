@@ -1,1 +1,1 @@
-export { CourtListAndDetails } from "./CourtListAndDetails";
+export { CourtListAndDetails } from "./ui/CourtListAndDetails.tsx";
