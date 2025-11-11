@@ -33,6 +33,7 @@ export const CourtList = memo((props: CourtListProps) => {
 	return (
 		<div className={classNames(cls.CourtList, {}, [className])}>
 			<div className={cls.header}>
+				<Typography.Headline>Доступные поля</Typography.Headline>
 				<IconButton
 					appearance="neutral"
 					aria-label="Закрыть"
