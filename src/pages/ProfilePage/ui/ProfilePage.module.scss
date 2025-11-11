@@ -33,9 +33,9 @@
 
 .footerButton {
   width: 100%;
-  box-sizing: border-box;
   flex-shrink: 0;
   padding: 0 20px;
+  padding-block-end: 20px;
 }
 
 .cell {
