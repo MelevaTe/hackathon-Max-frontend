@@ -7,18 +7,25 @@
   overscroll-behavior: none;
 }
 
+.iconButtonWrapper {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: 20px;
+}
+
 .header {
   width: 100%;
   box-sizing: border-box;
   flex-shrink: 0;
-
 }
 
 .content {
   width: 100%;
   max-height: calc(100dvh - 280px);
   flex: 1;
-  padding: 0 20px;
   overflow-y: auto;
   overscroll-behavior: contain;
 }

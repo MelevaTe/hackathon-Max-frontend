@@ -8,8 +8,9 @@ import {
 	CellList,
 	CellHeader,
 	CellSimple,
+	IconButton,
 } from "@maxhub/max-ui";
-import { Sun } from "lucide-react";
+import { CircleArrowLeft, Sun } from "lucide-react";
 import { CloudHail } from "lucide-react";
 import { memo } from "react";
 import { Link } from "react-router-dom";
@@ -17,7 +18,7 @@ import { useMax } from "@/shared/lib/hooks/useMax.ts";
 import cls from "./ProfilePage.module.scss";
 
 const ProfilePage = () => {
-	const { user, max } = useMax();
+	const { user, max, onClose } = useMax();
 
 	console.log(max?.initData);
 	return (
@@ -25,6 +26,19 @@ const ProfilePage = () => {
 			mode="secondary"
 			className={cls.page}
 		>
+			<div className={cls.iconButtonWrapper}>
+				<IconButton
+					appearance="themed"
+					aria-label="Название кнопки"
+					asChild
+					mode="secondary"
+					size="medium"
+				>
+					<Link to="/">
+						<CircleArrowLeft />
+					</Link>
+				</IconButton>
+			</div>
 			<Flex
 				direction="column"
 				gap={24}
@@ -200,12 +214,13 @@ const ProfilePage = () => {
 				<Container className={cls.footerButton}>
 					<Flex gap={8}>
 						<Button
+							onClick={onClose}
 							size="large"
 							mode="secondary"
 							appearance="neutral"
 							stretched
 						>
-							Выйти
+							Выйти из приложения
 						</Button>
 					</Flex>
 				</Container>

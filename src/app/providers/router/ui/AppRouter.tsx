@@ -1,3 +1,4 @@
+import { Spinner } from "@maxhub/max-ui";
 import React, { memo, Suspense, useCallback } from "react";
 import { Routes } from "react-router";
 import { Route } from "react-router-dom";
@@ -9,7 +10,16 @@ import { PageLoader } from "@/shared/ui/PageLoader/PageLoader";
 const AppRouter = () => {
 	const renderWithWrapper = useCallback((route: AppRoutesProps) => {
 		const element = (
-			<Suspense fallback={<PageLoader />}>{route.element}</Suspense>
+			<Suspense
+				fallback={
+					<Spinner
+						appearance="themed"
+						size={50}
+					/>
+				}
+			>
+				{route.element}
+			</Suspense>
 		);
 
 		return (
