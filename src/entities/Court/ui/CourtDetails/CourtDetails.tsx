@@ -72,14 +72,16 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 						max={5}
 						size={20}
 					/>
-					<IconButton
-						appearance="themed"
-						aria-label="Закрыть"
-						mode="primary"
-						size="small"
-					>
-						<RussianRuble size={20} />
-					</IconButton>
+					{court.paid && (
+						<IconButton
+							appearance="themed"
+							aria-label="цена"
+							mode="primary"
+							size="small"
+						>
+							<RussianRuble size={15} />
+						</IconButton>
+					)}
 				</div>
 
 				<Typography.Body

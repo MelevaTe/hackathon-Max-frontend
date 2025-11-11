@@ -47,14 +47,16 @@ export const CourtListItem = memo((props: CourtListItemProps) => {
 						max={5}
 						size={15}
 					/>
-					<IconButton
-						appearance="themed"
-						aria-label="цена"
-						mode="primary"
-						size="small"
-					>
-						<RussianRuble size={15} />
-					</IconButton>
+					{court.paid && (
+						<IconButton
+							appearance="themed"
+							aria-label="цена"
+							mode="primary"
+							size="small"
+						>
+							<RussianRuble size={15} />
+						</IconButton>
+					)}
 				</div>
 				<Typography.Body
 					variant="medium"
