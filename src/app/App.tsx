@@ -1,11 +1,13 @@
 import { Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { AppRouter } from "@/app/providers/router";
+import { AuthService } from "@/shared/api/authService.ts";
+import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "@/shared/const/localstorage.ts";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
 
 function App() {
-	const { max, user } = useMax();
+	const { max, user, initData } = useMax();
 	const { i18n } = useTranslation();
 
 	useEffect(() => {
@@ -22,6 +24,20 @@ function App() {
 			max.ready();
 		}
 	}, [max]);
+
+	useEffect(() => {
+		if (initData) {
+			const token = localStorage.getItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY);
+
+			if (!token) {
+				AuthService.loginWithInitData(initData)
+					.then(({ token, userId, role }) => {})
+					.catch((err) => {
+						console.error("Ошибка аутентификации", err);
+					});
+			}
+		}
+	}, [initData]);
 
 	return (
 		<div className={classNames("app", {}, [])}>

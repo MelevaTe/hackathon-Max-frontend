@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 interface UseMaxReturn {
 	max: WebApp | null;
 	user: WebAppUser | undefined;
+	initData: string | undefined;
 	isInMax: boolean | null;
 	onClose: () => void;
 }
@@ -29,10 +30,12 @@ export const useMax = (): UseMaxReturn => {
 		}
 	};
 
+	const initData = max?.initData;
 	const user = max?.initDataUnsafe?.user;
 
 	return {
 		max,
+		initData,
 		user,
 		isInMax,
 		onClose,
