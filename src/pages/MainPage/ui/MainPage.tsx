@@ -4,8 +4,7 @@ import { useSelector } from "react-redux";
 import { getCourtsData } from "@/entities/Court/model/selectors/getCourtsData.ts";
 import { fetchCourts } from "@/entities/Court/model/services/fetchCourts.ts";
 import { courtReducer } from "@/entities/Court/model/slice/courtSchemaSlice.ts";
-import { SportFilter } from "@/features/sportFilter";
-import { getSport } from "@/features/sportFilter/model/selectors/getSport.ts";
+import { getSport, SportFilter } from "@/features/sportFilter";
 import {
 	DynamicModuleLoader,
 	type ReducersList,

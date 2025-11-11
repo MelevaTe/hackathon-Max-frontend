@@ -1,9 +1,8 @@
 import { Button, Panel } from "@maxhub/max-ui";
 import { X, List } from "lucide-react";
 import { memo, useState } from "react";
+import { CourtDetails, CourtList } from "@/entities/Court";
 import type { Court } from "@/entities/Court/model/types/court.ts";
-import { CourtDetails } from "@/entities/Court/ui/CourtDetails/CourtDetails.tsx";
-import { CourtList } from "@/entities/Court/ui/CourtList/CourtList.tsx";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import cls from "./CourtListAndDetails.module.scss";
 import type { MobileSheetView } from "../model/types/types.ts";

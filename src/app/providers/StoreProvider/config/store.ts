@@ -1,11 +1,9 @@
 import type { Reducer, ReducersMapObject } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
 import type { CombinedState } from "@reduxjs/toolkit/query";
-// import { userReducer } from "@/entities/User";
 import { sportFilterReducer } from "@/features/sportFilter";
 import { $api } from "@/shared/api/api";
 import { rtkApi } from "@/shared/api/rtkApi";
-// import { ScrollSaveReducer } from "@/widgets/Page/ScrollSave";
 import { createReducerManager } from "./reducerManager";
 import type { StateSchema, ThunkExtraArg } from "./StateSchema";
 
@@ -16,8 +14,6 @@ export function createReduxStore(
 	const rootReducers: ReducersMapObject<StateSchema> = {
 		...asyncReducers,
 		sportFilter: sportFilterReducer,
-		// user: userReducer,
-		// scrollSave: ScrollSaveReducer,
 		[rtkApi.reducerPath]: rtkApi.reducer,
 	};
 
@@ -30,7 +26,6 @@ export function createReduxStore(
 	const store = configureStore({
 		// @ts-ignore
 		reducer: reducerManager.reduce as Reducer<CombinedState<StateSchema>>,
-		// devTools: __IS_DEV__,
 		preloadedState: initialState,
 		middleware: (getDefaultMiddleware) =>
 			getDefaultMiddleware({

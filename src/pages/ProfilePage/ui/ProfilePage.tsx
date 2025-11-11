@@ -5,22 +5,18 @@ import {
 	Avatar,
 	Button,
 	Typography,
-	CellList,
-	CellHeader,
-	CellSimple,
 	IconButton,
 } from "@maxhub/max-ui";
-import { CircleArrowLeft, Sun } from "lucide-react";
-import { CloudHail } from "lucide-react";
+import { CircleArrowLeft } from "lucide-react";
 import { memo } from "react";
 import { Link } from "react-router-dom";
+import { InfiniteBookingList } from "@/features/infiniteBookingList/ui/InfiniteBookitList.tsx";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
 import cls from "./ProfilePage.module.scss";
 
 const ProfilePage = () => {
-	const { user, max, onClose } = useMax();
+	const { user, onClose } = useMax();
 
-	console.log(max?.initData);
 	return (
 		<Panel
 			mode="secondary"
@@ -72,143 +68,8 @@ const ProfilePage = () => {
 					gap={16}
 					className={cls.content}
 				>
-					<CellList
-						mode="island"
-						header={<CellHeader>Активные записи</CellHeader>}
-					>
-						<CellSimple
-							after={
-								<Button
-									appearance="themed"
-									asChild
-									mode="primary"
-									size="medium"
-								>
-									<Link to="/">Маршурт</Link>
-								</Button>
-							}
-							before={<Sun color="#007bff" />}
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-							className={cls.cell}
-						/>
-						<CellSimple
-							after={
-								<Button
-									appearance="themed"
-									asChild
-									mode="primary"
-									size="medium"
-								>
-									<Link to="/">Маршурт</Link>
-								</Button>
-							}
-							onClick={() => {}}
-							before={<CloudHail color="#007bff" />}
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-						/>
-
-						<CellSimple
-							after={
-								<Button
-									appearance="themed"
-									asChild
-									mode="primary"
-									size="medium"
-								>
-									<Link to="/">Маршурт</Link>
-								</Button>
-							}
-							onClick={() => {}}
-							before={<Sun color="#007bff" />}
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-							className={cls.cell}
-						/>
-						<CellSimple
-							after={
-								<Button
-									appearance="themed"
-									asChild
-									mode="primary"
-									size="medium"
-								>
-									<Link to="/">Маршурт</Link>
-								</Button>
-							}
-							before={<CloudHail color="#007bff" />}
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-						/>
-						<CellSimple
-							after={
-								<Button
-									appearance="themed"
-									asChild
-									mode="primary"
-									size="medium"
-								>
-									<Link to="/">Маршурт</Link>
-								</Button>
-							}
-							before={<Sun color="#007bff" />}
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-						/>
-					</CellList>
-					<CellList
-						filled
-						mode="island"
-						header={<CellHeader>История записей</CellHeader>}
-					>
-						<CellSimple
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-						/>
-						<CellSimple
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-						/>
-						<CellSimple
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-						/>
-						<CellSimple
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-						/>
-						<CellSimple
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-						/>
-						<CellSimple
-							height="normal"
-							overline=""
-							subtitle="2025-11-12 • 14:00"
-							title="Теннисный корт Спортивный"
-						/>
-					</CellList>
+					<InfiniteBookingList type="active" />
+					<InfiniteBookingList type="history" />
 				</Flex>
 
 				<Container className={cls.footerButton}>
