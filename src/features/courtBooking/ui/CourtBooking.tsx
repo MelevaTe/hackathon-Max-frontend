@@ -25,6 +25,7 @@ export const CourtBooking = (props: CourtBookingProps) => {
 	const dispatch = useAppDispatch();
 	const [selectedTime, setSelectedTime] = useState<Dayjs | null>(null);
 	const [selectedDate, setSelectedDate] = useState<string | null>(null);
+	const [bookingSuccess, setBookingSuccess] = useState(false);
 
 	const onTimeChange: TimePickerProps["onChange"] = (time) => {
 		setSelectedTime(time);
@@ -64,7 +65,7 @@ export const CourtBooking = (props: CourtBookingProps) => {
 		try {
 			await dispatch(createCourtBooking(bookingData)).unwrap();
 			console.log("Бронирование успешно создано!!!!!!!!!!");
-			onClose();
+			setBookingSuccess(true);
 		} catch (e) {
 			console.error("Ошибка при бронировании:", e);
 			console.error("Не удалось создать бронирование");
@@ -96,6 +97,11 @@ export const CourtBooking = (props: CourtBookingProps) => {
 			<div className={cls.header}>
 				<Typography.Body>{courtTitle}</Typography.Body>
 			</div>
+			{bookingSuccess && (
+				<div className={cls.successMessage}>
+					<Typography.Body>Вы записаны!</Typography.Body>
+				</div>
+			)}
 			<div className={cls.content}>
 				<DatePicker
 					selectedDate={selectedDate}
