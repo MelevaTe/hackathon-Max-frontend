@@ -4,7 +4,7 @@ import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../const/localstorage.ts";
 
 export const $api = axios.create({
 	baseURL: __API__,
-	withCredentials: true,
+	// withCredentials: true,
 });
 
 $api.interceptors.request.use(
