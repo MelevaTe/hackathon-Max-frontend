@@ -15,7 +15,9 @@ import { useMax } from "@/shared/lib/hooks/useMax.ts";
 import cls from "./ProfilePage.module.scss";
 
 const ProfilePage = () => {
-	const { user, onClose } = useMax();
+	const { user, onClose, initData } = useMax();
+
+	console.log("initData", initData);
 
 	return (
 		<Panel
