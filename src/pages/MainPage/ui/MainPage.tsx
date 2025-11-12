@@ -1,9 +1,10 @@
 import React, { memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import { courtReducer } from "@/entities/Court";
 import { getCourtsData } from "@/entities/Court/model/selectors/getCourtsData.ts";
 import { fetchCourts } from "@/entities/Court/model/services/fetchCourts.ts";
-import { courtReducer } from "@/entities/Court/model/slice/courtSchemaSlice.ts";
+import { courtBookingReducer } from "@/features/courtBooking";
 import { getSport, SportFilter } from "@/features/sportFilter";
 import {
 	DynamicModuleLoader,
@@ -18,6 +19,7 @@ import cls from "./MainPage.module.scss";
 
 const reducers: ReducersList = {
 	court: courtReducer,
+	courtBooking: courtBookingReducer,
 };
 
 const MainPage = () => {

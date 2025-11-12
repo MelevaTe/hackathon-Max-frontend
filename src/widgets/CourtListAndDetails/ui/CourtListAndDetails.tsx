@@ -1,8 +1,9 @@
 import { Button, Panel } from "@maxhub/max-ui";
-import { X, List } from "lucide-react";
+import { List } from "lucide-react";
 import { memo, useState } from "react";
 import { CourtDetails, CourtList } from "@/entities/Court";
 import type { Court } from "@/entities/Court/model/types/court.ts";
+import { CourtBooking } from "@/features/courtBooking";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import cls from "./CourtListAndDetails.module.scss";
 import type { MobileSheetView } from "../model/types/types.ts";
@@ -63,12 +64,21 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 				court={selectedCourt}
 				onBack={handleBackToList}
 				onClose={handleCloseSheet}
+				onBooking={handleOpenBooking}
 				className={cls.MobileSheetContent}
 			/>
 		) : (
 			<div>Данные отсутствуют</div>
 		),
-		booking: <div></div>,
+		booking: (
+			<CourtBooking
+				courtId={selectedCourt?.id}
+				courtTitle={selectedCourt?.title}
+				onBack={handleBackToDetails}
+				onClose={handleCloseSheet}
+				className={cls.MobileSheetContent}
+			/>
+		),
 	};
 
 	return (
@@ -96,6 +106,8 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 							[cls["MobileSheet--withDetails"]]:
 								selectedCourt !== null,
 							[cls["MobileSheet--withList"]]:
+								selectedCourt === null,
+							[cls["MobileSheet--withLBooking"]]:
 								selectedCourt === null,
 						},
 						[className]

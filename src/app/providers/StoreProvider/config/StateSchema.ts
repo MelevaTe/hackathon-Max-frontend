@@ -7,6 +7,7 @@ import type {
 import type { CombinedState } from "@reduxjs/toolkit/query";
 import type { AxiosInstance } from "axios";
 import type { CourtSchema } from "@/entities/Court";
+import type { courtBookingSchema } from "@/features/courtBooking";
 import type { sportFilterSchema } from "@/features/sportFilter";
 import type { rtkApi } from "@/shared/api/rtkApi";
 // import type { ScrollSaveSchema } from "@/widgets/Page/ScrollSave";
@@ -18,6 +19,7 @@ export interface StateSchema {
 
 	// Асинхронные редюсеры
 	court?: CourtSchema;
+	courtBooking?: courtBookingSchema;
 	// profile?: ProfileSchema;
 	// routePoints?: RoutePointsSchema;
 	// tripForm?: TripFormSchema;

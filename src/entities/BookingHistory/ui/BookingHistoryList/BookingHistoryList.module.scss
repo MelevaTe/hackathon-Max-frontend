@@ -1,12 +1,12 @@
 .BookingHistoryList {
-  width: 100%;
-  padding-inline: 12px;
+	width: 100%;
+	padding-inline: 12px;
 }
 
 .scrollContainer {
-  height: 220px;
-  border-radius: 16px;
-  background-color: var(--background-secondary-color);
-  -webkit-overflow-scrolling: touch;
-  overflow-y: auto;
+	height: 220px;
+	border-radius: 16px;
+	background-color: var(--background-secondary-color);
+	-webkit-overflow-scrolling: touch;
+	overflow-y: auto;
 }

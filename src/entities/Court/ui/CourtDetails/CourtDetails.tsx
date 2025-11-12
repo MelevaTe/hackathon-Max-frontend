@@ -17,11 +17,12 @@ interface CourtDetailsProps {
 	court: Court;
 	onBack: () => void;
 	onClose?: () => void;
+	onBooking: (courtId: string) => void;
 	className?: string;
 }
 
 export const CourtDetails = memo((props: CourtDetailsProps) => {
-	const { className, court, onBack, onClose } = props;
+	const { className, court, onBack, onClose, onBooking } = props;
 
 	return (
 		<div className={classNames(cls.CourtDetails, {}, [className])}>
@@ -97,7 +98,7 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 						mode="primary"
 						size="medium"
 						className={cls.actionButton}
-						// onClick={onBookClick}
+						onClick={() => onBooking(court.id)}
 						iconBefore={<Calendar1 />}
 					>
 						Записаться

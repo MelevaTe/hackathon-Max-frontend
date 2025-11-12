@@ -1,68 +1,68 @@
 .CourtDetails {
-  display: flex;
-  overflow: hidden;
-  height: 100%;
-  flex-direction: column;
+	display: flex;
+	overflow: hidden;
+	height: 100%;
+	flex-direction: column;
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  padding-block-end: 10px;
+	display: flex;
+	justify-content: space-between;
+	padding-block-end: 10px;
 }
 
 .content {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow-y: auto;
-  padding-block-end: 10px;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	overflow-y: auto;
+	padding-block-end: 10px;
 }
 
 .image {
-  width: 100%;
-  height: 192px;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  object-fit: cover;
+	width: 100%;
+	height: 192px;
+	border-radius: 8px;
+	margin-bottom: 16px;
+	object-fit: cover;
 }
 
 .name {
-  margin-bottom: 8px;
+	margin-bottom: 8px;
 }
 
 .ratingContainer {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-  gap: 1rem;
+	display: flex;
+	align-items: center;
+	margin-bottom: 16px;
+	gap: 1rem;
 }
 
 .ratingValue {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
+	color: var(--text-secondary);
+	font-size: 0.875rem;
 }
 
 .description {
-  flex-grow: 1;
-  margin-bottom: 24px;
-  color: var(--text-secondary);
+	flex-grow: 1;
+	margin-bottom: 24px;
+	color: var(--text-secondary);
 }
 
 .actionButtons {
-  display: flex;
-  gap: 12px;
+	display: flex;
+	gap: 12px;
 }
 
 .actionButton {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
 }
 
 .routeIcon {
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
+	width: 16px;
+	height: 16px;
+	margin-right: 8px;
 }

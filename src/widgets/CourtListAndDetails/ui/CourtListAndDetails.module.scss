@@ -1,55 +1,59 @@
 .MobileSheet {
-  position: fixed;
-  z-index: 1000;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  overflow: hidden;
-  height: 57%;
-  flex-direction: column;
-  background-color: white;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  box-shadow: 0 -4px 6px rgb(0 0 0 / 10%);
-  transition: height 0.3s ease;
+	position: fixed;
+	z-index: 1000;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	overflow: hidden;
+	height: 57%;
+	flex-direction: column;
+	background-color: white;
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
+	box-shadow: 0 -4px 6px rgb(0 0 0 / 10%);
+	transition: height 0.3s ease;
 }
 
 .MobileSheet--withDetails {
-  height: auto;
+	height: auto;
 }
 
 .MobileSheet--withList {
-  height: 57%;
+	height: 57%;
+}
+
+.MobileSheet--withBooking {
+	height: auto;
 }
 
 .panel {
-  overflow: hidden;
+	overflow: hidden;
 }
 
 .MobileSheetContent {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
+	flex: 1;
+	padding: 10px;
+	overflow-y: auto;
 }
 
 .OpenButton {
-  position: fixed;
-  z-index: 1000;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+	position: fixed;
+	z-index: 1000;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 .CloseButton {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: none;
-  color: var(--accent-color);
-  cursor: pointer;
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	background: none;
+	color: var(--accent-color);
+	cursor: pointer;
 }

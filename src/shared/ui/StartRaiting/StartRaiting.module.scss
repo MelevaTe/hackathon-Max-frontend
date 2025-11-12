@@ -1,23 +1,23 @@
 .starRating {
-  display: flex;
-  align-items: center;
-  gap: 2px;
+	display: flex;
+	align-items: center;
+	gap: 2px;
 }
 
 .star {
-  display: block;
-  flex-shrink: 0;
-  fill: transparent;
-  stroke: #ccc;
-  stroke-width: 1.5;
+	display: block;
+	flex-shrink: 0;
+	fill: transparent;
+	stroke: #ccc;
+	stroke-width: 1.5;
 
-  &--filled {
-    fill: #ffd700;
-    stroke: #ffd700;
-  }
+	&--filled {
+		fill: #ffd700;
+		stroke: #ffd700;
+	}
 
-  &--empty {
-    fill: transparent;
-    stroke: #ccc
-  }
+	&--empty {
+		fill: transparent;
+		stroke: #ccc;
+	}
 }

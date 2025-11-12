@@ -1,60 +1,60 @@
 .Select {
-  display: flex;
-  height: 50px;
-  align-items: center;
-  justify-content: center;
-  padding: 0 12px;
-  border-radius: 1rem;
-  background-color: var(--max-accent-color);
-  color: var(--text-color);
-  cursor: pointer;
+	display: flex;
+	height: 50px;
+	align-items: center;
+	justify-content: center;
+	padding: 0 12px;
+	border-radius: 1rem;
+	background-color: var(--max-accent-color);
+	color: var(--text-color);
+	cursor: pointer;
 
-  &[data-headlessui-state] {
-    width: 100%;
-    padding: 0;
-    border: none;
-    background-color: var(--max-accent-color);
-    outline: none;
-    text-align: left;
-  }
+	&[data-headlessui-state] {
+		width: 100%;
+		padding: 0;
+		border: none;
+		background-color: var(--max-accent-color);
+		outline: none;
+		text-align: left;
+	}
 }
 
 .SelectOptions {
-  position: absolute;
-  z-index: 100;
-  top: 100%;
-  right: 0;
-  left: auto;
-  width: 33%;
-  max-height: 200px;
-  border-radius: 1rem;
-  margin-top: 4px;
-  background-color: var(--max-accent-color);
-  color: var(--text-color);
-  outline: none;
-  overflow-y: auto;
-  padding-block: 6px;
+	position: absolute;
+	z-index: 100;
+	top: 100%;
+	right: 0;
+	left: auto;
+	width: 33%;
+	max-height: 200px;
+	border-radius: 1rem;
+	margin-top: 4px;
+	background-color: var(--max-accent-color);
+	color: var(--text-color);
+	outline: none;
+	overflow-y: auto;
+	padding-block: 6px;
 }
 
 .SelectOption {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 12px;
-  color: var(--text-color);
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  outline: none;
-  text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 12px;
+	color: var(--text-color);
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 500;
+	outline: none;
+	text-align: center;
 
-  &:not(&_selected):hover {
-    opacity: 64%;
-  }
+	&:not(&_selected):hover {
+		opacity: 64%;
+	}
 
-  &_selected {
-    color: darkgrey;
-  }
+	&_selected {
+		color: darkgrey;
+	}
 }
 
 //.SelectOption_focus {
@@ -62,32 +62,32 @@
 //}
 
 .SelectOptionContent {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  border-radius: 1rem;
-  gap: 6px;
+	display: flex;
+	width: 100%;
+	align-items: center;
+	border-radius: 1rem;
+	gap: 6px;
 }
 
 .SelectOptionContent:hover {
-  background-color: var(--max-accent-hover-color);
+	background-color: var(--max-accent-hover-color);
 }
 
 .SelectOptionCheck {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  visibility: hidden;
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+	visibility: hidden;
 }
 
 .SelectOptionCheck_visible {
-  visibility: visible;
+	visibility: visible;
 }
 
 .SelectOptionText {
-  overflow: hidden;
-  flex-grow: 1;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	overflow: hidden;
+	flex-grow: 1;
+	text-align: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }

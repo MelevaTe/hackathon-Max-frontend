@@ -1,4 +1,4 @@
-import { Button, CellHeader, CellList, CellSimple } from "@maxhub/max-ui";
+import { Button, CellSimple } from "@maxhub/max-ui";
 import { Sun } from "lucide-react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
