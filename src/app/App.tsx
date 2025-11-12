@@ -27,9 +27,11 @@ function App() {
 
 	useEffect(() => {
 		if (initData) {
-			const token = localStorage.getItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY);
+			const existingToken = localStorage.getItem(
+				ACCESS_TOKEN_LOCAL_STORAGE_KEY
+			);
 
-			if (!token) {
+			if (!existingToken) {
 				AuthService.loginWithInitData(initData)
 					.then(({ token, userId, role }) => {})
 					.catch((err) => {

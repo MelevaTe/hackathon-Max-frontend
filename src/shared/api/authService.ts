@@ -15,8 +15,10 @@ export class AuthService {
 				initData,
 			}
 		);
-		const { token } = response.data;
-		localStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, token);
+		localStorage.setItem(
+			ACCESS_TOKEN_LOCAL_STORAGE_KEY,
+			response.data.token
+		);
 		return response.data;
 	}
 }
