@@ -9,4 +9,5 @@ export interface Court {
 	rating: number;
 	img?: string;
 	type: CourtType;
+	date: string;
 }

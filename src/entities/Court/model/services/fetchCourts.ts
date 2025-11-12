@@ -16,6 +16,7 @@ const MOCK_COURTS: Court[] = [
 		paid: true,
 		rating: 4.8,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "3",
@@ -26,6 +27,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 0,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "4",
@@ -36,6 +38,7 @@ const MOCK_COURTS: Court[] = [
 		paid: true,
 		rating: 1.0,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "5",
@@ -46,6 +49,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 4.6,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "6",
@@ -56,6 +60,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 3.2,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "7",
@@ -66,6 +71,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 4.0,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "8",
@@ -76,6 +82,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 4.6,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "9",
@@ -86,6 +93,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 4.2,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "10",
@@ -96,6 +104,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 4.0,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "11",
@@ -106,6 +115,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 4.6,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "12",
@@ -116,6 +126,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 4.2,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "13",
@@ -126,6 +137,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 4.0,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 	{
 		id: "14",
@@ -136,6 +148,7 @@ const MOCK_COURTS: Court[] = [
 		paid: false,
 		rating: 4.6,
 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+		date: "август",
 	},
 ];
 
