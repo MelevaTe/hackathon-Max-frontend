@@ -9,9 +9,12 @@ interface LoginResponse {
 
 export class AuthService {
 	static async loginWithInitData(initData: string): Promise<LoginResponse> {
-		const response = await $api.post<LoginResponse>("/auth/login", {
-			initData,
-		});
+		const response = await $api.post<LoginResponse>(
+			"/auth-service/v1/auth/login",
+			{
+				initData,
+			}
+		);
 		const { token } = response.data;
 		localStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, token);
 		return response.data;

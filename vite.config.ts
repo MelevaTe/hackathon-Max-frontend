@@ -8,4 +8,10 @@ export default defineConfig({
 	build: {
 		sourcemap: true,
 	},
+	resolve: {
+		alias: [{ find: "@", replacement: "/src" }],
+	},
+	define: {
+		__API__: JSON.stringify("http://10.134.113.92:8072"),
+	},
 });

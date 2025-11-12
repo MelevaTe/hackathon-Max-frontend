@@ -9,5 +9,21 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	padding-block-end: 10px;
 	padding-inline: 0.75rem;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	padding: 0.75rem;
+	gap: 1.5rem;
+}
+
+.footer {
+	padding-block-start: 1rem;
+}
+
+.bookingButton {
+	width: 100%;
 }

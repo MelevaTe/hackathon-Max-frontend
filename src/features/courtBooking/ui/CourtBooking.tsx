@@ -1,7 +1,7 @@
 import { Button, IconButton, Typography } from "@maxhub/max-ui";
 import { TimePicker, type TimePickerProps } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
-import { X } from "lucide-react";
+import { CircleArrowLeft, X } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createCourtBooking } from "@/features/courtBooking/model/services/createCourtBooking.ts";
@@ -74,6 +74,15 @@ export const CourtBooking = (props: CourtBookingProps) => {
 	return (
 		<div className={classNames(cls.CourtBooking, {}, [className])}>
 			<div className={cls.header}>
+				<Button
+					onClick={onBack}
+					appearance="themed"
+					mode="secondary"
+					size="medium"
+					iconBefore={<CircleArrowLeft />}
+				>
+					Назад
+				</Button>
 				<IconButton
 					appearance="neutral"
 					aria-label="Закрыть"
@@ -99,10 +108,16 @@ export const CourtBooking = (props: CourtBookingProps) => {
 					format="HH:mm"
 					showSecond={false}
 					placeholder="Выберите время"
+					style={{
+						width: "100%",
+						height: "40px",
+						fontSize: "16px",
+					}}
 				/>
 			</div>
 			<div className={cls.footer}>
 				<Button
+					className={cls.bookingButton}
 					onClick={handleBooking}
 					appearance="themed"
 					mode="primary"

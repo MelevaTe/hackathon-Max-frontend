@@ -14,7 +14,7 @@ export const createCourtBooking = createAsyncThunk<
 
 	try {
 		const response = await extra.api.post<CourtBooking>(
-			"/api/bookings",
+			"/entry-service/v1/entries",
 			bookingData
 		);
 

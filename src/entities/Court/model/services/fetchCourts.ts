@@ -8,8 +8,8 @@ export interface FetchCourtsParams {
 
 const MOCK_COURTS: Court[] = [
 	{
-		id: "2",
-		title: "Баскетбольная площадка в парке Победы",
+		id: "123e4567-e89b-12d3-a456-426614174000",
+		title: "баскет в дгту",
 		address: "г. Ростов-на-Дону, парк Победы",
 		type: "basketball",
 		description: "тут хорошее кольцо для данков",

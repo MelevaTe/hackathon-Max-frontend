@@ -3,7 +3,7 @@ import { AuthService } from "./authService.ts";
 import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../const/localstorage.ts";
 
 export const $api = axios.create({
-	baseURL: "https://api.test.com",
+	baseURL: __API__,
 	withCredentials: true,
 });
 
