@@ -198,6 +198,8 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 					error={error}
 					triggerRef={triggerRef}
 					wrapperRef={scrollContainerRef}
+					hasNextPage={hasNextPage}
+					isNextLoading={isNextLoading}
 				/>
 			) : (
 				<BookingHistoryList
@@ -206,6 +208,8 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 					error={error}
 					triggerRef={triggerRef}
 					wrapperRef={scrollContainerRef}
+					hasNextPage={hasNextPage}
+					isNextLoading={isNextLoading}
 				/>
 			)}
 		</div>

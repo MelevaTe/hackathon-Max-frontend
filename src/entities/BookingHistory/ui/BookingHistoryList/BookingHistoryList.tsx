@@ -13,6 +13,8 @@ interface BookingHistoryListProps {
 	error?: unknown;
 	triggerRef?: React.RefObject<HTMLDivElement>;
 	wrapperRef?: React.RefObject<HTMLDivElement>;
+	hasNextPage?: boolean;
+	isNextLoading?: boolean;
 }
 
 export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
@@ -23,6 +25,8 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 		error,
 		triggerRef,
 		wrapperRef,
+		hasNextPage = false,
+		isNextLoading = false,
 	} = props;
 	const { t } = useTranslation();
 
@@ -53,19 +57,6 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 		);
 	}
 
-	if (!bookingHistories.length) {
-		return (
-			<div className={classNames(cls.BookingActiveList, {}, [className])}>
-				<CellHeader>История записей</CellHeader>
-				<div className={cls.errorAndLoadingContainer}>
-					<Typography.Body variant="large">
-						У вас нет истории записей
-					</Typography.Body>
-				</div>
-			</div>
-		);
-	}
-
 	return (
 		<div className={classNames(cls.BookingHistoryList, {}, [className])}>
 			<CellHeader>История записей</CellHeader>
@@ -73,17 +64,27 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 				ref={wrapperRef}
 				className={cls.scrollContainer}
 			>
-				{bookingHistories.map((item) => (
-					<BookingHistoryListItem
-						bookingHistory={item}
-						key={item.id}
-						className={cls.item}
+				{!bookingHistories.length ? (
+					<div className={cls.errorAndLoadingContainer}>
+						<Typography.Body variant="large">
+							У вас нет истории записей
+						</Typography.Body>
+					</div>
+				) : (
+					bookingHistories.map((item) => (
+						<BookingHistoryListItem
+							bookingHistory={item}
+							key={item.id}
+							className={cls.item}
+						/>
+					))
+				)}
+				{(hasNextPage || isNextLoading) && (
+					<div
+						ref={triggerRef}
+						style={{ height: "20px", minHeight: "20px" }}
 					/>
-				))}
-				<div
-					ref={triggerRef}
-					style={{ height: "1px" }}
-				/>
+				)}
 			</div>
 		</div>
 	);

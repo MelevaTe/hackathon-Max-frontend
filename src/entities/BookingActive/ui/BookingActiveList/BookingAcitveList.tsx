@@ -14,6 +14,8 @@ interface BookingActiveListProps {
 	deleteBooking: (id: string) => void;
 	triggerRef?: React.RefObject<HTMLDivElement>;
 	wrapperRef?: React.RefObject<HTMLDivElement>;
+	hasNextPage?: boolean;
+	isNextLoading?: boolean;
 }
 
 export const BookingActiveList = memo((props: BookingActiveListProps) => {
@@ -25,6 +27,8 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 		deleteBooking,
 		triggerRef,
 		wrapperRef,
+		hasNextPage = false,
+		isNextLoading = false,
 	} = props;
 	const { t } = useTranslation();
 
@@ -55,19 +59,6 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 		);
 	}
 
-	if (!bookingActives.length) {
-		return (
-			<div className={classNames(cls.BookingActiveList, {}, [className])}>
-				<CellHeader>Активные записи</CellHeader>
-				<div className={cls.errorAndLoadingContainer}>
-					<Typography.Body variant="large">
-						У вас нет активных записей
-					</Typography.Body>
-				</div>
-			</div>
-		);
-	}
-
 	return (
 		<div className={classNames(cls.BookingActiveList, {}, [className])}>
 			<CellHeader>Активные записи</CellHeader>
@@ -75,18 +66,28 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 				ref={wrapperRef}
 				className={cls.scrollContainer}
 			>
-				{bookingActives.map((item) => (
-					<BookingActiveListItem
-						bookingActive={item}
-						key={item.id}
-						className={cls.item}
-						deleteBooking={deleteBooking}
+				{!bookingActives.length ? (
+					<div className={cls.errorAndLoadingContainer}>
+						<Typography.Body variant="large">
+							У вас нет активных записей
+						</Typography.Body>
+					</div>
+				) : (
+					bookingActives.map((item) => (
+						<BookingActiveListItem
+							bookingActive={item}
+							key={item.id}
+							className={cls.item}
+							deleteBooking={deleteBooking}
+						/>
+					))
+				)}
+				{(hasNextPage || isNextLoading) && (
+					<div
+						ref={triggerRef}
+						style={{ height: "20px", minHeight: "20px" }}
 					/>
-				))}
-				<div
-					ref={triggerRef}
-					style={{ height: "1px" }}
-				/>
+				)}
 			</div>
 		</div>
 	);
