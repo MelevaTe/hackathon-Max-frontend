@@ -165,6 +165,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 	}, [type]);
 
 	const triggerRef = useRef<HTMLDivElement>(null);
+	const scrollContainerRef = useRef<HTMLDivElement>(null);
 
 	const onLoadNext = useCallback(() => {
 		const isFetching =
@@ -177,6 +178,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 	useInfiniteScroll({
 		callback: onLoadNext,
 		triggerRef,
+		wrapperRef: scrollContainerRef,
 	});
 
 	const isLoading = type === "active" ? isActiveLoading : isHistoryLoading;
@@ -195,6 +197,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 					deleteBooking={deleteBooking}
 					error={error}
 					triggerRef={triggerRef}
+					wrapperRef={scrollContainerRef}
 				/>
 			) : (
 				<BookingHistoryList
@@ -202,6 +205,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 					isLoading={isInitialLoading}
 					error={error}
 					triggerRef={triggerRef}
+					wrapperRef={scrollContainerRef}
 				/>
 			)}
 		</div>

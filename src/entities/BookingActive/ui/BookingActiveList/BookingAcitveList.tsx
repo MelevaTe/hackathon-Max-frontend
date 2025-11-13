@@ -13,6 +13,7 @@ interface BookingActiveListProps {
 	error?: unknown;
 	deleteBooking: (id: string) => void;
 	triggerRef?: React.RefObject<HTMLDivElement>;
+	wrapperRef?: React.RefObject<HTMLDivElement>;
 }
 
 export const BookingActiveList = memo((props: BookingActiveListProps) => {
@@ -23,6 +24,7 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 		error,
 		deleteBooking,
 		triggerRef,
+		wrapperRef,
 	} = props;
 	const { t } = useTranslation();
 
@@ -69,7 +71,10 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 	return (
 		<div className={classNames(cls.BookingActiveList, {}, [className])}>
 			<CellHeader>Активные записи</CellHeader>
-			<div className={cls.scrollContainer}>
+			<div
+				ref={wrapperRef}
+				className={cls.scrollContainer}
+			>
 				{bookingActives.map((item) => (
 					<BookingActiveListItem
 						bookingActive={item}

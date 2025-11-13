@@ -12,10 +12,18 @@ interface BookingHistoryListProps {
 	isLoading?: boolean;
 	error?: unknown;
 	triggerRef?: React.RefObject<HTMLDivElement>;
+	wrapperRef?: React.RefObject<HTMLDivElement>;
 }
 
 export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
-	const { className, bookingHistories, isLoading, error, triggerRef } = props;
+	const {
+		className,
+		bookingHistories,
+		isLoading,
+		error,
+		triggerRef,
+		wrapperRef,
+	} = props;
 	const { t } = useTranslation();
 
 	if (error) {
@@ -61,7 +69,10 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 	return (
 		<div className={classNames(cls.BookingHistoryList, {}, [className])}>
 			<CellHeader>История записей</CellHeader>
-			<div className={cls.scrollContainer}>
+			<div
+				ref={wrapperRef}
+				className={cls.scrollContainer}
+			>
 				{bookingHistories.map((item) => (
 					<BookingHistoryListItem
 						bookingHistory={item}
