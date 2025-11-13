@@ -3,9 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "@/app/providers/ThemeProvider";
-import { courtReducer } from "@/entities/Court";
-import { getCourtsData } from "@/entities/Court/model/selectors/getCourtsData.ts";
-import { fetchCourts } from "@/entities/Court/model/services/fetchCourts.ts";
+import { courtReducer, fetchCourts, getCourtsData } from "@/entities/Court";
 import { courtBookingReducer } from "@/features/courtBooking";
 import { getSport, SportFilter } from "@/features/sportFilter";
 import {
