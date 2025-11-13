@@ -30,7 +30,7 @@ export const createCourtBooking = createAsyncThunk<
 			const { status } = e.response;
 			if (status === 409) {
 				return rejectWithValue(
-					"Пользователь уже записан на это время."
+					"Вы уже записан на это время."
 				);
 			}
 		}
