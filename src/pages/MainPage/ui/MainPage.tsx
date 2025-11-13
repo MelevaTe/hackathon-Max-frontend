@@ -100,6 +100,7 @@ const MainPage = () => {
 					className={cls.map}
 					markers={markersData}
 					theme={theme}
+					onMarkerClick={handleMarkerClick}
 					destinationCoords={destinationCoords}
 					showRoute={!!destinationCoords}
 				/>
