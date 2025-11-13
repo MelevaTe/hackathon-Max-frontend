@@ -78,6 +78,13 @@ const MainPage = () => {
 		skip: !selectedCourtId,
 	});
 
+	console.log("состояние useGetCourtByIdQuery:", {
+		isLoading,
+		error: error ? error : null,
+		hasData: !!selectedCourt,
+		selectedCourtId,
+	});
+
 	const handleMarkerClick = useCallback((id: string) => {
 		setSelectedCourtId(id);
 	}, []);
