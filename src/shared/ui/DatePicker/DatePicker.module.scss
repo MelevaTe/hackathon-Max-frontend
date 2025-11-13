@@ -41,6 +41,7 @@
 		&:not(.DayCard--disabled) {
 			&:hover {
 				transform: translateY(-2px);
+				background-color: var(--hover-max-color);
 			}
 
 			&:active {
