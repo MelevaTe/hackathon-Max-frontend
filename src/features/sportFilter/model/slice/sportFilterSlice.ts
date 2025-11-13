@@ -3,7 +3,7 @@ import type { CourtType } from "@/entities/Court";
 import type { sportFilterSchema } from "../types/sportFilterSchema.ts";
 
 const initialState: sportFilterSchema = {
-	sport: "football",
+	sport: "FOOTBALL",
 };
 
 export const sportFilterSlice = createSlice({

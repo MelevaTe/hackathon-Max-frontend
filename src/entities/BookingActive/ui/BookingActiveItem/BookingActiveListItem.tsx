@@ -15,7 +15,7 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 	const { className, bookingActive } = props;
 	const { t } = useTranslation();
 
-	const destinationCoords = [bookingActive.long, bookingActive.lat] as [
+	const destinationCoords = [bookingActive.lon, bookingActive.lat] as [
 		number,
 		number,
 	];

@@ -3,154 +3,25 @@ import type { ThunkConfig } from "@/app/providers/StoreProvider";
 import type { Court, CourtType } from "../types/court";
 
 export interface FetchCourtsParams {
-	courtType?: CourtType;
+	sports?: CourtType[];
+	cityId?: string;
 }
 
-const MOCK_COURTS: Court[] = [
-	{
-		id: "123e4567-e89b-12d3-a456-426614174000",
-		title: "баскет в дгту",
-		address: "г. Ростов-на-Дону, парк Победы",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: true,
-		rating: 4.8,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "3",
-		title: "Баскетбольная площадка в спортивном комплексе",
-		address: "г. Ростов-на-Дону, ул. Спортивная, 15",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 0,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "4",
-		title: "Баскетбольная площадка во дворе",
-		address: "г. Ростов-на-Дону, пер. Ботанический, 7",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: true,
-		rating: 1.0,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "5",
-		title: "Баскетбольная площадка у школы №1",
-		address: "г. Ростов-на-Дону, ул. Школьная, 1",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 4.6,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "6",
-		title: "Баскетбольная площадка в спортивном комплексе",
-		address: "г. Ростов-на-Дону, ул. Спортивная, 15",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 3.2,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "7",
-		title: "Баскетбольная площадка во дворе",
-		address: "г. Ростов-на-Дону, пер. Ботанический, 7",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 4.0,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "8",
-		title: "Баскетбольная площадка у школы №1",
-		address: "г. Ростов-на-Дону, ул. Школьная, 1",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 4.6,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "9",
-		title: "Баскетбольная площадка в спортивном комплексе",
-		address: "г. Ростов-на-Дону, ул. Спортивная, 15",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 4.2,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "10",
-		title: "Баскетбольная площадка во дворе",
-		address: "г. Ростов-на-Дону, пер. Ботанический, 7",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 4.0,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "11",
-		title: "Баскетбольная площадка у школы №1",
-		address: "г. Ростов-на-Дону, ул. Школьная, 1",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 4.6,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "12",
-		title: "Баскетбольная площадка в спортивном комплексе",
-		address: "г. Ростов-на-Дону, ул. Спортивная, 15",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 4.2,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "13",
-		title: "Баскетбольная площадка во дворе",
-		address: "г. Ростов-на-Дону, пер. Ботанический, 7",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 4.0,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-	{
-		id: "14",
-		title: "Баскетбольная площадка у школы №1",
-		address: "г. Ростов-на-Дону, ул. Школьная, 1",
-		type: "basketball",
-		description: "тут хорошее кольцо для данков",
-		paid: false,
-		rating: 4.6,
-		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
-		date: "август",
-	},
-];
+// const MOCK_COURTS: Court[] = [
+// 	{
+// 		id: "123e4567-e89b-12d3-a456-426614174000",
+// 		title: "баскет в дгту",
+// 		lat: 2.123,
+// 		lon: 123.213,
+// 		address: "г. Ростов-на-Дону, парк Победы",
+// 		type: "BASKETBALL",
+// 		description: "тут хорошее кольцо для данков",
+// 		paid: true,
+// 		rating: 4.8,
+// 		img: "https://avatars.mds.yandex.net/get-altay/4824927/2a000001810f627303aab28b1b6b53d5febe/L_height",
+// 		date: "август",
+// 	},
+// ];
 
 export const fetchCourts = createAsyncThunk<
 	Court[],
@@ -160,18 +31,19 @@ export const fetchCourts = createAsyncThunk<
 	const { rejectWithValue, extra } = thunkApi;
 
 	try {
-		return MOCK_COURTS;
+		// return MOCK_COURTS;
 
-		// const response = await extra.api.get<Court[]>("/api/courts", {
-		// 	params: {
-		// 		type: params.courtType,
-		// 	},
-		// });
-		//
-		// if (!response.data) {
-		// 	throw new Error("No data received");
-		// }
-		// return response.data;
+		const response = await extra.api.get<Court[]>("/api/courts", {
+			params: {
+				sports: params.sports,
+				cityId: params.cityId,
+			},
+		});
+
+		if (!response.data) {
+			throw new Error("No data received");
+		}
+		return response.data;
 	} catch (e) {
 		return rejectWithValue("Не удалось получить данные о площадках");
 	}
