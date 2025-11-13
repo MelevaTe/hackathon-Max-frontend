@@ -27,7 +27,7 @@ import type { CourtsCords } from "../types/courtsCords.ts";
 // ];
 
 interface FetchCourtsCordParams {
-	cityId: string;
+	cityId: number;
 	courtType?: CourtType;
 }
 
@@ -39,21 +39,20 @@ export const fetchCourtsCord = createAsyncThunk<
 	const { rejectWithValue, extra } = thunkApi;
 
 	try {
-		const response = await extra.api.get<{ message: string; courtsCord: CourtsCords[] }>("/courts-service/v1/courts/search/points", {
-		  params: {
-		    cityId: params.cityId,
-		    sport: params.courtType,
-		  },
-		});
+		// return MOCK_COURTS;
+		const response = await extra.api.post<CourtsCords[]>(
+			"/courts-service/v1/courts/search/points",
+			{
+				cityId: params.cityId,
+				sports: params.courtType ? [params.courtType] : [],
+			}
+		);
 
-		if (!response.data || !response.data.courtsCord) {
-		  throw new Error("No data received");
+		if (!response.data) {
+			throw new Error("No data received");
 		}
 
-		return response.data.courtsCord;
-
-		// Пока мок:
-		// return MOCK_COURTS;
+		return response.data;
 	} catch (e) {
 		return rejectWithValue("Не удалось получить данные о площадках");
 	}

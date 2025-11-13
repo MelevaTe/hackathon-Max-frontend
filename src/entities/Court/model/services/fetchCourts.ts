@@ -4,7 +4,7 @@ import type { Court, CourtType } from "../types/court";
 
 export interface FetchCourtsParams {
 	sports?: CourtType[];
-	cityId?: string;
+	cityId?: number;
 }
 
 // const MOCK_COURTS: Court[] = [

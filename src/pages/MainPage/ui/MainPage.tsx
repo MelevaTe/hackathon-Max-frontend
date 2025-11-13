@@ -52,13 +52,13 @@ const MainPage = () => {
 		dispatch(
 			fetchCourts({
 				sports: [currentSport],
-				cityId: "1",
+				cityId: 1,
 			})
 		);
 	}, [dispatch, currentSport]);
 
 	useEffect(() => {
-		dispatch(fetchCourtsCord({ cityId: "1", courtType: currentSport }));
+		dispatch(fetchCourtsCord({ cityId: 1, courtType: currentSport }));
 		console.log("useEffect прошел успешно видимо");
 	}, [dispatch, currentSport]);
 
