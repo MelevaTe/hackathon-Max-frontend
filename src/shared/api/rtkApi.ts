@@ -14,8 +14,6 @@ export const rtkApi = createApi({
 		},
 	}),
 	tagTypes: [
-		"BookingActive",
-		"BookingHistory",
 		"CourtOnline",
 		"Court",
 		"Weather",

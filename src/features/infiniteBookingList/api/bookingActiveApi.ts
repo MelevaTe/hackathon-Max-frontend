@@ -18,7 +18,7 @@ const bookingActiveApi = rtkApi.injectEndpoints({
 				url: "/entry-service/v1/entries/active",
 				params,
 			}),
-			providesTags: ["BookingActive"],
+			keepUnusedDataFor: 0,
 			transformResponse: (
 				baseResponse: {
 					activeEntries: BookingActive[];

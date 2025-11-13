@@ -23,7 +23,9 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 	const [page, setPage] = useState(1);
 	const size = 10;
 	const [allActiveItems, setAllActiveItems] = useState<BookingActive[]>([]);
-	const [allHistoryItems, setAllHistoryItems] = useState<BookingHistory[]>([]);
+	const [allHistoryItems, setAllHistoryItems] = useState<BookingHistory[]>(
+		[]
+	);
 	const [hasNextPage, setHasNextPage] = useState(true);
 
 	const {
@@ -31,21 +33,27 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 		isLoading: isActiveLoading,
 		isFetching: isActiveFetching,
 		error: activeError,
-	} = useGetActiveBookingsQuery({ page, size }, { skip: type !== "active" });
+	} = useGetActiveBookingsQuery(
+		{ page, size },
+		{ skip: type !== "active", refetchOnMountOrArgChange: true }
+	);
 
 	const {
 		data: historyResponse,
 		isLoading: isHistoryLoading,
 		isFetching: isHistoryFetching,
 		error: historyError,
-	} = useGetHistoryBookingsQuery({ page, size }, { skip: type !== "history" });
+	} = useGetHistoryBookingsQuery(
+		{ page, size },
+		{ skip: type !== "history", refetchOnMountOrArgChange: true }
+	);
 
 	useEffect(() => {
 		if (type === "active" && activeResponse) {
 			const items = activeResponse.data || [];
 
 			if (items.length > 0) {
-				setAllActiveItems(prev =>
+				setAllActiveItems((prev) =>
 					page === 1 ? items : [...prev, ...items]
 				);
 			}
@@ -63,7 +71,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 			const items = historyResponse.data || [];
 
 			if (items.length > 0) {
-				setAllHistoryItems(prev =>
+				setAllHistoryItems((prev) =>
 					page === 1 ? items : [...prev, ...items]
 				);
 			}
@@ -109,9 +117,8 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 			</div>
 		);
 	}
-	const isEmpty = type === "active"
-		? activeResponse?.isEmpty
-		: historyResponse?.isEmpty;
+	const isEmpty =
+		type === "active" ? activeResponse?.isEmpty : historyResponse?.isEmpty;
 
 	if (!isLoading && isEmpty && page === 1) {
 		return (
@@ -119,8 +126,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 				<Typography.Body variant="large">
 					{type === "active"
 						? t("Нет активных бронирований")
-						: t("Нет истории бронирований")
-					}
+						: t("Нет истории бронирований")}
 				</Typography.Body>
 			</div>
 		);
@@ -144,7 +150,10 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 
 			{isFetching && page > 1 && (
 				<div className={cls.spinnerContainer}>
-					<Spinner appearance="themed" size={30} />
+					<Spinner
+						appearance="themed"
+						size={30}
+					/>
 				</div>
 			)}
 			{hasNextPage && (

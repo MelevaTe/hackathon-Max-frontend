@@ -18,7 +18,7 @@ const bookingHistoryApi = rtkApi.injectEndpoints({
 				url: "/entry-service/v1/entries/history",
 				params,
 			}),
-			providesTags: ["BookingHistory"],
+			keepUnusedDataFor: 0,
 			transformResponse: (
 				baseResponse: {
 					historyEntries?: BookingHistory[];
