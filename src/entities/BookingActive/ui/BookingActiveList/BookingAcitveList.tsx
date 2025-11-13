@@ -11,10 +11,12 @@ interface BookingActiveListProps {
 	bookingActives: BookingActive[];
 	isLoading?: boolean;
 	error?: unknown;
+	deleteBooking: (id: string) => void;
 }
 
 export const BookingActiveList = memo((props: BookingActiveListProps) => {
-	const { className, bookingActives, isLoading, error } = props;
+	const { className, bookingActives, isLoading, error, deleteBooking } =
+		props;
 	const { t } = useTranslation();
 
 	if (error) {
@@ -66,6 +68,7 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 						bookingActive={item}
 						key={item.id}
 						className={cls.item}
+						deleteBooking={deleteBooking}
 					/>
 				))}
 			</div>

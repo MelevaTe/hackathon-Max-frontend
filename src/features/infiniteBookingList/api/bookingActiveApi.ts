@@ -41,8 +41,17 @@ const bookingActiveApi = rtkApi.injectEndpoints({
 					isEmpty: isEmpty,
 				};
 			},
+			providesTags: ["BookingActive"],
+		}),
+		deleteBooking: build.mutation<void, string>({
+			query: (id) => ({
+				url: `/entry-service/v1/entries/${id}`,
+				method: "DELETE",
+			}),
+			invalidatesTags: ["BookingActive"],
 		}),
 	}),
 });
 
-export const { useGetActiveBookingsQuery } = bookingActiveApi;
+export const { useGetActiveBookingsQuery, useDeleteBookingMutation } =
+	bookingActiveApi;

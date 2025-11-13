@@ -1,3 +1,7 @@
 .InfiniteBookingList {
 	width: 100%;
 }
+
+.cell:hover {
+	background-color: var(--hover-max-color);
+}

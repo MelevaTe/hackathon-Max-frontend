@@ -1,4 +1,3 @@
-import { Spinner, Typography } from "@maxhub/max-ui";
 import { useState, useRef, useEffect } from "react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,7 +8,10 @@ import type { BookingHistory } from "@/entities/BookingHistory/model/types/booki
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import { useInfiniteScroll } from "@/shared/lib/hooks/useInfiniteScroll.ts";
 import cls from "./InfiniteBookingList.module.scss";
-import { useGetActiveBookingsQuery } from "../api/bookingActiveApi.ts";
+import {
+	useDeleteBookingMutation,
+	useGetActiveBookingsQuery,
+} from "../api/bookingActiveApi.ts";
 import { useGetHistoryBookingsQuery } from "../api/bookingHistoryApi.ts";
 
 interface InfiniteBookingListProps {
@@ -21,13 +23,15 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 	const { className, type } = props;
 	const { t } = useTranslation();
 
-	const [page, setPage] = useState(1);
+	const [page, setPage] = useState(0);
 	const size = 10;
 	const [allActiveItems, setAllActiveItems] = useState<BookingActive[]>([]);
 	const [allHistoryItems, setAllHistoryItems] = useState<BookingHistory[]>(
 		[]
 	);
 	const [hasNextPage, setHasNextPage] = useState(true);
+	const [deleteBooking, { isLoading: isDeleteLoading }] =
+		useDeleteBookingMutation();
 
 	const {
 		data: activeResponse,
@@ -117,6 +121,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 				<BookingActiveList
 					bookingActives={allActiveItems}
 					isLoading={isInitialLoading}
+					deleteBooking={deleteBooking}
 					error={error}
 				/>
 			) : (
