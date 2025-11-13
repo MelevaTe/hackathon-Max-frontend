@@ -11,10 +11,11 @@ interface BookingHistoryListProps {
 	bookingHistories: UIBookingHistory[];
 	isLoading?: boolean;
 	error?: unknown;
+	triggerRef?: React.RefObject<HTMLDivElement>;
 }
 
 export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
-	const { className, bookingHistories, isLoading, error } = props;
+	const { className, bookingHistories, isLoading, error, triggerRef } = props;
 	const { t } = useTranslation();
 
 	if (error) {
@@ -68,6 +69,10 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 						className={cls.item}
 					/>
 				))}
+				<div
+					ref={triggerRef}
+					style={{ height: "1px" }}
+				/>
 			</div>
 		</div>
 	);

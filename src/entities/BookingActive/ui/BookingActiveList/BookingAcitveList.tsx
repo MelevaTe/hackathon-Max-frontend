@@ -12,11 +12,18 @@ interface BookingActiveListProps {
 	isLoading?: boolean;
 	error?: unknown;
 	deleteBooking: (id: string) => void;
+	triggerRef?: React.RefObject<HTMLDivElement>;
 }
 
 export const BookingActiveList = memo((props: BookingActiveListProps) => {
-	const { className, bookingActives, isLoading, error, deleteBooking } =
-		props;
+	const {
+		className,
+		bookingActives,
+		isLoading,
+		error,
+		deleteBooking,
+		triggerRef,
+	} = props;
 	const { t } = useTranslation();
 
 	if (error) {
@@ -71,6 +78,10 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 						deleteBooking={deleteBooking}
 					/>
 				))}
+				<div
+					ref={triggerRef}
+					style={{ height: "1px" }}
+				/>
 			</div>
 		</div>
 	);
