@@ -36,7 +36,10 @@
 		border-radius: 0.5rem;
 		cursor: pointer;
 		gap: 0.25rem;
+		-webkit-tap-highlight-color: transparent;
+		touch-action: manipulation;
 		transition: all 0.2s ease;
+		user-select: none;
 
 		&:not(.DayCard--disabled) {
 			&:hover {

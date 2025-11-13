@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import cls from "./DatePicker.module.scss";
 import "dayjs/locale/ru";
+
 dayjs.extend(localeData);
 dayjs.extend(localizedFormat);
 dayjs.extend(updateLocale);
@@ -63,6 +64,13 @@ export const DatePicker = (props: CourtBookingProps) => {
 							key={index}
 							className={classNames(cls.DayCard, mods)}
 							onClick={() => onSelectDate(dateStr)}
+							role="button"
+							tabIndex={-1}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									onSelectDate(dateStr);
+								}
+							}}
 						>
 							<span className={cls.DayLabel}>
 								{getDateLabel(date)}
