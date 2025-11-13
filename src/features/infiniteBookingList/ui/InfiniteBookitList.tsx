@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -37,11 +37,8 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 		[]
 	);
 	const [hasNextPage, setHasNextPage] = useState(true);
-	const [deleteBooking, { isLoading: isDeleteLoading }] =
-		useDeleteBookingMutation();
-
-	console.log(`[${type}] Current page:`, page);
-	console.log(`[${type}] Current hasNextPage:`, hasNextPage);
+	const processedPagesRef = useRef<Set<number>>(new Set());
+	const [deleteBooking] = useDeleteBookingMutation();
 
 	const {
 		data: activeResponse,
@@ -60,7 +57,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 		{ skip: type !== "history" }
 	);
 
-	const formatActiveItems = (items: BookingActive[]): UIBookingActive[] => {
+	const formatActiveItems = useCallback((items: BookingActive[]): UIBookingActive[] => {
 		return items.map((item) => {
 			const { formattedDate, formattedTime } = formatDateTime(
 				item.entryTime
@@ -71,9 +68,9 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 				formattedEntryTime: formattedTime,
 			};
 		});
-	};
+	}, []);
 
-	const formatHistoryItems = (
+	const formatHistoryItems = useCallback((
 		items: BookingHistory[]
 	): UIBookingHistory[] => {
 		return items.map((item) => {
@@ -86,70 +83,91 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 				formattedEntryTime: formattedTime,
 			};
 		});
-	};
+	}, []);
 
 	useEffect(() => {
-		if (type === "active" && activeResponse) {
-			console.log(`[active] Received page ${page}, data length:`, activeResponse.data.length);
-			console.log(`[active] hasNextPage from API:`, activeResponse.hasNextPage);
+		if (type !== "active" || !activeResponse) return;
 
-			const items = activeResponse.data || [];
+		const items = activeResponse.data || [];
+		const currentHasNextPage = activeResponse.hasNextPage;
 
+		if (page === 0) {
+			if (items.length > 0) {
+				const formattedItems = formatActiveItems(items);
+				setAllActiveItems(formattedItems);
+			} else {
+				setAllActiveItems([]);
+			}
+			processedPagesRef.current = new Set([0]);
+		} else {
+			if (processedPagesRef.current.has(page)) return;
 			if (items.length > 0) {
 				const formattedItems = formatActiveItems(items);
 				setAllActiveItems((prev) => {
-					const newItems = page === 0 ? formattedItems : [...prev, ...formattedItems];
-					console.log(`[active] Updated items, total count:`, newItems.length);
-					return newItems;
+					const existingIds = new Set(prev.map((item) => item.id));
+					const newItems = formattedItems.filter(
+						(item) => !existingIds.has(item.id)
+					);
+					return [...prev, ...newItems];
 				});
-			} else if (page === 0) {
-				setAllActiveItems([]);
-				console.log(`[active] Cleared items on empty response at page 0`);
 			}
-
-			setHasNextPage(activeResponse.hasNextPage);
-			console.log(`[active] Set hasNextPage to:`, activeResponse.hasNextPage);
+			processedPagesRef.current.add(page);
 		}
+
+		setHasNextPage(currentHasNextPage);
 	}, [activeResponse, type, page, formatActiveItems]);
 
 	useEffect(() => {
-		if (type === "history" && historyResponse) {
-			console.log(`[history] Received page ${page}, data length:`, historyResponse.data.length);
-			console.log(`[history] hasNextPage from API:`, historyResponse.hasNextPage);
+		if (type !== "history" || !historyResponse) return;
 
-			const items = historyResponse.data || [];
+		const items = historyResponse.data || [];
+		const currentHasNextPage = historyResponse.hasNextPage;
 
+		if (page === 0) {
+			if (items.length > 0) {
+				const formattedItems = formatHistoryItems(items);
+				setAllHistoryItems(formattedItems);
+			} else {
+				setAllHistoryItems([]);
+			}
+			processedPagesRef.current = new Set([0]);
+		} else {
+			if (processedPagesRef.current.has(page)) return;
 			if (items.length > 0) {
 				const formattedItems = formatHistoryItems(items);
 				setAllHistoryItems((prev) => {
-					const newItems = page === 0 ? formattedItems : [...prev, ...formattedItems];
-					console.log(`[history] Updated items, total count:`, newItems.length);
-					return newItems;
+					const existingIds = new Set(prev.map((item) => item.id));
+					const newItems = formattedItems.filter(
+						(item) => !existingIds.has(item.id)
+					);
+					return [...prev, ...newItems];
 				});
-			} else if (page === 0) {
-				setAllHistoryItems([]);
-				console.log(`[history] Cleared items on empty response at page 0`);
 			}
-
-			setHasNextPage(historyResponse.hasNextPage);
-			console.log(`[history] Set hasNextPage to:`, historyResponse.hasNextPage);
+			processedPagesRef.current.add(page);
 		}
+
+		setHasNextPage(currentHasNextPage);
 	}, [historyResponse, type, page, formatHistoryItems]);
+
+	useEffect(() => {
+		setPage(0);
+		setHasNextPage(true);
+		processedPagesRef.current = new Set();
+		if (type === "active") {
+			setAllActiveItems([]);
+		} else {
+			setAllHistoryItems([]);
+		}
+	}, [type]);
 
 	const triggerRef = useRef<HTMLDivElement>(null);
 
-	const onLoadNext = () => {
-		if (!isFetching && hasNextPage && triggerRef.current) {
-			console.log(`[${type}] onLoadNext triggered, incrementing page...`);
-			setPage((prev) => {
-				const newPage = prev + 1;
-				console.log(`[${type}] Page updated to:`, newPage);
-				return newPage;
-			});
-		} else {
-			console.log(`[${type}] onLoadNext blocked: isFetching=${isFetching}, hasNextPage=${hasNextPage}`);
+	const onLoadNext = useCallback(() => {
+		const isFetching = type === "active" ? isActiveFetching : isHistoryFetching;
+		if (!isFetching && hasNextPage) {
+			setPage((prev) => prev + 1);
 		}
-	};
+	}, [type, isActiveFetching, isHistoryFetching, hasNextPage]);
 
 	useInfiniteScroll({
 		callback: onLoadNext,
@@ -162,8 +180,6 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 
 	const isInitialLoading = isLoading && page === 0;
 	const isNextLoading = isFetching && page > 0;
-
-	console.log(`[${type}] Render: isLoading=${isLoading}, isFetching=${isFetching}, isInitial=${isInitialLoading}, isNext=${isNextLoading}`);
 
 	return (
 		<div className={classNames(cls.InfiniteBookingList, {}, [className])}>
