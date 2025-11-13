@@ -1,0 +1,30 @@
+.OnlineEntryItem {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+	border-radius: 8px;
+	background-color: var(--background-secondary-color);
+}
+
+.timeContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.time {
+	color: var(--text-secondary);
+}
+
+.usersInfo {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.userCount {
+	min-width: 20px;
+	text-align: center;
+}

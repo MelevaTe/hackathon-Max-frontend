@@ -1,10 +1,13 @@
 import { Button, Panel } from "@maxhub/max-ui";
 import { List } from "lucide-react";
-import { memo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { CourtDetails, CourtList } from "@/entities/Court";
 import type { Court } from "@/entities/Court/model/types/court.ts";
 import { CourtBooking } from "@/features/courtBooking";
+import { useGetCourtOnlineStatusQuery } from "@/features/onlineCourtStatus";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
+import { getDateRange } from "@/shared/lib/utils/dateRange.ts";
+import { formatDateTime } from "@/shared/lib/utils/formatDate.ts";
 import cls from "./CourtListAndDetails.module.scss";
 import type { MobileSheetView } from "../model/types/types.ts";
 
@@ -13,13 +16,30 @@ interface CourtListAndDetailsProps {
 	courts?: Court[];
 	isLoading?: boolean;
 	error?: string;
+	initialCourt?: Court | null;
+	initialView?: MobileSheetView;
 }
 
 export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
-	const { className, courts = [] } = props;
+	const {
+		className,
+		courts = [],
+		initialCourt = null,
+		initialView = "list",
+	} = props;
 	const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
-	const [selectedCourt, setSelectedCourt] = useState<Court | null>(null);
-	const [view, setView] = useState<MobileSheetView>("list");
+	const [selectedCourt, setSelectedCourt] = useState<Court | null>(
+		initialCourt
+	);
+	const [view, setView] = useState<MobileSheetView>(initialView);
+
+	useEffect(() => {
+		if (initialCourt) {
+			setSelectedCourt(initialCourt);
+			setView("details");
+			setMobileSheetOpen(true);
+		}
+	}, [initialCourt]);
 
 	const handleOpenDetails = (court: Court) => {
 		setSelectedCourt(court);
@@ -50,6 +70,37 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		setView("list");
 	};
 
+	const dateRange = useMemo(() => getDateRange(7), []);
+
+	const {
+		data: onlineEntries,
+		isLoading: isOnlineLoading,
+		isError: isOnlineError,
+	} = useGetCourtOnlineStatusQuery(
+		{
+			courtId: selectedCourt?.id!,
+			startDate: dateRange.startDate,
+			endDate: dateRange.endDate,
+		},
+		{
+			skip: !selectedCourt?.id,
+		}
+	);
+
+	const formattedOnlineEntries = useMemo(() => {
+		if (!onlineEntries) return [];
+		return onlineEntries.map((entry) => {
+			const { formattedTime, formattedDate } = formatDateTime(
+				entry.entryTime
+			);
+			return {
+				formattedTime,
+				formattedDate,
+				usersCount: entry.usersCount,
+			};
+		});
+	}, [onlineEntries]);
+
 	const viewComponents: Record<MobileSheetView, JSX.Element> = {
 		list: (
 			<CourtList
@@ -61,11 +112,14 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		),
 		details: selectedCourt ? (
 			<CourtDetails
+				className={cls.MobileSheetContent}
 				court={selectedCourt}
 				onBack={handleBackToList}
 				onClose={handleCloseSheet}
 				onBooking={handleOpenBooking}
-				className={cls.MobileSheetContent}
+				onlineEntries={formattedOnlineEntries}
+				isOnlineLoading={isOnlineLoading}
+				isOnlineError={isOnlineError}
 			/>
 		) : (
 			<div>Данные отсутствуют</div>
@@ -104,11 +158,10 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 						cls.MobileSheet,
 						{
 							[cls["MobileSheet--withDetails"]]:
-								selectedCourt !== null,
-							[cls["MobileSheet--withList"]]:
-								selectedCourt === null,
-							[cls["MobileSheet--withLBooking"]]:
-								selectedCourt === null,
+								view === "details",
+							[cls["MobileSheet--withList"]]: view === "list",
+							[cls["MobileSheet--withBooking"]]:
+								view === "booking",
 						},
 						[className]
 					)}

@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@maxhub/max-ui";
+import { Button, IconButton, Spinner } from "@maxhub/max-ui";
 import { Typography } from "@maxhub/max-ui";
 import {
 	Calendar1,
@@ -9,20 +9,34 @@ import {
 } from "lucide-react";
 import { memo } from "react";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
+import type { OnlineEntryFormatted } from "@/shared/types/formatedDate.ts";
+import { OnlineEntryItem } from "@/shared/ui/OnlineEntryItem/OnlineEntryItem.tsx";
 import { StarRating } from "@/shared/ui/StartRaiting/StartRaiting.tsx";
 import cls from "./CourtDetails.module.scss";
 import type { Court } from "../../model/types/court.ts";
 
 interface CourtDetailsProps {
+	className?: string;
 	court: Court;
 	onBack: () => void;
 	onClose?: () => void;
 	onBooking: (courtId: string) => void;
-	className?: string;
+	onlineEntries?: OnlineEntryFormatted[];
+	isOnlineLoading?: boolean;
+	isOnlineError?: boolean;
 }
 
 export const CourtDetails = memo((props: CourtDetailsProps) => {
-	const { className, court, onBack, onClose, onBooking } = props;
+	const {
+		className,
+		court,
+		onBack,
+		onClose,
+		onBooking,
+		onlineEntries,
+		isOnlineError,
+		isOnlineLoading,
+	} = props;
 
 	return (
 		<div className={classNames(cls.CourtDetails, {}, [className])}>
@@ -49,7 +63,7 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 
 			<div className={cls.content}>
 				<img
-					src={court.img}
+					src={court.photoUrl}
 					alt={court.title}
 					className={cls.image}
 				/>
@@ -91,6 +105,62 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 				>
 					{court.description}
 				</Typography.Body>
+				<div className={cls.onlineList}>
+					<Typography.Body
+						variant="medium"
+						className={cls.onlineText}
+					>
+						Онлайн на поле:
+					</Typography.Body>
+					<div className={cls.scrollContainer}>
+						{isOnlineLoading && (
+							<div className={cls.centeredContent}>
+								<Spinner
+									size={30}
+									appearance="themed"
+									className={cls.spinner}
+								/>
+							</div>
+						)}
+						{!isOnlineLoading && isOnlineError && (
+							<div className={cls.centeredContent}>
+								<Typography.Body
+									variant="medium"
+									className={cls.errorText}
+								>
+									Не удалось загрузить онлайн-записи
+								</Typography.Body>
+							</div>
+						)}
+						{!isOnlineLoading &&
+							!isOnlineError &&
+							onlineEntries?.length === 0 && (
+								<div className={cls.centeredContent}>
+									<Typography.Body
+										variant="medium"
+										className={cls.noDataText}
+									>
+										Нет записей на это поле
+									</Typography.Body>
+								</div>
+							)}
+						{!isOnlineLoading &&
+							!isOnlineError &&
+							onlineEntries &&
+							onlineEntries.length > 0 && (
+								<div className={cls.entriesList}>
+									{onlineEntries.map((item) => (
+										<OnlineEntryItem
+											usersCount={item.usersCount}
+											entryTime={item.formattedTime}
+											entryDate={item.formattedDate}
+											key={`${item.formattedDate}-${item.formattedTime}`}
+										/>
+									))}
+								</div>
+							)}
+					</div>
+				</div>
 
 				<div className={cls.actionButtons}>
 					<Button

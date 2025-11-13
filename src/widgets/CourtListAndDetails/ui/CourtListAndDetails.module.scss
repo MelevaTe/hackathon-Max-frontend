@@ -6,7 +6,6 @@
 	left: 0;
 	display: flex;
 	overflow: hidden;
-	height: 57%;
 	flex-direction: column;
 	background-color: white;
 	border-top-left-radius: 16px;
@@ -16,7 +15,7 @@
 }
 
 .MobileSheet--withDetails {
-	height: auto;
+	height: 65%;
 }
 
 .MobileSheet--withList {
@@ -24,7 +23,7 @@
 }
 
 .MobileSheet--withBooking {
-	height: 57%;
+	height: auto;
 }
 
 .panel {
