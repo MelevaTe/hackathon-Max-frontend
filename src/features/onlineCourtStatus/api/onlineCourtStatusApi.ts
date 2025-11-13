@@ -8,7 +8,7 @@ const onlineStatusApi = rtkApi.injectEndpoints({
 			{ courtId: string; startDate: string; endDate: string }
 		>({
 			query: ({ courtId, startDate, endDate }) => ({
-				url: "/v1/entries/online",
+				url: "/entry-service/v1/entries/online",
 				params: {
 					courtId,
 					startDate,
