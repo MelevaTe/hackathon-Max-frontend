@@ -1,4 +1,4 @@
-import { CellHeader, Typography } from "@maxhub/max-ui";
+import { CellHeader, Spinner, Typography } from "@maxhub/max-ui";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { BookingHistoryListItem } from "@/entities/BookingHistory/ui/BookingHistoryItem/BookingHistoryListItem.tsx";
@@ -30,7 +30,21 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 		);
 	}
 
-	if (!isLoading && !bookingHistories.length) {
+	if (isLoading) {
+		return (
+			<div className={classNames(cls.BookingActiveList, {}, [className])}>
+				<CellHeader>История записей</CellHeader>
+				<div className={cls.errorAndLoadingContainer}>
+					<Spinner
+						appearance="themed"
+						size={30}
+					/>
+				</div>
+			</div>
+		);
+	}
+
+	if (!bookingHistories.length) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
 				<CellHeader>История записей</CellHeader>

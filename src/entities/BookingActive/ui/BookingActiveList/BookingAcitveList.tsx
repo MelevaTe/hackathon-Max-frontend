@@ -1,4 +1,4 @@
-import { CellHeader, CellList, Typography } from "@maxhub/max-ui";
+import { CellHeader, CellList, Spinner, Typography } from "@maxhub/max-ui";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { classNames } from "@/shared/lib/classNames/classNames";
@@ -30,7 +30,21 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 		);
 	}
 
-	if (!isLoading && !bookingActives.length) {
+	if (isLoading) {
+		return (
+			<div className={classNames(cls.BookingActiveList, {}, [className])}>
+				<CellHeader>Активные записи</CellHeader>
+				<div className={cls.errorAndLoadingContainer}>
+					<Spinner
+						appearance="themed"
+						size={30}
+					/>
+				</div>
+			</div>
+		);
+	}
+
+	if (!bookingActives.length) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
 				<CellHeader>Активные записи</CellHeader>
