@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ThunkConfig } from "@/app/providers/StoreProvider";
+import type { CourtType } from "@/entities/Court";
 import {
 	getCourtPageHasMore,
 	getCourtPageIsLoading,
@@ -8,11 +9,16 @@ import {
 import { fetchCourts } from "../services/fetchCourts.ts";
 import { courtActions } from "../slice/courtSchemaSlice.ts";
 
+export interface FetchNextCourtsPageParams {
+	cityId: number;
+	sports?: CourtType[];
+}
+
 export const fetchNextCourtsPage = createAsyncThunk<
 	void,
-	void,
+	FetchNextCourtsPageParams,
 	ThunkConfig<string>
->("court/fetchNextCourtsPage", async (_, thunkApi) => {
+>("court/fetchNextCourtsPage", async (params, thunkApi) => {
 	const { getState, dispatch } = thunkApi;
 	const hasMore = getCourtPageHasMore(getState());
 	const page = getCourtPageNum(getState());
@@ -20,6 +26,11 @@ export const fetchNextCourtsPage = createAsyncThunk<
 
 	if (hasMore && !isLoading) {
 		dispatch(courtActions.setPage(page + 1));
-		dispatch(fetchCourts({}));
+		dispatch(
+			fetchCourts({
+				...params,
+				replace: false,
+			})
+		);
 	}
 });

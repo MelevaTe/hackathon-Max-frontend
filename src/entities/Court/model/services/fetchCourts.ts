@@ -4,10 +4,12 @@ import {
 	getCourtPageLimit,
 	getCourtPageNum,
 } from "../selectors/courtPageSelectors.ts";
-import type { Court } from "../types/court";
+import type { Court, CourtType } from "../types/court";
 
 export interface FetchCourtsParams {
 	replace?: boolean;
+	cityId: number;
+	sports?: CourtType[];
 }
 
 export const fetchCourts = createAsyncThunk<
@@ -16,6 +18,7 @@ export const fetchCourts = createAsyncThunk<
 	ThunkConfig<string>
 >("court/fetchCourts", async (props, thunkApi) => {
 	const { extra, rejectWithValue, getState } = thunkApi;
+	const { cityId, sports, replace } = props;
 
 	const limit = getCourtPageLimit(getState());
 	const page = getCourtPageNum(getState());
@@ -23,7 +26,10 @@ export const fetchCourts = createAsyncThunk<
 	try {
 		const response = await extra.api.post<Court[]>(
 			"/courts-service/v1/courts/info/search/locations",
-			{},
+			{
+				cityId,
+				sports,
+			},
 			{
 				params: {
 					page,

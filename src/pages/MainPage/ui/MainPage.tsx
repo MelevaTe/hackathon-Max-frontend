@@ -59,7 +59,12 @@ const MainPage = () => {
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		dispatch(fetchCourts({}));
+		dispatch(
+			fetchCourts({
+				cityId: 1,
+				sports: [currentSport],
+			})
+		);
 	}, [dispatch, currentSport]);
 
 	useEffect(() => {
@@ -69,7 +74,12 @@ const MainPage = () => {
 	useInfiniteScroll({
 		callback: () => {
 			if (hasMore && !isLoadingCourt) {
-				dispatch(fetchNextCourtsPage());
+				dispatch(
+					fetchNextCourtsPage({
+						cityId: 1,
+						sports: [currentSport],
+					})
+				);
 			}
 		},
 		triggerRef,
