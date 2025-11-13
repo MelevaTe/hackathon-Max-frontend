@@ -9,13 +9,14 @@ import {
 } from "@maxhub/max-ui";
 import { CircleArrowLeft } from "lucide-react";
 import { memo } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { InfiniteBookingList } from "@/features/infiniteBookingList/ui/InfiniteBookitList.tsx";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
 import cls from "./ProfilePage.module.scss";
 
 const ProfilePage = () => {
 	const { user, onClose } = useMax();
+	const navigate = useNavigate();
 
 	return (
 		<Panel
@@ -29,10 +30,9 @@ const ProfilePage = () => {
 					asChild
 					mode="secondary"
 					size="medium"
+					onClick={() => navigate("/")}
 				>
-					<Link to="/">
-						<CircleArrowLeft />
-					</Link>
+					<CircleArrowLeft />
 				</IconButton>
 			</div>
 			<Flex
