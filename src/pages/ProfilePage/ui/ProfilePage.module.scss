@@ -3,17 +3,17 @@
 	overflow: hidden;
 	height: 100dvh;
 	flex-direction: column;
-	padding: 20px 0;
+	padding: 1.25rem 0;
 	overscroll-behavior: none;
 }
 
 .iconButtonWrapper {
 	display: flex;
-	width: 32px;
-	height: 32px;
+	width: 2rem;
+	height: 2rem;
 	align-items: center;
 	justify-content: center;
-	margin-inline-start: 20px;
+	margin-inline-start: 1.25rem;
 }
 
 .header {
@@ -24,17 +24,17 @@
 
 .content {
 	width: 100%;
-	max-height: calc(100dvh - 280px);
+	max-height: calc(100dvh - 17.5rem);
 	flex: 1;
 	overflow-y: auto;
 	overscroll-behavior: contain;
-	padding-block-end: 20px;
-	padding-inline: 20px;
+	padding-block-end: 1.25rem;
+	padding-inline: 1.25rem;
 }
 
 .footerButton {
 	width: 100%;
 	flex-shrink: 0;
-	padding: 0 20px;
-	padding-block-end: 20px;
+	padding: 0 1.25rem;
+	padding-block-end: 1.25rem;
 }

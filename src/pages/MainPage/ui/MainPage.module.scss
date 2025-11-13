@@ -6,21 +6,21 @@
 
 .avatar {
 	position: absolute;
-	top: 16px;
-	left: 16px;
+	top: 1rem;
+	left: 1rem;
 	display: flex;
-	width: 50px;
-	height: 50px;
+	width: 3.125rem;
+	height: 3.125rem;
 	align-items: center;
 	justify-content: center;
 }
 
 .filter {
 	position: absolute;
-	top: 16px;
-	right: 16px;
+	top: 1rem;
+	right: 1rem;
 	display: flex;
 	min-width: 33%;
-	height: 50px;
+	height: 3.125rem;
 	align-items: center;
 }

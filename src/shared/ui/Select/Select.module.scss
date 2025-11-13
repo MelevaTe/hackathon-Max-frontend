@@ -1,9 +1,9 @@
 .Select {
 	display: flex;
-	height: 50px;
+	height: 3.125rem;
 	align-items: center;
 	justify-content: center;
-	padding: 0 12px;
+	padding: 0 0.75rem;
 	border-radius: 1rem;
 	background-color: var(--max-accent-color);
 	color: var(--text-color);
@@ -26,7 +26,7 @@
 	right: 0;
 	left: auto;
 	width: 33%;
-	max-height: 200px;
+	max-height: 12.5rem;
 	border-radius: 1rem;
 	margin-top: 4px;
 	background-color: var(--max-accent-color);
@@ -40,10 +40,10 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 0 12px;
+	padding: 0 0.75rem;
 	color: var(--text-color);
 	cursor: pointer;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: 500;
 	outline: none;
 	text-align: center;
@@ -74,8 +74,8 @@
 }
 
 .SelectOptionCheck {
-	width: 16px;
-	height: 16px;
+	width: 1rem;
+	height: 1rem;
 	flex-shrink: 0;
 	visibility: hidden;
 }
