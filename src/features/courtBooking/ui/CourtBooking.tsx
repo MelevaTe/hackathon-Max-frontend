@@ -111,6 +111,7 @@ export const CourtBooking = (props: CourtBookingProps) => {
 					minuteStep={30}
 					format="HH:mm"
 					showSecond={false}
+					inputReadOnly={true}
 					placeholder="Выберите время"
 					style={{
 						width: "100%",
