@@ -10,17 +10,28 @@ interface BookingHistoryListProps {
 	className?: string;
 	bookingHistories: BookingHistory[];
 	isLoading?: boolean;
+	error?: unknown;
 }
 
 export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
-	const { className, bookingHistories, isLoading } = props;
+	const { className, bookingHistories, isLoading, error } = props;
 	const { t } = useTranslation();
+
+	if (error) {
+		return (
+			<div className={classNames(cls.BookingActiveList, {}, [className])}>
+				<Typography.Body variant="large">
+					Ошибка при загрузке записей
+				</Typography.Body>
+			</div>
+		);
+	}
 
 	if (!isLoading && !bookingHistories.length) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
 				<Typography.Body variant="large">
-					У вас нет истории запсей
+					У вас нет истории записей
 				</Typography.Body>
 			</div>
 		);
@@ -28,7 +39,7 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 
 	return (
 		<div className={classNames(cls.BookingHistoryList, {}, [className])}>
-			<CellHeader>Активные записи</CellHeader>
+			<CellHeader>История записей</CellHeader>
 			<div className={cls.scrollContainer}>
 				{bookingHistories.map((item) => (
 					<BookingHistoryListItem

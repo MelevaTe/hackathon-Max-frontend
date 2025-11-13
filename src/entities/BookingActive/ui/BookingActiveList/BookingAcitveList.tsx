@@ -10,11 +10,22 @@ interface BookingActiveListProps {
 	className?: string;
 	bookingActives: BookingActive[];
 	isLoading?: boolean;
+	error?: unknown;
 }
 
 export const BookingActiveList = memo((props: BookingActiveListProps) => {
-	const { className, bookingActives, isLoading } = props;
+	const { className, bookingActives, isLoading, error } = props;
 	const { t } = useTranslation();
+
+	if (error) {
+		return (
+			<div className={classNames(cls.BookingActiveList, {}, [className])}>
+				<Typography.Body variant="large">
+					Ошибка при загрузке записей
+				</Typography.Body>
+			</div>
+		);
+	}
 
 	if (!isLoading && !bookingActives.length) {
 		return (

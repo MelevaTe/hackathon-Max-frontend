@@ -108,30 +108,6 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 	const isFetching = type === "active" ? isActiveFetching : isHistoryFetching;
 	const error = type === "active" ? activeError : historyError;
 
-	if (error) {
-		return (
-			<div className={cls.spinnerContainer}>
-				<Typography.Body variant="large">
-					{t("Ошибка при загрузке записей")}
-				</Typography.Body>
-			</div>
-		);
-	}
-	const isEmpty =
-		type === "active" ? activeResponse?.isEmpty : historyResponse?.isEmpty;
-
-	if (!isLoading && isEmpty && page === 1) {
-		return (
-			<div className={cls.spinnerContainer}>
-				<Typography.Body variant="large">
-					{type === "active"
-						? t("Нет активных бронирований")
-						: t("Нет истории бронирований")}
-				</Typography.Body>
-			</div>
-		);
-	}
-
 	const isInitialLoading = isLoading && page === 1;
 
 	return (
@@ -140,11 +116,13 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 				<BookingActiveList
 					bookingActives={allActiveItems}
 					isLoading={isInitialLoading}
+					error={error}
 				/>
 			) : (
 				<BookingHistoryList
 					bookingHistories={allHistoryItems}
 					isLoading={isInitialLoading}
+					error={error}
 				/>
 			)}
 
