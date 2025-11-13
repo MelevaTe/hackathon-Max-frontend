@@ -8,7 +8,7 @@ const bookingHistoryApi = rtkApi.injectEndpoints({
 			{ page: number; size?: number }
 		>({
 			query: (params) => ({
-				url: "/bookings/history",
+				url: "/v1/entries/history",
 				params,
 			}),
 			providesTags: ["BookingHistory"],

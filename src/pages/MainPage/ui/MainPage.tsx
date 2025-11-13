@@ -34,7 +34,12 @@ const MainPage = () => {
 	const courts = useSelector(getCourtsData);
 
 	useEffect(() => {
-		dispatch(fetchCourts({ courtType: currentSport }));
+		dispatch(
+			fetchCourts({
+				sports: [currentSport],
+				cityId: "1",
+			})
+		);
 	}, [dispatch, currentSport]);
 
 	const destinationParam = searchParams.get("destination");

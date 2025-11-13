@@ -30,7 +30,7 @@ export const CourtListItem = memo((props: CourtListItemProps) => {
 			onClick={handleClick}
 		>
 			<img
-				src={court.img}
+				src={court.photoUrl}
 				alt={court.title}
 				className={cls.image}
 			/>

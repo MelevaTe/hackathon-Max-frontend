@@ -7,23 +7,19 @@ import type {
 import type { CombinedState } from "@reduxjs/toolkit/query";
 import type { AxiosInstance } from "axios";
 import type { CourtSchema } from "@/entities/Court";
+import type { CourtsCordsSchema } from "@/entities/CourtCord";
 import type { courtBookingSchema } from "@/features/courtBooking";
 import type { sportFilterSchema } from "@/features/sportFilter";
 import type { rtkApi } from "@/shared/api/rtkApi";
-// import type { ScrollSaveSchema } from "@/widgets/Page/ScrollSave";
 
 export interface StateSchema {
 	sportFilter: sportFilterSchema;
-	// scrollSave: ScrollSaveSchema;
 	[rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>;
 
 	// Асинхронные редюсеры
 	court?: CourtSchema;
+	courtsCords?: CourtsCordsSchema;
 	courtBooking?: courtBookingSchema;
-	// profile?: ProfileSchema;
-	// routePoints?: RoutePointsSchema;
-	// tripForm?: TripFormSchema;
-	// tripResult?: TripResultSchema;
 }
 
 export type StateSchemaKey = keyof StateSchema;

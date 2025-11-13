@@ -13,6 +13,12 @@ export const rtkApi = createApi({
 			return headers;
 		},
 	}),
-	tagTypes: ["BookingActive", "BookingHistory", "Weather"],
+	tagTypes: [
+		"BookingActive",
+		"BookingHistory",
+		"CourtOnline",
+		"Court",
+		"Weather",
+	],
 	endpoints: (builder) => ({}),
 });

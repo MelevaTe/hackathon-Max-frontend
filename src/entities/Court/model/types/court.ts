@@ -1,13 +1,14 @@
-export type CourtType = "football" | "basketball" | "tennis" | "volleyball";
+export type CourtType = "FOOTBALL" | "BASKETBALL" | "TENNIS" | "VOLLEYBALL";
 
 export interface Court {
 	id: string;
-	title: string;
+	lat: number;
+	lon: number;
 	address: string;
-	description: string;
-	paid: boolean;
 	rating: number;
-	img?: string;
 	type: CourtType;
-	date: string;
+	photoUrl?: string;
+	paid: boolean;
+	description: string;
+	title: string;
 }

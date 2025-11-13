@@ -12,6 +12,8 @@ export default defineConfig({
 		alias: [{ find: "@", replacement: "/src" }],
 	},
 	define: {
-		__API__: JSON.stringify("http://10.134.113.92:8072"),
+		__API__: JSON.stringify(
+			"https://lusciously-pragmatic-yeti.cloudpub.ru"
+		),
 	},
 });

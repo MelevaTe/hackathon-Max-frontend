@@ -4,5 +4,5 @@ export interface BookingActive {
 	title: string;
 	address: string;
 	lat: number;
-	long: number;
+	lon: number;
 }
