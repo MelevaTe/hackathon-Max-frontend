@@ -48,21 +48,6 @@
 			}
 		}
 
-		&--selected {
-			border-color: var(--primary-color);
-			background-color: color-mix(
-				in srgb,
-				var(--primary-color) 10%,
-				transparent
-			);
-
-			.DayLabel,
-			.DayNumber,
-			.DayMonth {
-				color: var(--primary-color);
-			}
-		}
-
 		&--disabled {
 			cursor: not-allowed;
 			opacity: 50%;
@@ -70,7 +55,6 @@
 	}
 
 	.DayLabel {
-		color: var(--text-muted);
 		font-size: 0.75rem;
 		font-weight: 500;
 	}
