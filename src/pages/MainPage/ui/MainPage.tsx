@@ -1,6 +1,8 @@
 import React, { memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+import { useTheme } from "@/app/providers/ThemeProvider";
 import { courtReducer } from "@/entities/Court";
 import { getCourtsData } from "@/entities/Court/model/selectors/getCourtsData.ts";
 import { fetchCourts } from "@/entities/Court/model/services/fetchCourts.ts";
@@ -25,6 +27,8 @@ const reducers: ReducersList = {
 const MainPage = () => {
 	const { user } = useMax();
 	const { t } = useTranslation();
+	const [searchParams] = useSearchParams();
+	const { theme } = useTheme();
 	const dispatch = useAppDispatch();
 	const currentSport = useSelector(getSport);
 	const courts = useSelector(getCourtsData);
@@ -33,10 +37,23 @@ const MainPage = () => {
 		dispatch(fetchCourts({ courtType: currentSport }));
 	}, [dispatch, currentSport]);
 
+	const destinationParam = searchParams.get("destination");
+	const destinationCoords = destinationParam
+		? (destinationParam.split(",").map(Number) as [number, number])
+		: undefined;
+
+	console.log("Дестинейшен:", destinationCoords);
+	console.log("searchParams:", `/?route=1${searchParams}`);
+
 	return (
 		<DynamicModuleLoader reducers={reducers}>
 			<div className={cls["main-page"]}>
-				<MapComponent />
+				<MapComponent
+					className={cls.map}
+					theme={theme}
+					destinationCoords={destinationCoords}
+					showRoute={!!destinationCoords}
+				/>
 				<div className={cls.avatar}>
 					<ClickableAvatar
 						userId={user?.id}

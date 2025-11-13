@@ -15,6 +15,12 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 	const { className, bookingActive } = props;
 	const { t } = useTranslation();
 
+	const destinationCoords = [bookingActive.long, bookingActive.lat] as [
+		number,
+		number,
+	];
+	const searchParams = `?destination=${destinationCoords.join(",")}`;
+
 	return (
 		<CellSimple
 			after={
@@ -24,13 +30,13 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 					mode="primary"
 					size="medium"
 				>
-					<Link to="/">Маршурт</Link>
+					<Link to={`/?route=1${searchParams}`}>Маршрут</Link>
 				</Button>
 			}
 			before={<Sun color="#007bff" />}
 			height="normal"
 			overline=""
-			subtitle={`${bookingActive.date} • ${bookingActive.date}`}
+			subtitle={`${bookingActive.entryTime} • ${bookingActive.entryTime}`}
 			title={bookingActive.title}
 			className={cls.cell}
 		/>

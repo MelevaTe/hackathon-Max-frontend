@@ -1,52 +1,63 @@
 import { load } from "@2gis/mapgl";
 import { useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useUserLocation } from "@/shared/lib/hooks/useUserLocation";
 import { MapWrapper } from "./MapWrapper";
 import "./Map.scss";
-import { Directions } from "@2gis/mapgl-directions";
+import { Theme } from "@/app/providers/ThemeProvider";
 
 export interface MarkerData {
+	id: string;
 	coordinates: [number, number];
 }
+
+const THEME_TO_STYLE_ID: Record<Theme, string> = {
+	[Theme.LIGHT]: "d013506c-74b4-421f-939d-58c7f475b6b4",
+	[Theme.DARK]: "bead9c80-2217-47fe-982e-4d385cc4e151",
+};
 
 interface MapProps {
 	className?: string;
 	markers?: MarkerData[];
-	onMapClick?: (coords: { lat: number; lon: number }) => void;
-	onResetRoute?: () => void;
+	theme: Theme;
+	onMarkerClick?: (id: string) => void;
+	destinationCoords?: [number, number];
+	showRoute?: boolean;
 }
 
 export const MapComponent = ({
 	className,
 	markers = [],
-	onMapClick,
-	onResetRoute,
+	theme,
+	onMarkerClick,
+	destinationCoords,
+	showRoute = false,
 }: MapProps) => {
+	const [searchParams] = useSearchParams();
+	const { getUserLocation } = useUserLocation();
+
 	const mapRef = useRef<mapgl.Map | null>(null);
 	const mapglRef = useRef<any>(null);
 	const markersRef = useRef<mapgl.Marker[]>([]);
-	const directionsRef = useRef<Directions | null>(null);
 	const circleRef = useRef<mapgl.CircleMarker | null>(null);
-	const onMapClickRef = useRef(onMapClick);
-	const onResetRouteRef = useRef(onResetRoute);
-
-	useEffect(() => {
-		onMapClickRef.current = onMapClick;
-		onResetRouteRef.current = onResetRoute;
-	}, [onMapClick, onResetRoute]);
+	const destinationMarkerRef = useRef<mapgl.Marker | null>(null);
 
 	useEffect(() => {
 		let map: mapgl.Map | null = null;
 		let control: mapgl.Control | null = null;
 		let button: HTMLElement | null = null;
-		let resetControl: mapgl.Control | null = null;
-		let resetButton: HTMLElement | null = null;
 
-		const mapClickHandler = (e: any) => {
-			if (onMapClickRef.current) {
-				const lat = e.lngLat[0];
-				const lon = e.lngLat[1];
-				onMapClickRef.current({ lat, lon });
+		const addDestinationMarker = (coords: [number, number]) => {
+			if (!mapRef.current || !mapglRef.current) return;
+
+			if (destinationMarkerRef.current) {
+				destinationMarkerRef.current.destroy();
 			}
+
+			const marker = new mapglRef.current.Marker(mapRef.current, {
+				coordinates: coords,
+			});
+			destinationMarkerRef.current = marker;
 		};
 
 		const success = (pos: GeolocationPosition) => {
@@ -74,8 +85,23 @@ export const MapComponent = ({
 
 			circleRef.current = newCircle;
 
-			currentMap.setCenter(center);
-			currentMap.setZoom(16);
+			if (destinationCoords) {
+				const bounds = {
+					southWest: [
+						Math.min(center[0], destinationCoords[0]),
+						Math.min(center[1], destinationCoords[1]),
+					] as [number, number],
+					northEast: [
+						Math.max(center[0], destinationCoords[0]),
+						Math.max(center[1], destinationCoords[1]),
+					] as [number, number],
+				};
+				currentMap.fitBounds(bounds);
+				addDestinationMarker(destinationCoords);
+			} else {
+				currentMap.setCenter(center);
+				currentMap.setZoom(16);
+			}
 		};
 
 		const geoFindMe = () => {
@@ -100,22 +126,25 @@ export const MapComponent = ({
 			});
 		};
 
-		const initMap = async () => {
+		const start = async () => {
 			const mapglAPI = await load();
 			mapglRef.current = mapglAPI;
 
+			const initialCenter: [number, number] = [39.712619, 47.23683];
+
 			map = new mapglAPI.Map("map-container", {
-				center: [39.712619, 47.23683],
+				center: initialCenter,
 				zoom: 17,
 				key: import.meta.env.VITE_2GIS_API_KEY,
 				zoomControl: "centerRight",
 				trafficControl: "centerRight",
-				style: "bead9c80-2217-47fe-982e-4d385cc4e151",
 			});
 
 			mapRef.current = map;
 
-			map.on("click", mapClickHandler);
+			if (THEME_TO_STYLE_ID[theme]) {
+				map.setStyleById(THEME_TO_STYLE_ID[theme]);
+			}
 
 			const controlContent = `
         <div class="mapgl-geolocate-control">
@@ -139,48 +168,62 @@ export const MapComponent = ({
 				button.addEventListener("click", geoFindMe);
 			}
 
-			if (onResetRouteRef.current) {
-				resetControl = new mapglAPI.Control(
-					map,
-					`<button class="mapgl-reset-button">Сбросить маршрут</button>`,
-					{
-						position: "centerRight",
+			markers.forEach((markerData) => {
+				if (map) {
+					const marker = new mapglAPI.Marker(map, {
+						coordinates: markerData.coordinates,
+					});
+
+					if (onMarkerClick) {
+						marker.on("click", (e) => {
+							onMarkerClick(markerData.id);
+						});
 					}
+
+					markersRef.current.push(marker);
+				}
+			});
+
+			if (markers.length > 0 && !destinationCoords) {
+				const lats = markers.map((m) => m.coordinates[0]);
+				const lons = markers.map((m) => m.coordinates[1]);
+
+				const validLats = lats.filter(
+					(lat) => typeof lat === "number" && !isNaN(lat)
+				);
+				const validLons = lons.filter(
+					(lon) => typeof lon === "number" && !isNaN(lon)
 				);
 
-				resetButton = resetControl
-					.getContainer()
-					.querySelector("button");
-				if (resetButton) {
-					const handleResetClick = (e: Event) => {
-						e.stopPropagation();
-						if (onResetRouteRef.current) {
-							onResetRouteRef.current();
-						}
-					};
-					resetButton.addEventListener("click", handleResetClick);
+				if (validLats.length > 0 && validLons.length > 0) {
+					const centerLat =
+						validLats.reduce((a, b) => a + b, 0) / validLats.length;
+					const centerLon =
+						validLons.reduce((a, b) => a + b, 0) / validLons.length;
+					map.setCenter([centerLat, centerLon]);
+					map.setZoom(markers.length === 1 ? 16 : 14);
 				}
+			}
+
+			if (destinationCoords) {
+				geoFindMe();
 			}
 		};
 
-		initMap();
+		start();
 
 		return () => {
-			if (mapRef.current) {
-				mapRef.current.off("click", mapClickHandler);
-			}
-
 			markersRef.current.forEach((m) => m.destroy());
 			markersRef.current = [];
-
-			if (directionsRef.current) {
-				directionsRef.current.clear();
-				directionsRef.current = null;
-			}
 
 			if (circleRef.current) {
 				circleRef.current.destroy();
 				circleRef.current = null;
+			}
+
+			if (destinationMarkerRef.current) {
+				destinationMarkerRef.current.destroy();
+				destinationMarkerRef.current = null;
 			}
 
 			if (button) {
@@ -189,74 +232,17 @@ export const MapComponent = ({
 
 			if (control) control.destroy();
 
-			if (resetControl) resetControl.destroy();
-
 			if (mapRef.current) {
 				mapRef.current.destroy();
 				mapRef.current = null;
 			}
 		};
-	}, []);
-
-	useEffect(() => {
-		const map = mapRef.current;
-		const mapglAPI = mapglRef.current;
-		if (!map || !mapglAPI) return;
-
-		markersRef.current.forEach((m) => m.destroy());
-		markersRef.current = [];
-
-		markers.forEach((markerData) => {
-			const marker = new mapglAPI.Marker(map, {
-				coordinates: markerData.coordinates,
-			});
-			markersRef.current.push(marker);
-		});
-
-		if (markers.length > 0) {
-			const lats = markers.map((m) => m.coordinates[0]);
-			const lons = markers.map((m) => m.coordinates[1]);
-
-			const validLats = lats.filter(
-				(lat) => typeof lat === "number" && !isNaN(lat)
-			);
-			const validLons = lons.filter(
-				(lon) => typeof lon === "number" && !isNaN(lon)
-			);
-
-			if (validLats.length > 0 && validLons.length > 0) {
-				const centerLat =
-					validLats.reduce((a, b) => a + b, 0) / validLats.length;
-				const centerLon =
-					validLons.reduce((a, b) => a + b, 0) / validLons.length;
-				map.setCenter([centerLat, centerLon]);
-				map.setZoom(markers.length === 1 ? 16 : 14);
-			}
-		}
-
-		if (directionsRef.current) {
-			directionsRef.current.clear();
-		}
-
-		if (markers.length >= 2) {
-			if (!directionsRef.current) {
-				directionsRef.current = new Directions(map, {
-					directionsApiKey: import.meta.env.VITE_2GIS_API_KEY,
-				});
-			}
-
-			directionsRef.current.carRoute({
-				points: markers.map((m) => m.coordinates),
-			});
-		}
-	}, [markers]);
+	}, [markers, theme, destinationCoords, onMarkerClick]);
 
 	return (
-		<div
+		<MapWrapper
 			className={className}
 			style={{ width: "100%", height: "100%" }}
-		>
-			<MapWrapper />
-		</div>
+		/>
 	);
 };
