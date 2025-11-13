@@ -20,9 +20,11 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 	if (error) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
-				<Typography.Body variant="large">
-					Ошибка при загрузке записей
-				</Typography.Body>
+				<div className={cls.errorAndLoadingContainer}>
+					<Typography.Body variant="large">
+						Ошибка при загрузке записей
+					</Typography.Body>
+				</div>
 			</div>
 		);
 	}
@@ -30,9 +32,11 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 	if (!isLoading && !bookingActives.length) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
-				<Typography.Body variant="large">
-					У вас нет активных записей
-				</Typography.Body>
+				<div className={cls.errorAndLoadingContainer}>
+					<Typography.Body variant="large">
+						У вас нет активных записей
+					</Typography.Body>
+				</div>
 			</div>
 		);
 	}

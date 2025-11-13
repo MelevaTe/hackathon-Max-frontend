@@ -6,6 +6,7 @@ import { BookingActiveList } from "@/entities/BookingActive";
 import type { BookingActive } from "@/entities/BookingActive/model/types/bookingActive";
 import { BookingHistoryList } from "@/entities/BookingHistory";
 import type { BookingHistory } from "@/entities/BookingHistory/model/types/bookingHistory";
+import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import { useInfiniteScroll } from "@/shared/lib/hooks/useInfiniteScroll.ts";
 import cls from "./InfiniteBookingList.module.scss";
 import { useGetActiveBookingsQuery } from "../api/bookingActiveApi.ts";
@@ -111,7 +112,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 	const isInitialLoading = isLoading && page === 1;
 
 	return (
-		<div className={className}>
+		<div className={classNames(cls.InfiniteBookingList, {}, [className])}>
 			{type === "active" ? (
 				<BookingActiveList
 					bookingActives={allActiveItems}
@@ -124,15 +125,6 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 					isLoading={isInitialLoading}
 					error={error}
 				/>
-			)}
-
-			{isFetching && page > 1 && (
-				<div className={cls.spinnerContainer}>
-					<Spinner
-						appearance="themed"
-						size={30}
-					/>
-				</div>
 			)}
 			{hasNextPage && (
 				<div
