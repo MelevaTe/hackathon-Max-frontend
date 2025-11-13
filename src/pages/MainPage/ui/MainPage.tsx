@@ -6,7 +6,6 @@ import { useTheme } from "@/app/providers/ThemeProvider";
 import {
 	courtReducer,
 	fetchCourts,
-	getCourtsData,
 	useGetCourtByIdQuery,
 } from "@/entities/Court";
 import {
