@@ -14,10 +14,20 @@ interface CourtListProps {
 	isLoading?: boolean;
 	onItemClick: (court: Court) => void;
 	onClose: () => void;
+	triggerRef?: React.RefObject<HTMLDivElement>;
+	wrapperRef?: React.RefObject<HTMLDivElement>;
 }
 
 export const CourtList = memo((props: CourtListProps) => {
-	const { className, courts, isLoading, onItemClick, onClose } = props;
+	const {
+		className,
+		courts,
+		isLoading,
+		onItemClick,
+		onClose,
+		triggerRef,
+		wrapperRef,
+	} = props;
 	const { t } = useTranslation();
 
 	if (!isLoading && !courts.length) {
@@ -44,7 +54,10 @@ export const CourtList = memo((props: CourtListProps) => {
 					<X />
 				</IconButton>
 			</div>
-			<div className={cls.content}>
+			<div
+				ref={wrapperRef}
+				className={cls.content}
+			>
 				{courts.map((court) => (
 					<CourtListItem
 						key={court.id}
@@ -52,6 +65,10 @@ export const CourtList = memo((props: CourtListProps) => {
 						onClick={() => onItemClick(court)}
 					/>
 				))}
+				<div
+					ref={triggerRef}
+					style={{ height: "20px", minHeight: "20px" }}
+				/>
 			</div>
 		</div>
 	);

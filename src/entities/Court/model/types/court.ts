@@ -11,4 +11,5 @@ export interface Court {
 	paid: boolean;
 	description: string;
 	title: string;
+	city_id: null;
 }

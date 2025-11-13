@@ -18,6 +18,8 @@ interface CourtListAndDetailsProps {
 	error?: string;
 	initialCourt?: Court | null;
 	initialView?: MobileSheetView;
+	triggerRef?: React.RefObject<HTMLDivElement>;
+	wrapperRef?: React.RefObject<HTMLDivElement>;
 }
 
 export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
@@ -26,6 +28,8 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		courts = [],
 		initialCourt = null,
 		initialView = "list",
+		triggerRef,
+		wrapperRef,
 	} = props;
 	const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
 	const [selectedCourt, setSelectedCourt] = useState<Court | null>(
@@ -118,6 +122,8 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 				className={cls.MobileSheetContent}
 				onItemClick={handleOpenDetails}
 				onClose={handleCloseSheet}
+				triggerRef={triggerRef}
+				wrapperRef={wrapperRef}
 			/>
 		),
 		details: selectedCourt ? (

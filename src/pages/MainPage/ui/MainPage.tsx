@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
@@ -9,6 +9,12 @@ import {
 	getCourtsData,
 	useGetCourtByIdQuery,
 } from "@/entities/Court";
+import {
+	getCourtPageData,
+	getCourtPageHasMore,
+	getCourtPageIsLoading,
+} from "@/entities/Court/model/selectors/courtPageSelectors.ts";
+import { fetchNextCourtsPage } from "@/entities/Court/model/services/fetchNextCourtsPage.ts";
 import {
 	type CourtsCords,
 	courtsCordsReducer,
@@ -22,6 +28,7 @@ import {
 	type ReducersList,
 } from "@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader.tsx";
 import { useAppDispatch } from "@/shared/lib/hooks/useAppDispatch.ts";
+import { useInfiniteScroll } from "@/shared/lib/hooks/useInfiniteScroll.ts";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
 import { ClickableAvatar } from "@/shared/ui/ClickableAvatar/ClickableAvatar.tsx";
 import {
@@ -44,23 +51,31 @@ const MainPage = () => {
 	const { theme } = useTheme();
 	const dispatch = useAppDispatch();
 	const currentSport = useSelector(getSport);
-	const courts = useSelector(getCourtsData);
+	const courts = useSelector(getCourtPageData);
+	const hasMore = useSelector(getCourtPageHasMore);
+	const isLoadingCourt = useSelector(getCourtPageIsLoading);
 	const courtsCords = useSelector(getCourtsCords);
 	const [selectedCourtId, setSelectedCourtId] = useState<string | null>(null);
+	const triggerRef = useRef<HTMLDivElement>(null);
+	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		dispatch(
-			fetchCourts({
-				sports: [currentSport],
-				cityId: 1,
-			})
-		);
+		dispatch(fetchCourts({}));
 	}, [dispatch, currentSport]);
 
 	useEffect(() => {
 		dispatch(fetchCourtsCord({ cityId: 1, courtType: currentSport }));
-		console.log("useEffect прошел успешно видимо");
 	}, [dispatch, currentSport]);
+
+	useInfiniteScroll({
+		callback: () => {
+			if (hasMore && !isLoadingCourt) {
+				dispatch(fetchNextCourtsPage());
+			}
+		},
+		triggerRef,
+		wrapperRef,
+	});
 
 	const destinationParam = searchParams.get("destination");
 	const destinationCoords = destinationParam
@@ -78,21 +93,14 @@ const MainPage = () => {
 		skip: !selectedCourtId,
 	});
 
-	console.log("состояние useGetCourtByIdQuery:", {
-		isLoading,
-		error: error ? error : null,
-		hasData: !!selectedCourt,
-		selectedCourtId,
-	});
-
 	const handleMarkerClick = useCallback((courtInfoId: string) => {
 		setSelectedCourtId(courtInfoId);
 	}, []);
 
 	const transformCourtsCordsToMarkers = (
-		courts: CourtsCords[]
+		courtsCords: CourtsCords[]
 	): MarkerData[] => {
-		return courts.map((court) => ({
+		return courtsCords.map((court) => ({
 			id: court.id,
 			coordinates: [court.lon, court.lat],
 			courtInfoId: court.courtInfoId,
@@ -122,9 +130,11 @@ const MainPage = () => {
 				</div>
 				<SportFilter className={cls.filter} />
 				<CourtListAndDetails
+					wrapperRef={wrapperRef}
 					courts={courts}
 					initialCourt={selectedCourt}
 					initialView="details"
+					triggerRef={triggerRef}
 				/>
 			</div>
 		</DynamicModuleLoader>
