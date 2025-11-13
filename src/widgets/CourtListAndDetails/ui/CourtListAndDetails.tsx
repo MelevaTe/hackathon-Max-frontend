@@ -72,6 +72,16 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 
 	const dateRange = useMemo(() => getDateRange(7), []);
 
+	const utcDateRange = useMemo(() => {
+		const startDate = new Date(dateRange.startDate);
+		const endDate = new Date(dateRange.endDate);
+
+		return {
+			startDate: startDate.toISOString(),
+			endDate: endDate.toISOString(),
+		};
+	}, [dateRange]);
+
 	const {
 		data: onlineEntries,
 		isLoading: isOnlineLoading,
@@ -79,8 +89,8 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 	} = useGetCourtOnlineStatusQuery(
 		{
 			courtId: selectedCourt?.id!,
-			startDate: dateRange.startDate,
-			endDate: dateRange.endDate,
+			startDate: utcDateRange.startDate,
+			endDate: utcDateRange.endDate,
 		},
 		{
 			skip: !selectedCourt?.id,
