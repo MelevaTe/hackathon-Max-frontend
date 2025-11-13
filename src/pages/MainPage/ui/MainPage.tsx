@@ -85,8 +85,8 @@ const MainPage = () => {
 		selectedCourtId,
 	});
 
-	const handleMarkerClick = useCallback((id: string) => {
-		setSelectedCourtId(id);
+	const handleMarkerClick = useCallback((courtInfoId: string) => {
+		setSelectedCourtId(courtInfoId);
 	}, []);
 
 	const transformCourtsCordsToMarkers = (
@@ -95,6 +95,7 @@ const MainPage = () => {
 		return courts.map((court) => ({
 			id: court.id,
 			coordinates: [court.lon, court.lat],
+			courtInfoId: court.courtInfoId,
 		}));
 	};
 

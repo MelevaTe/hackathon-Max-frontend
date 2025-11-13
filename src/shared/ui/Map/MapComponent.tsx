@@ -9,6 +9,7 @@ import { Theme } from "@/app/providers/ThemeProvider";
 export interface MarkerData {
 	id: string;
 	coordinates: [number, number];
+	courtInfoId: string;
 }
 
 const THEME_TO_STYLE_ID: Record<Theme, string> = {
@@ -20,7 +21,7 @@ interface MapProps {
 	className?: string;
 	markers?: MarkerData[];
 	theme: Theme;
-	onMarkerClick?: (id: string) => void;
+	onMarkerClick?: (courtInfoId: string) => void;
 	destinationCoords?: [number, number];
 	showRoute?: boolean;
 }
@@ -176,7 +177,7 @@ export const MapComponent = ({
 
 					if (onMarkerClick) {
 						marker.on("click", (e) => {
-							onMarkerClick(markerData.id);
+							onMarkerClick(markerData.courtInfoId);
 						});
 					}
 
