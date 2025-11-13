@@ -200,7 +200,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 			{(isNextLoading || hasNextPage) && (
 				<div
 					ref={triggerRef}
-					style={{ height: "20px" }}
+					style={{ height: "1px" }}
 				/>
 			)}
 		</div>
