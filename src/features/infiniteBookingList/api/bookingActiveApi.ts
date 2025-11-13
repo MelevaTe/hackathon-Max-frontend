@@ -8,7 +8,7 @@ const bookingActiveApi = rtkApi.injectEndpoints({
 			{ page: number; size?: number }
 		>({
 			query: (params) => ({
-				url: "/v1/entries/active",
+				url: "/entry-service/v1/entries/active",
 				params,
 			}),
 			providesTags: ["BookingActive"],
