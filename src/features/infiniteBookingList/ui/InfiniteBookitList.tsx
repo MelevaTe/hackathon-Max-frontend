@@ -38,10 +38,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 		isLoading: isActiveLoading,
 		isFetching: isActiveFetching,
 		error: activeError,
-	} = useGetActiveBookingsQuery(
-		{ page, size },
-		{ skip: type !== "active", refetchOnMountOrArgChange: true }
-	);
+	} = useGetActiveBookingsQuery({ page, size }, { skip: type !== "active" });
 
 	const {
 		data: historyResponse,
@@ -50,7 +47,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 		error: historyError,
 	} = useGetHistoryBookingsQuery(
 		{ page, size },
-		{ skip: type !== "history", refetchOnMountOrArgChange: true }
+		{ skip: type !== "history" }
 	);
 
 	useEffect(() => {
@@ -59,13 +56,15 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 
 			if (items.length > 0) {
 				setAllActiveItems((prev) =>
-					page === 1 ? items : [...prev, ...items]
+					page === 0 || prev.length === 0
+						? items
+						: [...prev, ...items]
 				);
 			}
 
 			setHasNextPage(activeResponse.hasNextPage);
 
-			if (page === 1 && activeResponse.isEmpty) {
+			if (page === 0 && activeResponse.isEmpty) {
 				setHasNextPage(false);
 			}
 		}
@@ -77,20 +76,22 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 
 			if (items.length > 0) {
 				setAllHistoryItems((prev) =>
-					page === 1 ? items : [...prev, ...items]
+					page === 0 || prev.length === 0
+						? items
+						: [...prev, ...items]
 				);
 			}
 
 			setHasNextPage(historyResponse.hasNextPage);
 
-			if (page === 1 && historyResponse.isEmpty) {
+			if (page === 0 && historyResponse.isEmpty) {
 				setHasNextPage(false);
 			}
 		}
 	}, [historyResponse, type, page]);
 
 	useEffect(() => {
-		setPage(1);
+		setPage(0);
 		setAllActiveItems([]);
 		setAllHistoryItems([]);
 		setHasNextPage(true);
