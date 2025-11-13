@@ -127,7 +127,7 @@ export const CourtBooking = (props: CourtBookingProps) => {
 					mode="primary"
 					size="large"
 				>
-					Забронировать
+					Записаться
 				</Button>
 			</div>
 		</div>
