@@ -30,16 +30,14 @@ const bookingHistoryApi = rtkApi.injectEndpoints({
 				const historyEntries = baseResponse.historyEntries || [];
 				const { message } = baseResponse;
 
-				const hasData = historyEntries && historyEntries.length > 0;
-				const hasNextPage =
-					hasData && historyEntries.length === (arg.size || 10);
-				const isEmpty = !hasData || historyEntries.length === 0;
+				const hasNextPage = historyEntries.length === (arg.size || 10);
+				const isEmpty = !historyEntries || historyEntries.length === 0;
 
 				return {
 					data: historyEntries,
-					message: message,
-					hasNextPage: hasNextPage,
-					isEmpty: isEmpty,
+					message,
+					hasNextPage,
+					isEmpty,
 				};
 			},
 		}),

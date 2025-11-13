@@ -27,18 +27,9 @@ const bookingActiveApi = rtkApi.injectEndpoints({
 				meta,
 				arg
 			) => {
-				console.log(
-					`API Response: page=${arg.page}, size=${arg.size}, data length:`,
-					baseResponse.activeEntries.length
-				);
-
 				const { activeEntries, message } = baseResponse;
 				const hasNextPage = activeEntries.length === (arg.size || 10);
 				const isEmpty = !activeEntries || activeEntries.length === 0;
-
-				console.log(
-					`API: hasNextPage=${hasNextPage}, isEmpty=${isEmpty}`
-				);
 
 				return {
 					data: activeEntries || [],
