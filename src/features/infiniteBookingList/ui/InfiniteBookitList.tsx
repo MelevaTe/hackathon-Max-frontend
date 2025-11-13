@@ -1,12 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
-import { BookingActiveList } from "@/entities/BookingActive";
+import {
+	BookingActiveList,
+	type UIBookingActive,
+} from "@/entities/BookingActive";
 import type { BookingActive } from "@/entities/BookingActive/model/types/bookingActive";
-import { BookingHistoryList } from "@/entities/BookingHistory";
+import {
+	BookingHistoryList,
+	type UIBookingHistory,
+} from "@/entities/BookingHistory";
 import type { BookingHistory } from "@/entities/BookingHistory/model/types/bookingHistory";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import { useInfiniteScroll } from "@/shared/lib/hooks/useInfiniteScroll.ts";
+import { formatDateTime } from "@/shared/lib/utils/formatDate.ts";
 import cls from "./InfiniteBookingList.module.scss";
 import {
 	useDeleteBookingMutation,
@@ -25,8 +32,8 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 
 	const [page, setPage] = useState(0);
 	const size = 10;
-	const [allActiveItems, setAllActiveItems] = useState<BookingActive[]>([]);
-	const [allHistoryItems, setAllHistoryItems] = useState<BookingHistory[]>(
+	const [allActiveItems, setAllActiveItems] = useState<UIBookingActive[]>([]);
+	const [allHistoryItems, setAllHistoryItems] = useState<UIBookingHistory[]>(
 		[]
 	);
 	const [hasNextPage, setHasNextPage] = useState(true);
@@ -50,16 +57,47 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 		{ skip: type !== "history" }
 	);
 
+	const formatActiveItems = (items: BookingActive[]): UIBookingActive[] => {
+		return items.map((item) => {
+			const { formattedDate, formattedTime } = formatDateTime(
+				item.entryTime
+			);
+			return {
+				...item,
+				formattedEntryDate: formattedDate,
+				formattedEntryTime: formattedTime,
+			};
+		});
+	};
+
+	const formatHistoryItems = (
+		items: BookingHistory[]
+	): UIBookingHistory[] => {
+		return items.map((item) => {
+			const { formattedDate, formattedTime } = formatDateTime(
+				item.entryTime
+			);
+			return {
+				...item,
+				formattedEntryDate: formattedDate,
+				formattedEntryTime: formattedTime,
+			};
+		});
+	};
+
 	useEffect(() => {
 		if (type === "active" && activeResponse) {
 			const items = activeResponse.data || [];
 
 			if (items.length > 0) {
+				const formattedItems = formatActiveItems(items);
 				setAllActiveItems((prev) =>
 					page === 0 || prev.length === 0
-						? items
-						: [...prev, ...items]
+						? formattedItems
+						: [...prev, ...formattedItems]
 				);
+			} else if (page === 0) {
+				setAllActiveItems([]);
 			}
 
 			setHasNextPage(activeResponse.hasNextPage);
@@ -68,18 +106,21 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 				setHasNextPage(false);
 			}
 		}
-	}, [activeResponse, type, page]);
+	}, [activeResponse, type, page, formatActiveItems]);
 
 	useEffect(() => {
 		if (type === "history" && historyResponse) {
 			const items = historyResponse.data || [];
 
 			if (items.length > 0) {
+				const formattedItems = formatHistoryItems(items);
 				setAllHistoryItems((prev) =>
 					page === 0 || prev.length === 0
-						? items
-						: [...prev, ...items]
+						? formattedItems
+						: [...prev, ...formattedItems]
 				);
+			} else if (page === 0) {
+				setAllHistoryItems([]);
 			}
 
 			setHasNextPage(historyResponse.hasNextPage);
@@ -88,12 +129,15 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 				setHasNextPage(false);
 			}
 		}
-	}, [historyResponse, type, page]);
+	}, [historyResponse, type, page, formatHistoryItems]);
 
 	useEffect(() => {
 		setPage(0);
-		setAllActiveItems([]);
-		setAllHistoryItems([]);
+		if (type === "active") {
+			setAllActiveItems([]);
+		} else {
+			setAllHistoryItems([]);
+		}
 		setHasNextPage(true);
 	}, [type]);
 
@@ -114,7 +158,8 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 	const isFetching = type === "active" ? isActiveFetching : isHistoryFetching;
 	const error = type === "active" ? activeError : historyError;
 
-	const isInitialLoading = isLoading && page === 1;
+	const isInitialLoading = isLoading && page === 0;
+	const isNextLoading = isFetching && page > 0;
 
 	return (
 		<div className={classNames(cls.InfiniteBookingList, {}, [className])}>
@@ -132,7 +177,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 					error={error}
 				/>
 			)}
-			{hasNextPage && (
+			{(isNextLoading || hasNextPage) && (
 				<div
 					ref={triggerRef}
 					style={{ height: "1px" }}

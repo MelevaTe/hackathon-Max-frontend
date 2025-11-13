@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import { BookingHistoryListItem } from "@/entities/BookingHistory/ui/BookingHistoryItem/BookingHistoryListItem.tsx";
 import { classNames } from "@/shared/lib/classNames/classNames";
 import cls from "./BookingHistoryList.module.scss";
-import type { BookingHistory } from "../../model/types/bookingHistory.ts";
+import type { UIBookingHistory } from "../../model/types/bookingHistory.ts";
 
 interface BookingHistoryListProps {
 	className?: string;
-	bookingHistories: BookingHistory[];
+	bookingHistories: UIBookingHistory[];
 	isLoading?: boolean;
 	error?: unknown;
 }

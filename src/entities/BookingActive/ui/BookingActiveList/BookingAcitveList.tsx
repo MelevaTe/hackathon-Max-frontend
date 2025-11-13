@@ -1,14 +1,14 @@
-import { CellHeader, CellList, Spinner, Typography } from "@maxhub/max-ui";
+import { CellHeader, Spinner, Typography } from "@maxhub/max-ui";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { classNames } from "@/shared/lib/classNames/classNames";
 import cls from "./BookingActiveList.module.scss";
-import type { BookingActive } from "../../model/types/bookingActive.ts";
+import type { UIBookingActive } from "../../model/types/bookingActive.ts";
 import { BookingActiveListItem } from "../BookingActiveItem/BookingActiveListItem.tsx";
 
 interface BookingActiveListProps {
 	className?: string;
-	bookingActives: BookingActive[];
+	bookingActives: UIBookingActive[];
 	isLoading?: boolean;
 	error?: unknown;
 	deleteBooking: (id: string) => void;

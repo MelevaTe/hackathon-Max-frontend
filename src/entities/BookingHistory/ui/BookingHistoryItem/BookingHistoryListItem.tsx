@@ -1,11 +1,11 @@
 import { CellSimple } from "@maxhub/max-ui";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
-import type { BookingHistory } from "../../model/types/bookingHistory.ts";
+import type { UIBookingHistory } from "../../model/types/bookingHistory.ts";
 
 export interface CourtListItemProps {
 	className?: string;
-	bookingHistory: BookingHistory;
+	bookingHistory: UIBookingHistory;
 }
 
 export const BookingHistoryListItem = memo((props: CourtListItemProps) => {
@@ -16,7 +16,7 @@ export const BookingHistoryListItem = memo((props: CourtListItemProps) => {
 		<CellSimple
 			height="normal"
 			overline=""
-			subtitle={`${bookingHistory.date} • ${bookingHistory.date}`}
+			subtitle={`${bookingHistory.formattedEntryDate} • ${bookingHistory.formattedEntryTime}`}
 			title={bookingHistory.title}
 		/>
 	);

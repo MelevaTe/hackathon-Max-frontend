@@ -1,14 +1,14 @@
-import { Button, CellSimple, Flex, IconButton } from "@maxhub/max-ui";
+import { Button, CellSimple, IconButton } from "@maxhub/max-ui";
 import { Sun, Trash2 } from "lucide-react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import type { BookingActive } from "@/entities/BookingActive";
 import cls from "./BookingActiveListItem.module.scss";
+import type { UIBookingActive } from "../../model/types/bookingActive.ts";
 
 export interface CourtListItemProps {
 	className?: string;
-	bookingActive: BookingActive;
+	bookingActive: UIBookingActive;
 	deleteBooking: (id: string) => void;
 }
 
@@ -25,7 +25,7 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 	return (
 		<CellSimple
 			after={
-				<Flex gap="8">
+				<div className={cls.btnWrapper}>
 					<IconButton
 						appearance="negative"
 						asChild
@@ -43,12 +43,12 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 					>
 						<Link to={`/?route=1${searchParams}`}>Маршрут</Link>
 					</Button>
-				</Flex>
+				</div>
 			}
 			before={<Sun color="#007bff" />}
 			height="normal"
 			overline=""
-			subtitle={`${bookingActive.entryTime} • ${bookingActive.entryTime}`}
+			subtitle={`${bookingActive.formattedEntryDate} • ${bookingActive.formattedEntryTime}`}
 			title={bookingActive.title}
 			className={cls.cell}
 		/>
