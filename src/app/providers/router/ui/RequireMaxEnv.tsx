@@ -8,7 +8,7 @@ export function RequireMaxEnv({ children }: { children?: JSX.Element }) {
 	const { isInMax } = useMax();
 
 	if (isInMax === null) {
-		return ;
+		return <div>Проверка окружения...</div>;
 	}
 
 	if (!isInMax) {
