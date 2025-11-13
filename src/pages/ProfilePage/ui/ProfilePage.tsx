@@ -60,7 +60,11 @@ const ProfilePage = () => {
 							direction="column"
 							align="center"
 						>
-							<Typography.Headline variant="large-strong">{`${user?.first_name}, ${user?.last_name}`}</Typography.Headline>
+							<Typography.Headline variant="large-strong">
+								{user?.first_name && user?.last_name
+									? `${user.first_name}, ${user.last_name}`
+									: user?.first_name || user?.last_name || ""}
+							</Typography.Headline>
 						</Flex>
 					</Flex>
 				</Container>
