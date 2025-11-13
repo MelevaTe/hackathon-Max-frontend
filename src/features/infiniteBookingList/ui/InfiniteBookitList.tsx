@@ -23,36 +23,65 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 	const [page, setPage] = useState(1);
 	const size = 10;
 	const [allActiveItems, setAllActiveItems] = useState<BookingActive[]>([]);
-	const [allHistoryItems, setAllHistoryItems] = useState<BookingHistory[]>(
-		[]
-	);
+	const [allHistoryItems, setAllHistoryItems] = useState<BookingHistory[]>([]);
 	const [hasNextPage, setHasNextPage] = useState(true);
 
 	const {
-		data,
-		isLoading: isInitialLoading,
-		isFetching,
-		error,
-	} = type === "active"
-		? useGetActiveBookingsQuery({ page, size })
-		: useGetHistoryBookingsQuery({ page, size });
+		data: activeResponse,
+		isLoading: isActiveLoading,
+		isFetching: isActiveFetching,
+		error: activeError,
+	} = useGetActiveBookingsQuery({ page, size }, { skip: type !== "active" });
+
+	const {
+		data: historyResponse,
+		isLoading: isHistoryLoading,
+		isFetching: isHistoryFetching,
+		error: historyError,
+	} = useGetHistoryBookingsQuery({ page, size }, { skip: type !== "history" });
 
 	useEffect(() => {
-		if (data && data.length > 0) {
-			if (type === "active") {
-				setAllActiveItems(
-					(prev) => [...prev, ...data] as BookingActive[]
-				);
-			} else {
-				setAllHistoryItems(
-					(prev) => [...prev, ...data] as BookingHistory[]
+		if (type === "active" && activeResponse) {
+			const items = activeResponse.data || [];
+
+			if (items.length > 0) {
+				setAllActiveItems(prev =>
+					page === 1 ? items : [...prev, ...items]
 				);
 			}
-			if (data.length < 10) {
+
+			setHasNextPage(activeResponse.hasNextPage);
+
+			if (page === 1 && activeResponse.isEmpty) {
 				setHasNextPage(false);
 			}
 		}
-	}, [data, type]);
+	}, [activeResponse, type, page]);
+
+	useEffect(() => {
+		if (type === "history" && historyResponse) {
+			const items = historyResponse.data || [];
+
+			if (items.length > 0) {
+				setAllHistoryItems(prev =>
+					page === 1 ? items : [...prev, ...items]
+				);
+			}
+
+			setHasNextPage(historyResponse.hasNextPage);
+
+			if (page === 1 && historyResponse.isEmpty) {
+				setHasNextPage(false);
+			}
+		}
+	}, [historyResponse, type, page]);
+
+	useEffect(() => {
+		setPage(1);
+		setAllActiveItems([]);
+		setAllHistoryItems([]);
+		setHasNextPage(true);
+	}, [type]);
 
 	const triggerRef = useRef<HTMLDivElement>(null);
 
@@ -67,52 +96,63 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 		triggerRef,
 	});
 
+	const isLoading = type === "active" ? isActiveLoading : isHistoryLoading;
+	const isFetching = type === "active" ? isActiveFetching : isHistoryFetching;
+	const error = type === "active" ? activeError : historyError;
+
 	if (error) {
 		return (
 			<div className={cls.spinnerContainer}>
 				<Typography.Body variant="large">
-					Ошибка при загрузке записей
+					{t("Ошибка при загрузке записей")}
+				</Typography.Body>
+			</div>
+		);
+	}
+	const isEmpty = type === "active"
+		? activeResponse?.isEmpty
+		: historyResponse?.isEmpty;
+
+	if (!isLoading && isEmpty && page === 1) {
+		return (
+			<div className={cls.spinnerContainer}>
+				<Typography.Body variant="large">
+					{type === "active"
+						? t("Нет активных бронирований")
+						: t("Нет истории бронирований")
+					}
 				</Typography.Body>
 			</div>
 		);
 	}
 
-	const isLoading =
-		isInitialLoading ||
-		(isFetching &&
-			(type === "active"
-				? allActiveItems.length
-				: allHistoryItems.length) === 0);
-
-	if (isLoading) {
-		return (
-			<div className={cls.spinnerContainer}>
-				<Spinner
-					appearance="themed"
-					size={30}
-				/>
-			</div>
-		);
-	}
+	const isInitialLoading = isLoading && page === 1;
 
 	return (
 		<div className={className}>
 			{type === "active" ? (
 				<BookingActiveList
 					bookingActives={allActiveItems}
-					isLoading={false}
+					isLoading={isInitialLoading}
 				/>
 			) : (
 				<BookingHistoryList
 					bookingHistories={allHistoryItems}
-					isLoading={false}
+					isLoading={isInitialLoading}
 				/>
 			)}
-			{isFetching && <Spinner />}
-			<div
-				ref={triggerRef}
-				style={{ height: "1px" }}
-			/>
+
+			{isFetching && page > 1 && (
+				<div className={cls.spinnerContainer}>
+					<Spinner appearance="themed" size={30} />
+				</div>
+			)}
+			{hasNextPage && (
+				<div
+					ref={triggerRef}
+					style={{ height: "1px" }}
+				/>
+			)}
 		</div>
 	);
 });
