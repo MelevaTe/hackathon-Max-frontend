@@ -38,7 +38,20 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 	);
 	const [hasNextPage, setHasNextPage] = useState(true);
 	const processedPagesRef = useRef<Set<number>>(new Set());
-	const [deleteBooking] = useDeleteBookingMutation();
+	const [deleteBookingMutation] = useDeleteBookingMutation();
+
+	const handleDeleteBooking = async (id: string) => {
+		try {
+			await deleteBookingMutation(id).unwrap();
+			if (type === "active") {
+				setAllActiveItems((prev) =>
+					prev.filter((item) => item.id !== id)
+				);
+			}
+		} catch (error) {
+			console.error("Failed to delete booking:", error);
+		}
+	};
 
 	const {
 		data: activeResponse,
@@ -194,7 +207,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 				<BookingActiveList
 					bookingActives={allActiveItems}
 					isLoading={isInitialLoading}
-					deleteBooking={deleteBooking}
+					deleteBooking={handleDeleteBooking}
 					error={error}
 					triggerRef={triggerRef}
 					wrapperRef={scrollContainerRef}

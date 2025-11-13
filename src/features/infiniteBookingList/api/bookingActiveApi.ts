@@ -45,7 +45,6 @@ const bookingActiveApi = rtkApi.injectEndpoints({
 				url: `/entry-service/v1/entries/${id}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: ["BookingActive"],
 		}),
 	}),
 });

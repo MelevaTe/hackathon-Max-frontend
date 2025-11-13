@@ -18,7 +18,6 @@ const ProfilePage = () => {
 	const { user, onClose } = useMax();
 	const navigate = useNavigate();
 	const handleBackClick = () => {
-		console.log('Кнопка "Назад" нажата, идём на главную...');
 		navigate("/");
 	};
 
