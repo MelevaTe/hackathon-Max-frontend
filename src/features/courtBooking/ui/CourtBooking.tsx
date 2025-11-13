@@ -54,17 +54,15 @@ export const CourtBooking = (props: CourtBookingProps) => {
 			.set("minute", selectedTime.minute())
 			.set("second", 0);
 
-		const entryTime = combinedDateTime.format("YYYY-MM-DDTHH:mm:ss");
+		const entryTime = combinedDateTime.toISOString();
 
 		const bookingData = {
 			courtId,
 			entryTime,
 		};
-		console.log("BOOKINGDATA ", bookingData);
 
 		try {
 			await dispatch(createCourtBooking(bookingData)).unwrap();
-			console.log("Бронирование успешно создано!!!!!!!!!!");
 			setBookingSuccess(true);
 		} catch (e) {
 			console.error("Ошибка при бронировании:", e);
