@@ -23,8 +23,19 @@ export const createCourtBooking = createAsyncThunk<
 		}
 
 		return response.data;
-	} catch (e) {
+	} catch (e: any) {
 		console.error("Ошибка при создании бронирования:", e);
-		return rejectWithValue("Не удалось создать бронирование");
+
+		if (e.isAxiosError && e.response) {
+			const { status } = e.response;
+			if (status === 409) {
+				return rejectWithValue(
+					"Пользователь уже записан на это время."
+				);
+			}
+		}
+		const errorMessage =
+			e.response?.data?.message || "Не удалось создать бронирование";
+		return rejectWithValue(errorMessage);
 	}
 });

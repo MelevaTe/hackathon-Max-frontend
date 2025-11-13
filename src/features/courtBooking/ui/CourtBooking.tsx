@@ -3,6 +3,7 @@ import { TimePicker, type TimePickerProps } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import { CircleArrowLeft, X } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { createCourtBooking } from "@/features/courtBooking/model/services/createCourtBooking.ts";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
@@ -25,7 +26,6 @@ export const CourtBooking = (props: CourtBookingProps) => {
 	const dispatch = useAppDispatch();
 	const [selectedTime, setSelectedTime] = useState<Dayjs | null>(null);
 	const [selectedDate, setSelectedDate] = useState<string | null>(null);
-	const [bookingSuccess, setBookingSuccess] = useState(false);
 
 	const onTimeChange: TimePickerProps["onChange"] = (time) => {
 		setSelectedTime(time);
@@ -42,10 +42,12 @@ export const CourtBooking = (props: CourtBookingProps) => {
 		}
 		if (!selectedDate) {
 			console.error("Дата не выбрана");
+			toast.error("Пожалуйста, выберите дату");
 			return;
 		}
 		if (!selectedTime) {
 			console.error("Время не выбрано");
+			toast.error("Пожалуйста, выберите время");
 			return;
 		}
 
@@ -63,10 +65,11 @@ export const CourtBooking = (props: CourtBookingProps) => {
 
 		try {
 			await dispatch(createCourtBooking(bookingData)).unwrap();
-			setBookingSuccess(true);
-		} catch (e) {
+			toast.success("Бронирование успешно создано!");
+		} catch (e: any) {
 			console.error("Ошибка при бронировании:", e);
-			console.error("Не удалось создать бронирование");
+			const errorMessage = e || "Не удалось создать бронирование";
+			toast.error(errorMessage);
 		}
 	};
 
@@ -95,11 +98,6 @@ export const CourtBooking = (props: CourtBookingProps) => {
 			<div className={cls.header}>
 				<Typography.Body>{courtTitle}</Typography.Body>
 			</div>
-			{bookingSuccess && (
-				<div className={cls.successMessage}>
-					<Typography.Body>Вы записаны!</Typography.Body>
-				</div>
-			)}
 			<div className={cls.content}>
 				<DatePicker
 					selectedDate={selectedDate}

@@ -1,4 +1,5 @@
 import { Suspense, useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { AppRouter } from "@/app/providers/router";
 import { AuthService } from "@/shared/api/authService.ts";
@@ -46,6 +47,10 @@ function App() {
 			<Suspense fallback="">
 				<div className="content-page">{<AppRouter />}</div>
 			</Suspense>
+			<Toaster
+				position="top-center"
+				reverseOrder={false}
+			/>
 		</div>
 	);
 }
