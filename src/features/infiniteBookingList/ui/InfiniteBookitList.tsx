@@ -92,19 +92,13 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 			if (items.length > 0) {
 				const formattedItems = formatActiveItems(items);
 				setAllActiveItems((prev) =>
-					page === 0 || prev.length === 0
-						? formattedItems
-						: [...prev, ...formattedItems]
+					page === 0 ? formattedItems : [...prev, ...formattedItems]
 				);
 			} else if (page === 0) {
 				setAllActiveItems([]);
 			}
 
 			setHasNextPage(activeResponse.hasNextPage);
-
-			if (page === 0 && activeResponse.isEmpty) {
-				setHasNextPage(false);
-			}
 		}
 	}, [activeResponse, type, page, formatActiveItems]);
 
@@ -115,31 +109,15 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 			if (items.length > 0) {
 				const formattedItems = formatHistoryItems(items);
 				setAllHistoryItems((prev) =>
-					page === 0 || prev.length === 0
-						? formattedItems
-						: [...prev, ...formattedItems]
+					page === 0 ? formattedItems : [...prev, ...formattedItems]
 				);
 			} else if (page === 0) {
 				setAllHistoryItems([]);
 			}
 
 			setHasNextPage(historyResponse.hasNextPage);
-
-			if (page === 0 && historyResponse.isEmpty) {
-				setHasNextPage(false);
-			}
 		}
 	}, [historyResponse, type, page, formatHistoryItems]);
-
-	useEffect(() => {
-		setPage(0);
-		if (type === "active") {
-			setAllActiveItems([]);
-		} else {
-			setAllHistoryItems([]);
-		}
-		setHasNextPage(true);
-	}, [type]);
 
 	const triggerRef = useRef<HTMLDivElement>(null);
 
@@ -180,7 +158,7 @@ export const InfiniteBookingList = memo((props: InfiniteBookingListProps) => {
 			{(isNextLoading || hasNextPage) && (
 				<div
 					ref={triggerRef}
-					style={{ height: "6px" }}
+					style={{ height: "20px" }}
 				/>
 			)}
 		</div>

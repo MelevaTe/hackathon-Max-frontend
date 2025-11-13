@@ -29,16 +29,14 @@ const bookingActiveApi = rtkApi.injectEndpoints({
 			) => {
 				const { activeEntries, message } = baseResponse;
 
-				const hasData = activeEntries && activeEntries.length > 0;
-				const hasNextPage =
-					hasData && activeEntries.length === (arg.size || 10);
-				const isEmpty = !hasData || activeEntries.length === 0;
+				const hasNextPage = activeEntries.length === (arg.size || 10);
+				const isEmpty = !activeEntries || activeEntries.length === 0;
 
 				return {
 					data: activeEntries || [],
-					message: message,
-					hasNextPage: hasNextPage,
-					isEmpty: isEmpty,
+					message,
+					hasNextPage,
+					isEmpty,
 				};
 			},
 			providesTags: ["BookingActive"],
