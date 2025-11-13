@@ -19,7 +19,7 @@ const ProfilePage = () => {
 	const navigate = useNavigate();
 	const handleBackClick = () => {
 		console.log('Кнопка "Назад" нажата, идём на главную...');
-		navigate('/');
+		navigate("/");
 	};
 
 	return (
