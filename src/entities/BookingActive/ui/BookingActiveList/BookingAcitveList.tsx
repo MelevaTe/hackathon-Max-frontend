@@ -20,6 +20,7 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 	if (error) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
+				<CellHeader>Активные записи</CellHeader>
 				<div className={cls.errorAndLoadingContainer}>
 					<Typography.Body variant="large">
 						Ошибка при загрузке записей
@@ -32,6 +33,7 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 	if (!isLoading && !bookingActives.length) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
+				<CellHeader>Активные записи</CellHeader>
 				<div className={cls.errorAndLoadingContainer}>
 					<Typography.Body variant="large">
 						У вас нет активных записей

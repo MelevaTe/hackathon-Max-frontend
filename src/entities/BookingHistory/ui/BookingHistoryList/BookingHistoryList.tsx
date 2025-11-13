@@ -20,6 +20,7 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 	if (error) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
+				<CellHeader>История записей</CellHeader>
 				<div className={cls.errorAndLoadingContainer}>
 					<Typography.Body variant="large">
 						Ошибка при загрузке записей
@@ -32,6 +33,7 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 	if (!isLoading && !bookingHistories.length) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
+				<CellHeader>История записей</CellHeader>
 				<div className={cls.errorAndLoadingContainer}>
 					<Typography.Body variant="large">
 						У вас нет истории записей
