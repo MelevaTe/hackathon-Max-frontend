@@ -3,7 +3,7 @@ import { List } from "lucide-react";
 import { memo, useEffect, useMemo, useState } from "react";
 import { CourtDetails, CourtList } from "@/entities/Court";
 import type { Court } from "@/entities/Court/model/types/court.ts";
-import { RouteList } from "@/features/buildRoute";
+import { BuildRouteList } from "@/features/buildRoute/ui/BuildRouteList/BuildRouteList.tsx";
 import { CourtBooking } from "@/features/courtBooking";
 import { useGetCourtOnlineStatusQuery } from "@/features/onlineCourtStatus";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
@@ -166,7 +166,7 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 			/>
 		),
 		routeList: (
-			<RouteList
+			<BuildRouteList
 				onBack={handleBackToList}
 				className={cls.MobileSheetContent}
 			/>
@@ -200,6 +200,8 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 							[cls["MobileSheet--withList"]]: view === "list",
 							[cls["MobileSheet--withBooking"]]:
 								view === "booking",
+							[cls["MobileSheet--withRouteList"]]:
+								view === "routeList",
 						},
 						[className]
 					)}

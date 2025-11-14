@@ -14,7 +14,7 @@ interface RouteListProps {
 	onBack: () => void;
 }
 
-export const RouteList = memo((props: RouteListProps) => {
+export const BuildRouteList = memo((props: RouteListProps) => {
 	const { className, onBack } = props;
 	const { t } = useTranslation();
 	const {

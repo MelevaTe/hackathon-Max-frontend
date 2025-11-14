@@ -21,6 +21,7 @@ interface MapProps {
 	userPosition: [number, number] | null;
 	destinationCoords: [number, number] | null;
 	routeType: "car" | "pedestrian" | null;
+	centerCoords?: [number, number];
 }
 
 const THEME_TO_STYLE_ID: Record<Theme, string> = {
@@ -38,6 +39,7 @@ export const MapComponent = memo(
 		userPosition,
 		destinationCoords,
 		routeType,
+		centerCoords,
 	}: MapProps) => {
 		const mapRef = useRef<MapGL | null>(null);
 		const mapglRef = useRef<any>(null);
@@ -51,8 +53,10 @@ export const MapComponent = memo(
 				const mapglAPI = await load();
 				mapglRef.current = mapglAPI;
 
+				const initialCenter = centerCoords || [39.712619, 47.23683];
+
 				map = new mapglAPI.Map("map-container", {
-					center: [39.712619, 47.23683],
+					center: initialCenter,
 					zoom: 14,
 					key: import.meta.env.VITE_2GIS_API_KEY,
 					zoomControl: "centerRight",
@@ -193,6 +197,7 @@ export const MapComponent = memo(
 			destinationCoords,
 			routeType,
 			onMarkerClick,
+			centerCoords,
 		]);
 
 		return (

@@ -1,19 +1,16 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
 import { useTheme } from "@/app/providers/ThemeProvider";
 import {
 	courtReducer,
 	fetchCourts,
-	useGetCourtByIdQuery,
-} from "@/entities/Court";
-import {
+	fetchNextCourtsPage,
 	getCourtPageData,
 	getCourtPageHasMore,
 	getCourtPageIsLoading,
-} from "@/entities/Court/model/selectors/courtPageSelectors.ts";
-import { fetchNextCourtsPage } from "@/entities/Court/model/services/fetchNextCourtsPage.ts";
+	useGetCourtByIdQuery,
+} from "@/entities/Court";
 import {
 	type CourtsCords,
 	courtsCordsReducer,
@@ -35,7 +32,7 @@ import { ClickableAvatar } from "@/shared/ui/ClickableAvatar/ClickableAvatar.tsx
 import {
 	MapComponent,
 	type MarkerData,
-} from "@/shared/ui/Map/MapComponent.tsx";
+} from "@/shared/ui/MapComponent/MapComponent.tsx";
 import { CourtListAndDetails } from "@/widgets/CourtListAndDetails";
 import { LocationSelectorModal } from "@/widgets/LocationSelectorModal";
 import cls from "./MainPage.module.scss";
