@@ -11,6 +11,7 @@ import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 import cls from "./BuildRouteList.module.scss";
 import type { RouteResponseItem } from "../../model/types/buildRoute.ts";
 import { RouteListItem } from "../BuildRouteListItem/BuildRouteListItem.tsx";
+import {skipToken} from "@reduxjs/toolkit/query";
 
 interface RouteListProps {
 	className?: string;
@@ -89,9 +90,11 @@ export const RouteList = memo((props: RouteListProps) => {
 		isLoading: isRouteLoading,
 		isError: isRouteError,
 		refetch: refetchRoutes,
-	} = useBuildRouteQuery(queryArgs!, {
-		skip: !queryArgs,
-	});
+	} = useBuildRouteQuery(
+		queryArgs || skipToken,
+		{
+		}
+	);
 
 	if (!finalUserCoords || !destinationCoords) {
 		return (
