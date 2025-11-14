@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { memo } from "react";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
+import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 import type { OnlineEntryFormatted } from "@/shared/types/formatedDate.ts";
 import { OnlineEntryItem } from "@/shared/ui/OnlineEntryItem/OnlineEntryItem.tsx";
 import { StarRating } from "@/shared/ui/StartRaiting/StartRaiting.tsx";
@@ -37,8 +38,19 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 		onlineEntries,
 		isOnlineError,
 		isOnlineLoading,
-		onRoute
+		onRoute,
 	} = props;
+
+	const { setRoute } = useRoute();
+
+	const handleBuildRoute = () => {
+		if (court.lat !== undefined && court.lon !== undefined) {
+			setRoute([court.lon, court.lat]);
+		}
+		if (onRoute) {
+			onRoute();
+		}
+	};
 
 	return (
 		<div className={classNames(cls.CourtDetails, {}, [className])}>
@@ -180,7 +192,7 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 						mode="primary"
 						size="medium"
 						className={cls.actionButton}
-						onClick={onRoute}
+						onClick={handleBuildRoute}
 						iconBefore={<MapPinned />}
 					>
 						Маршрут

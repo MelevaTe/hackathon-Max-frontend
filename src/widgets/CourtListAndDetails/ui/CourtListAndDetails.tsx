@@ -3,15 +3,15 @@ import { List } from "lucide-react";
 import { memo, useEffect, useMemo, useState } from "react";
 import { CourtDetails, CourtList } from "@/entities/Court";
 import type { Court } from "@/entities/Court/model/types/court.ts";
+import { RouteList, useBuildRouteQuery } from "@/features/buildRoute";
 import { CourtBooking } from "@/features/courtBooking";
 import { useGetCourtOnlineStatusQuery } from "@/features/onlineCourtStatus";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
+import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 import { getDateRange } from "@/shared/lib/utils/dateRange.ts";
 import { formatDateTime } from "@/shared/lib/utils/formatDate.ts";
 import cls from "./CourtListAndDetails.module.scss";
 import type { MobileSheetView } from "../model/types/types.ts";
-import {useRoute} from "@/shared/lib/hooks/useRoute.ts";
-import {RouteList, useBuildRouteQuery} from "@/features/buildRoute";
 
 interface CourtListAndDetailsProps {
 	className?: string;
