@@ -69,6 +69,7 @@ const MainPage = () => {
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		console.log('clearRoute in MAINPAGE')
 		clearRoute();
 
 		if (userLocation?.id) {
