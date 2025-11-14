@@ -5,5 +5,5 @@ export {
 	getShowRoute,
 	getUserPosition,
 	getRouteType,
-	getRouteData
+	getRouteData,
 } from "./model/selectors/routeSelectors";

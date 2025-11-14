@@ -1,6 +1,7 @@
 import { Typography, IconButton, Input, Button } from "@maxhub/max-ui";
 import { X, Car, User, Search } from "lucide-react";
-import { memo, useState, useEffect, useRef } from "react";
+import { memo, useState, useEffect, useCallback } from "react";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useGeocodeQuery } from "@/features/buildRoute/api/buildRouteApi.ts";
 import { classNames } from "@/shared/lib/classNames/classNames";
@@ -16,85 +17,78 @@ interface RouteListProps {
 export const RouteList = memo((props: RouteListProps) => {
 	const { className, onBack } = props;
 	const { t } = useTranslation();
-	const { setShowRoute, setRoute, destinationCoords } = useRoute();
-	const { userPosition, updateUserPosition, routeType, setRouteType } =
-		useRoute();
+	const {
+		setShowRoute,
+		destinationCoords,
+		userPosition,
+		updateUserPosition,
+		routeType,
+		setRouteType,
+	} = useRoute();
 
 	const [userAddress, setUserAddress] = useState("");
 	const [debouncedUserAddress, setDebouncedUserAddress] = useState("");
+	const [isGeoLocationAttempted, setIsGeoLocationAttempted] = useState(false);
 
-	const userPositionSetRef = useRef(false);
-
-	console.log("[ROUTE_LIST] Component rendered with props:", {
-		userPosition,
-		destinationCoords,
-		routeType,
-		userAddress,
-		debouncedUserAddress,
-	});
-
-	useEffect(() => {
-		console.log(
-			"[ROUTE_LIST] useEffect for geolocation, userPosition:",
-			userPosition,
-			"userPositionSetRef:",
-			userPositionSetRef.current
-		);
-
-		if (!userPosition && !userPositionSetRef.current) {
-			userPositionSetRef.current = true;
-			if (navigator.geolocation) {
-				console.log("[ROUTE_LIST] Requesting geolocation...");
-				navigator.geolocation.getCurrentPosition(
-					(position) => {
-						console.log(
-							"[ROUTE_LIST] Geolocation success:",
-							position.coords
-						);
-						const coords: [number, number] = [
-							position.coords.longitude,
-							position.coords.latitude,
-						];
-						updateUserPosition(coords);
-					},
-					(error) => {
-						console.error(
-							"[ROUTE_LIST] Error getting geolocation:",
-							error.message
-						);
-						userPositionSetRef.current = false;
-					}
-				);
-			} else {
-				console.log("[ROUTE_LIST] Geolocation not supported");
-				userPositionSetRef.current = false;
-			}
-		}
-	}, [userPosition, updateUserPosition]);
-
-	const debouncedSetUserAddress = useDebounce((value: string) => {
-		console.log("[ROUTE_LIST] Debounced address set:", value);
+	const debouncedSetAddress = useDebounce((value: string) => {
 		setDebouncedUserAddress(value);
 	}, 500);
 
 	useEffect(() => {
-		debouncedSetUserAddress(userAddress);
-	}, [userAddress, debouncedSetUserAddress]);
+		debouncedSetAddress(userAddress);
+	}, [userAddress, debouncedSetAddress]);
+
+	useEffect(() => {
+		if (userPosition || isGeoLocationAttempted) return;
+
+		if (navigator.geolocation) {
+			console.log("[ROUTE_LIST] Requesting geolocation...");
+			setIsGeoLocationAttempted(true);
+
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					console.log(
+						"[ROUTE_LIST] Geolocation success:",
+						position.coords
+					);
+					const coords: [number, number] = [
+						position.coords.longitude,
+						position.coords.latitude,
+					];
+					updateUserPosition(coords);
+					toast.success("Местоположение определено");
+				},
+				(error) => {
+					console.error("[ROUTE_LIST] Geolocation error:", error);
+					toast.error(
+						"Не удалось определить местоположение. Введите адрес вручную"
+					);
+				}
+			);
+		} else {
+			console.log("[ROUTE_LIST] Geolocation not supported");
+			setIsGeoLocationAttempted(true);
+		}
+	}, []);
 
 	const { data: userGeocodeItems, isLoading: isUserGeocodeLoading } =
 		useGeocodeQuery(
-			{ q: debouncedUserAddress, key: import.meta.env.VITE_2GIS_API_KEY },
-			{ skip: !debouncedUserAddress }
+			{
+				q: debouncedUserAddress,
+				key: import.meta.env.VITE_2GIS_API_KEY,
+			},
+			{
+				skip: !debouncedUserAddress || debouncedUserAddress.length < 3,
+			}
 		);
 
 	useEffect(() => {
-		if (userGeocodeItems?.[0] && !userPositionSetRef.current) {
-			userPositionSetRef.current = true;
+		if (userGeocodeItems?.[0]) {
 			console.log("[ROUTE_LIST] Geocoding result:", userGeocodeItems[0]);
 			const { lat, lon } = userGeocodeItems[0].point;
 			const coords: [number, number] = [lon, lat];
 			console.log(
-				"[ROUTE_LIST] Updating user position from geocoding:",
+				"[ROUTE_LIST] Setting user position from geocoding:",
 				coords
 			);
 			updateUserPosition(coords);
@@ -102,24 +96,32 @@ export const RouteList = memo((props: RouteListProps) => {
 	}, [userGeocodeItems, updateUserPosition]);
 
 	const handleSetRouteType = (type: "car" | "pedestrian") => {
-		console.log("[ROUTE_LIST] handleSetRouteType:", type);
+		console.log("[ROUTE_LIST] Setting route type:", type);
 		setRouteType(type);
 	};
 
 	const handleBuildRoute = () => {
-		console.log("[ROUTE_LIST] handleBuildRoute called with:", {
+		console.log("[ROUTE_LIST] Building route with:", {
 			userPosition,
 			destinationCoords,
 			routeType,
 		});
 
 		if (userPosition && destinationCoords && routeType) {
-			console.log("[ROUTE_LIST] Setting showRoute to true");
 			setShowRoute(true);
 			onBack();
 		} else {
-			console.log("[ROUTE_LIST] Cannot build route, missing data");
+			if (!userPosition) {
+				alert("Укажите ваше местоположение");
+			} else if (!routeType) {
+				alert("Выберите тип маршрута");
+			}
 		}
+	};
+
+	const handleAddressClear = () => {
+		setUserAddress("");
+		setDebouncedUserAddress("");
 	};
 
 	return (
@@ -137,29 +139,43 @@ export const RouteList = memo((props: RouteListProps) => {
 				</IconButton>
 			</div>
 			<div className={cls.content}>
-				<Input
-					value={userAddress}
-					onChange={(e) => {
-						setUserAddress(e.target.value);
-						console.log(
-							"[ROUTE_LIST] User address input changed:",
-							e.target.value
-						);
-						if (userAddress && !e.target.value) {
-							userPositionSetRef.current = false;
+				<div className={cls.addressInput}>
+					<Input
+						value={userAddress}
+						onChange={(e) => setUserAddress(e.target.value)}
+						placeholder={
+							userPosition
+								? "Местоположение определено"
+								: "Введите ваш адрес"
 						}
-					}}
-					placeholder="Ваш адрес"
-					iconAfter={
-						<IconButton
-							appearance="neutral"
-							mode="tertiary"
-							size="medium"
-						>
-							<Search />
-						</IconButton>
-					}
-				/>
+						disabled={isUserGeocodeLoading}
+						iconAfter={
+							userAddress ? (
+								<IconButton
+									appearance="neutral"
+									mode="tertiary"
+									size="medium"
+									onClick={handleAddressClear}
+									title="Очистить"
+								>
+									<X />
+								</IconButton>
+							) : (
+								<IconButton
+									appearance="neutral"
+									mode="tertiary"
+									size="medium"
+									disabled
+								>
+									<Search />
+								</IconButton>
+							)
+						}
+					/>
+					{isUserGeocodeLoading && (
+						<Typography.Body>Поиск адреса...</Typography.Body>
+					)}
+				</div>
 
 				<div className={cls.routeTypeButtons}>
 					<IconButton
@@ -190,7 +206,11 @@ export const RouteList = memo((props: RouteListProps) => {
 					disabled={!userPosition || !destinationCoords || !routeType}
 					className={cls.buildButton}
 				>
-					Построить маршрут
+					{!userPosition
+						? "Укажите местоположение"
+						: !routeType
+							? "Выберите тип маршрута"
+							: "Построить маршрут"}
 				</Button>
 			</div>
 		</div>
