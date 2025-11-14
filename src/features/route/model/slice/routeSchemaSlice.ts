@@ -33,6 +33,11 @@ export const routeSlice = createSlice({
 			state.userPosition = null;
 			state.routeType = null;
 		},
+		resetForNewRoute: (state) => {
+			state.showRoute = false;
+			state.userPosition = null;
+			state.routeType = null;
+		},
 		setUserPosition: (state, action: PayloadAction<[number, number]>) => {
 			state.userPosition = action.payload;
 		},

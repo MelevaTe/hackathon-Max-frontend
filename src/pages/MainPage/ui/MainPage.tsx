@@ -58,7 +58,7 @@ const MainPage = () => {
 	const isLoadingCourt = useSelector(getCourtPageIsLoading);
 	const courtsCords = useSelector(getCourtsCords);
 	const {
-		clearRoute,
+		resetForNewRoute,
 		showRoute,
 		userPosition,
 		destinationCoords,
@@ -70,7 +70,7 @@ const MainPage = () => {
 
 	useEffect(() => {
 		console.log('clearRoute in MAINPAGE')
-		clearRoute();
+		resetForNewRoute();
 
 		if (userLocation?.id) {
 			dispatch(
@@ -80,7 +80,7 @@ const MainPage = () => {
 				})
 			);
 		}
-	}, [dispatch, currentSport, userLocation?.id, clearRoute]);
+	}, [dispatch, currentSport, userLocation?.id, resetForNewRoute]);
 
 	useEffect(() => {
 		if (userLocation?.id) {

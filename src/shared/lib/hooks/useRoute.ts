@@ -44,6 +44,10 @@ export const useRoute = () => {
 		dispatch(routeActions.clearRoute());
 	}, [dispatch]);
 
+	const resetForNewRoute = useCallback(() => {
+		dispatch(routeActions.resetForNewRoute());
+	}, [dispatch]);
+
 	const updateUserPosition = useCallback(
 		(coords: [number, number]) => {
 			console.log("useRoute - updateUserPosition вызван с:", coords);
@@ -68,6 +72,7 @@ export const useRoute = () => {
 		setRoute,
 		setShowRoute,
 		clearRoute,
+		resetForNewRoute,
 		updateUserPosition,
 		setRouteType,
 	};
