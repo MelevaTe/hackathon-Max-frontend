@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useGeocodeQuery } from "@/features/buildRoute/api/buildRouteApi.ts";
 import { classNames } from "@/shared/lib/classNames/classNames";
 import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
-import cls from "./RouteList.module.scss";
+import cls from "./BuildRouteList.module.scss";
 import type { RouteResponseItem } from "../../model/types/buildRoute.ts";
 import { RouteListItem } from "../BuildRouteListItem/BuildRouteListItem.tsx";
 
