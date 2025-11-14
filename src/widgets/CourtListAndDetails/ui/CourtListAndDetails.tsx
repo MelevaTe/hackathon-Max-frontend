@@ -57,6 +57,7 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 
 	useEffect(() => {
 		if (destinationCoords) {
+			console.log('destinationCoords в CourtListAndDetails', destinationCoords)
 			setMobileSheetOpen(true);
 			setView("routeList");
 		}

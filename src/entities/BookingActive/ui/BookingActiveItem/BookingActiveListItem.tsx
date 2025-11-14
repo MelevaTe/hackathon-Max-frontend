@@ -33,6 +33,7 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 		];
 		setRoute(destinationCoords);
 		toast.success(`Маршрут до "${bookingActive.title}"`);
+		console.log('useRoute вызван:', destinationCoords);
 		navigate("/");
 	};
 
