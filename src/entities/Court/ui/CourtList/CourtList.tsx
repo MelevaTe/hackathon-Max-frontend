@@ -75,6 +75,9 @@ export const CourtList = memo((props: CourtListProps) => {
 			<div
 				ref={wrapperRef}
 				className={cls.content}
+				style={{
+					backgroundColor: "rgba(255, 0, 0, 0.3)",
+				}}
 			>
 				{courts.map((court) => (
 					<CourtListItem

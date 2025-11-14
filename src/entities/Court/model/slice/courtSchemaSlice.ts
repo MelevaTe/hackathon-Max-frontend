@@ -43,8 +43,15 @@ export const courtSlice = createSlice({
 				(state, action: PayloadAction<Court[]>) => {
 					const courts = action.payload;
 					const size = state.pageSize;
+
+					console.log('fetchCourts.fulfilled:', {
+						receivedCount: courts.length,
+						pageSize: size,
+						willHaveMore: courts.length === size
+					});
+
+					// Если пришло меньше элементов, чем размер страницы - больше нет данных
 					const hasNextPage = courts.length === size;
-					const isEmpty = !courts || courts.length === 0;
 
 					if (state.currentPage === 0) {
 						state.data = courts;
@@ -56,7 +63,13 @@ export const courtSlice = createSlice({
 
 					state.isLoading = false;
 					state.hasNextPage = hasNextPage;
-					state.isEmpty = state.currentPage === 0 ? isEmpty : false;
+					state.isEmpty = state.currentPage === 0 && courts.length === 0;
+
+					console.log('New state:', {
+						totalCourts: state.data?.length,
+						hasNextPage: state.hasNextPage,
+						currentPage: state.currentPage
+					});
 				}
 			)
 			.addCase(fetchCourts.rejected, (state, action) => {

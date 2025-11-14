@@ -8,7 +8,7 @@ import {
 	fetchNextCourtsPage,
 	getCourtPageData,
 	getCourtPageHasMore,
-	getCourtPageIsLoading,
+	getCourtPageIsLoading, getCourtPageNum,
 	useGetCourtByIdQuery,
 } from "@/entities/Court";
 import {
@@ -71,6 +71,14 @@ const MainPage = () => {
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		console.log('Courts state:', {
+			courtsLength: courts?.length,
+			hasMore,
+			isLoadingCourt,
+		});
+	}, [courts, hasMore, isLoadingCourt]);
+
+	useEffect(() => {
 		resetForNewRoute();
 
 		dispatch(courtActions.clearCourts());
@@ -97,19 +105,27 @@ const MainPage = () => {
 		}
 	}, [dispatch, currentSport, userLocation?.id]);
 
+	const handleLoadMore = useCallback(() => {
+		console.log('handleLoadMore called:', {
+			hasMore,
+			isLoadingCourt,
+			userLocationId: userLocation?.id,
+			courtsLength: courts?.length
+		});
+
+		if (hasMore && !isLoadingCourt && userLocation?.id) {
+			console.log('Dispatching fetchNextCourtsPage');
+			dispatch(
+				fetchNextCourtsPage({
+					cityId: userLocation.id,
+					sports: [currentSport],
+				})
+			);
+		}
+	}, [hasMore, isLoadingCourt, userLocation?.id, dispatch, currentSport, courts?.length]);
+
 	useInfiniteScroll({
-		callback: () => {
-			console.log('InfiniteScroll triggered', { hasMore, isLoadingCourt });
-			if (hasMore && !isLoadingCourt && userLocation?.id) {
-				console.log('Dispatching fetchNextCourtsPage');
-				dispatch(
-					fetchNextCourtsPage({
-						cityId: userLocation.id,
-						sports: [currentSport],
-					})
-				);
-			}
-		},
+		callback: handleLoadMore,
 		triggerRef,
 		wrapperRef,
 	});
