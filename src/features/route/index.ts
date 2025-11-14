@@ -1,8 +1,9 @@
 export type { routeSchema } from "./model/type/routeSchema.ts";
 export { routeActions, routeReducer } from "./model/slice/routeSchemaSlice.ts";
 export {
-	getRouteDestinationCoords,
-	getRouteShow,
-	getRouteUserPosition,
+	getRouteDestination,
+	getShowRoute,
+	getUserPosition,
 	getRouteType,
-} from "./model/selectors/routeSelectors.ts";
+	getRouteData
+} from "./model/selectors/routeSelectors";
