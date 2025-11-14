@@ -75,9 +75,6 @@ export const CourtList = memo((props: CourtListProps) => {
 			<div
 				ref={wrapperRef}
 				className={cls.content}
-				style={{
-					backgroundColor: "rgba(255, 0, 0, 0.3)",
-				}}
 			>
 				{courts.map((court) => (
 					<CourtListItem
@@ -88,7 +85,7 @@ export const CourtList = memo((props: CourtListProps) => {
 				))}
 				<div
 					ref={triggerRef}
-					style={{ height: "20px", minHeight: "20px" }}
+					style={{ height: "20px", minHeight: "20px", backgroundColor: "rgba(255, 0, 0, 0.3)" }}
 				/>
 			</div>
 		</div>
