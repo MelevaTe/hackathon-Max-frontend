@@ -45,7 +45,7 @@ export const AppImage = (props: AppImageProps) => {
 
 	if (hasError && errorFallback) {
 		return (
-			<div className={classNames(cls.errorFallback, {}, [className])}>
+			<div className={classNames(cls.fallback, {}, [className])}>
 				{errorFallback}
 			</div>
 		);

@@ -80,7 +80,6 @@ export const RouteList = memo((props: RouteListProps) => {
 		if (userGeocodeItems?.[0]) {
 			const { lat, lon } = userGeocodeItems[0].point;
 			const coords: [number, number] = [lon, lat];
-			console.log("Координаты: ", coords);
 			updateUserPosition(coords);
 		}
 	}, [userGeocodeItems, updateUserPosition]);

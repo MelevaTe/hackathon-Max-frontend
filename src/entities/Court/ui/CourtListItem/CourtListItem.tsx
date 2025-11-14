@@ -34,8 +34,8 @@ export const CourtListItem = memo((props: CourtListItemProps) => {
 				src={court.photoUrl}
 				alt={court.title}
 				className={cls.image}
-				fallback={<Spinner size={30} />}
-				errorFallback={<ImageOff size={24} />}
+				fallback={<Spinner size={40} />}
+				errorFallback={<ImageOff size={30} />}
 			/>
 			<div className={cls.content}>
 				<Typography.Body
