@@ -69,7 +69,6 @@ const MainPage = () => {
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		console.log('clearRoute in MAINPAGE')
 		resetForNewRoute();
 
 		if (userLocation?.id) {

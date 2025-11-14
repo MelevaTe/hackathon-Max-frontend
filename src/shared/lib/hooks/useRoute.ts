@@ -16,16 +16,8 @@ export const useRoute = () => {
 	const userPosition = useSelector(getUserPosition);
 	const routeType = useSelector(getRouteType);
 
-	console.log("useRoute - текущие значения:", {
-		destinationCoords,
-		showRoute,
-		userPosition,
-		routeType
-	});
-
 	const setRoute = useCallback(
 		(coords: [number, number]) => {
-			console.log("useRoute - setRoute вызван с координатами:", coords);
 			dispatch(routeActions.setRouteDestination(coords));
 		},
 		[dispatch]
@@ -33,14 +25,12 @@ export const useRoute = () => {
 
 	const setShowRoute = useCallback(
 		(show: boolean) => {
-			console.log("useRoute - setShowRoute вызван с:", show);
 			dispatch(routeActions.setShowRoute(show));
 		},
 		[dispatch]
 	);
 
 	const clearRoute = useCallback(() => {
-		console.log("useRoute - clearRoute вызван");
 		dispatch(routeActions.clearRoute());
 	}, [dispatch]);
 
@@ -50,7 +40,6 @@ export const useRoute = () => {
 
 	const updateUserPosition = useCallback(
 		(coords: [number, number]) => {
-			console.log("useRoute - updateUserPosition вызван с:", coords);
 			dispatch(routeActions.setUserPosition(coords));
 		},
 		[dispatch]
@@ -58,7 +47,6 @@ export const useRoute = () => {
 
 	const setRouteType = useCallback(
 		(type: "car" | "pedestrian") => {
-			console.log("useRoute - setRouteType вызван с:", type);
 			dispatch(routeActions.setRouteType(type));
 		},
 		[dispatch]

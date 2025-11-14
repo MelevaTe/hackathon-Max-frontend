@@ -21,19 +21,12 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 	const { t } = useTranslation();
 
 	const handleShowRoute = () => {
-		console.log("[BookingActiveListItem] Setting route with coords:", {
-			lon: bookingActive.lon,
-			lat: bookingActive.lat,
-			coords: [bookingActive.lon, bookingActive.lat]
-		});
-		// clearRoute();
 		const destinationCoords: [number, number] = [
 			bookingActive.lon,
 			bookingActive.lat,
 		];
 		setRoute(destinationCoords);
 		toast.success(`Маршрут до "${bookingActive.title}"`);
-		console.log('useRoute вызван:', destinationCoords);
 		navigate("/");
 	};
 
