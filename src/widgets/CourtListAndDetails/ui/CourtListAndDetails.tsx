@@ -1,9 +1,7 @@
 import { Button, Panel } from "@maxhub/max-ui";
 import { List } from "lucide-react";
 import { memo, useEffect, useMemo, useState } from "react";
-import { CourtDetails, CourtList } from "@/entities/Court";
-import type { Court } from "@/entities/Court/model/types/court.ts";
-import { BuildRouteList } from "@/features/buildRoute/ui/BuildRouteList/BuildRouteList.tsx";
+import {type Court, CourtDetails, CourtList} from "@/entities/Court";
 import { CourtBooking } from "@/features/courtBooking";
 import { useGetCourtOnlineStatusQuery } from "@/features/onlineCourtStatus";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
@@ -12,6 +10,7 @@ import { getDateRange } from "@/shared/lib/utils/dateRange.ts";
 import { formatDateTime } from "@/shared/lib/utils/formatDate.ts";
 import cls from "./CourtListAndDetails.module.scss";
 import type { MobileSheetView } from "../model/types/types.ts";
+import {BuildRouteList} from "@/features/buildRoute";
 
 interface CourtListAndDetailsProps {
 	className?: string;
