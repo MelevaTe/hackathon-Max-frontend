@@ -52,9 +52,9 @@ function App() {
 				reverseOrder={false}
 				toastOptions={{
 					style: {
-						padding: '8px 12px',
-						fontSize: '14px',
-						width: '170px'
+						padding: "8px 12px",
+						fontSize: "14px",
+						width: "170px",
 					},
 				}}
 			/>

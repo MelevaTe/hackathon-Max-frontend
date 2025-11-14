@@ -20,10 +20,12 @@ export interface SelectProps {
 	options: SelectOption[];
 	value: SelectOption;
 	onChange: (value: SelectOption) => void;
+	largeWidth?: boolean; // Новый пропс
 }
 
 export const Select: FC<SelectProps> = memo((props) => {
-	const { className, options, value, onChange, ...otherProps } = props;
+	const { className, options, value, onChange, largeWidth, ...otherProps } =
+		props;
 
 	return (
 		<Listbox
@@ -37,7 +39,13 @@ export const Select: FC<SelectProps> = memo((props) => {
 			</ListboxButton>
 			<ListboxOptions
 				anchor="bottom"
-				className={cls.SelectOptions}
+				className={classNames(
+					cls.SelectOptions,
+					{
+						[cls.SelectOptions_large]: largeWidth, // Условный класс
+					},
+					[]
+				)}
 			>
 				{options.map((option) => (
 					<ListboxOption

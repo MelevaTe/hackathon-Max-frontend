@@ -20,6 +20,7 @@ import {
 	fetchCourtsCord,
 	getCourtsCords,
 } from "@/entities/CourtCord";
+import { selectUserLocation } from "@/entities/UserLocation";
 import { courtBookingReducer } from "@/features/courtBooking";
 import { getSport, SportFilter } from "@/features/sportFilter";
 import {
@@ -35,6 +36,7 @@ import {
 	type MarkerData,
 } from "@/shared/ui/Map/MapComponent.tsx";
 import { CourtListAndDetails } from "@/widgets/CourtListAndDetails";
+import { LocationSelectorModal } from "@/widgets/LocationSelectorModal";
 import cls from "./MainPage.module.scss";
 
 const reducers: ReducersList = {
@@ -50,6 +52,7 @@ const MainPage = () => {
 	const { theme } = useTheme();
 	const dispatch = useAppDispatch();
 	const currentSport = useSelector(getSport);
+	const userLocation = useSelector(selectUserLocation);
 	const courts = useSelector(getCourtPageData);
 	const hasMore = useSelector(getCourtPageHasMore);
 	const isLoadingCourt = useSelector(getCourtPageIsLoading);
@@ -59,24 +62,34 @@ const MainPage = () => {
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		dispatch(
-			fetchCourts({
-				cityId: 1,
-				sports: [currentSport],
-			})
-		);
-	}, [dispatch, currentSport]);
+		console.log("MainPage userLocation:", userLocation);
+		if (userLocation?.id) {
+			dispatch(
+				fetchCourts({
+					cityId: userLocation.id,
+					sports: [currentSport],
+				})
+			);
+		}
+	}, [dispatch, currentSport, userLocation?.id]);
 
 	useEffect(() => {
-		dispatch(fetchCourtsCord({ cityId: 1, courtType: currentSport }));
-	}, [dispatch, currentSport]);
+		if (userLocation?.id) {
+			dispatch(
+				fetchCourtsCord({
+					cityId: userLocation.id,
+					courtType: currentSport,
+				})
+			);
+		}
+	}, [dispatch, currentSport, userLocation?.id]);
 
 	useInfiniteScroll({
 		callback: () => {
-			if (hasMore && !isLoadingCourt) {
+			if (hasMore && !isLoadingCourt && userLocation?.id) {
 				dispatch(
 					fetchNextCourtsPage({
-						cityId: 1,
+						cityId: userLocation.id,
 						sports: [currentSport],
 					})
 				);
@@ -121,6 +134,7 @@ const MainPage = () => {
 	return (
 		<DynamicModuleLoader reducers={reducers}>
 			<div className={cls["main-page"]}>
+				<LocationSelectorModal />
 				<MapComponent
 					className={cls.map}
 					markers={markersData}
