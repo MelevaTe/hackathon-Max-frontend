@@ -9,6 +9,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	padding-block-end: 0.625rem;
 	padding-inline: 0.75rem;
 }
 
@@ -18,10 +19,16 @@
 	flex-direction: column;
 	gap: 0.625rem;
 	overflow-y: auto;
+	padding-block-end: 0.625rem;
+	padding-inline: 0.75rem;
 }
 
 .routeTypeButtons {
 	display: flex;
 	flex-direction: row;
 	gap: 0.75rem;
+}
+
+.actionButton {
+	flex: 1;
 }
