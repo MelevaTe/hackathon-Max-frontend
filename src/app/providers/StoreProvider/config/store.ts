@@ -8,20 +8,22 @@ import { $api } from "@/shared/api/api";
 import { rtkApi } from "@/shared/api/rtkApi";
 import { createReducerManager } from "./reducerManager";
 import type { StateSchema, ThunkExtraArg } from "./StateSchema";
+import {geolocationApi} from "@/shared/api/rtkApi2gis.ts";
 
 export function createReduxStore(
-	initialState?: StateSchema,
-	asyncReducers?: ReducersMapObject<StateSchema>
-) {
-	const rootReducers: ReducersMapObject<StateSchema> = {
-		...asyncReducers,
-		sportFilter: sportFilterReducer,
-		userLocations: userLocationReducer,
-		route: routeReducer,
-		[rtkApi.reducerPath]: rtkApi.reducer,
-	};
+		initialState?: StateSchema,
+		asyncReducers?: ReducersMapObject<StateSchema>
+	) {
+		const rootReducers: ReducersMapObject<StateSchema> = {
+			...asyncReducers,
+			sportFilter: sportFilterReducer,
+			userLocations: userLocationReducer,
+			route: routeReducer,
+			[rtkApi.reducerPath]: rtkApi.reducer,
+			[geolocationApi.reducerPath]: geolocationApi.reducer,
+		};
 
-	const reducerManager = createReducerManager(rootReducers);
+		const reducerManager = createReducerManager(rootReducers);
 
 	const extraArg: ThunkExtraArg = {
 		api: $api,
