@@ -6,18 +6,16 @@ import { rtkApi } from "@/shared/api/rtkApi.ts";
 
 const buildRouteApi = rtkApi.injectEndpoints({
 	endpoints: (build) => ({
-		buildRoute: build.query<RouteResponseItem[], RouteRequest>({
-			query: (params) => {
-				const { key, ...body } = params;
+		buildRoute: build.query<RouteResponseItem[], Omit<RouteRequest, 'key'> & { key: string }>({
+			query: ({ key, ...body }) => {
 				return {
-					url: "https://catalog.api.2gis.com/2.0/router/build_route",
+					url: `https://routing.api.2gis.com/public_transport/2.0?key=${key}`,
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
 					body: {
 						...body,
-						key,
 					},
 				};
 			},
