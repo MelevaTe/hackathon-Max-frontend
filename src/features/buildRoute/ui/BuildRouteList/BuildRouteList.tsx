@@ -30,6 +30,8 @@ export const RouteList = memo((props: RouteListProps) => {
 	const [debouncedUserAddress, setDebouncedUserAddress] = useState("");
 	const [isGeoLocation, setIsGeoLocation] = useState(false);
 
+	console.log("destinationCoords in RouteList", destinationCoords)
+
 	const debouncedSetAddress = useDebounce((value: string) => {
 		setDebouncedUserAddress(value);
 	}, 500);
