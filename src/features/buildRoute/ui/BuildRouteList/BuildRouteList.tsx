@@ -1,6 +1,6 @@
 import { Typography, IconButton, Input, Button } from "@maxhub/max-ui";
 import { X, Car, User, Search } from "lucide-react";
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useGeocodeQuery } from "@/features/buildRoute/api/buildRouteApi.ts";
 import { classNames } from "@/shared/lib/classNames/classNames";
@@ -16,31 +16,33 @@ interface RouteListProps {
 export const RouteList = memo((props: RouteListProps) => {
 	const { className, onBack } = props;
 	const { t } = useTranslation();
-	const {
-		setShowRoute,
-		setRoute,
-		destinationCoords,
-		userPosition,
-		updateUserPosition,
-		routeType,
-		setRouteType,
-	} = useRoute();
+	const { setShowRoute, setRoute, destinationCoords } = useRoute();
+	const { userPosition, updateUserPosition, routeType, setRouteType } =
+		useRoute();
 
 	const [userAddress, setUserAddress] = useState("");
 	const [debouncedUserAddress, setDebouncedUserAddress] = useState("");
+
+	const userPositionSetRef = useRef(false);
 
 	console.log("[ROUTE_LIST] Component rendered with props:", {
 		userPosition,
 		destinationCoords,
 		routeType,
+		userAddress,
+		debouncedUserAddress,
 	});
 
 	useEffect(() => {
 		console.log(
 			"[ROUTE_LIST] useEffect for geolocation, userPosition:",
-			userPosition
+			userPosition,
+			"userPositionSetRef:",
+			userPositionSetRef.current
 		);
-		if (!userPosition) {
+
+		if (!userPosition && !userPositionSetRef.current) {
+			userPositionSetRef.current = true;
 			if (navigator.geolocation) {
 				console.log("[ROUTE_LIST] Requesting geolocation...");
 				navigator.geolocation.getCurrentPosition(
@@ -60,10 +62,12 @@ export const RouteList = memo((props: RouteListProps) => {
 							"[ROUTE_LIST] Error getting geolocation:",
 							error.message
 						);
+						userPositionSetRef.current = false;
 					}
 				);
 			} else {
 				console.log("[ROUTE_LIST] Geolocation not supported");
+				userPositionSetRef.current = false;
 			}
 		}
 	}, [userPosition, updateUserPosition]);
@@ -84,7 +88,8 @@ export const RouteList = memo((props: RouteListProps) => {
 		);
 
 	useEffect(() => {
-		if (userGeocodeItems?.[0]) {
+		if (userGeocodeItems?.[0] && !userPositionSetRef.current) {
+			userPositionSetRef.current = true;
 			console.log("[ROUTE_LIST] Geocoding result:", userGeocodeItems[0]);
 			const { lat, lon } = userGeocodeItems[0].point;
 			const coords: [number, number] = [lon, lat];
@@ -111,12 +116,9 @@ export const RouteList = memo((props: RouteListProps) => {
 		if (userPosition && destinationCoords && routeType) {
 			console.log("[ROUTE_LIST] Setting showRoute to true");
 			setShowRoute(true);
+			onBack();
 		} else {
-			console.log("[ROUTE_LIST] Cannot build route, missing data:", {
-				hasUserPosition: !!userPosition,
-				hasDestinationCoords: !!destinationCoords,
-				hasRouteType: !!routeType,
-			});
+			console.log("[ROUTE_LIST] Cannot build route, missing data");
 		}
 	};
 
@@ -143,6 +145,9 @@ export const RouteList = memo((props: RouteListProps) => {
 							"[ROUTE_LIST] User address input changed:",
 							e.target.value
 						);
+						if (userAddress && !e.target.value) {
+							userPositionSetRef.current = false;
+						}
 					}}
 					placeholder="Ваш адрес"
 					iconAfter={

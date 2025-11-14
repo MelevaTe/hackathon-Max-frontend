@@ -1,7 +1,7 @@
-import * as _mapgl from "../../../node_modules/@2gis/mapgl/types";
+/// <reference types="@2gis/mapgl/global" />
+
+export {};
 
 declare global {
-	namespace mapgl {
-		export = _mapgl;
-	}
+	const mapgl: typeof import("@2gis/mapgl/types/index");
 }

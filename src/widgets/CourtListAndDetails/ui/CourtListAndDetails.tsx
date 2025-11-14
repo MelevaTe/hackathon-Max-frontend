@@ -38,9 +38,7 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		initialCourt
 	);
 	const [view, setView] = useState<MobileSheetView>(initialView);
-	const {
-		setRoute,
-	} = useRoute();
+	const { setRoute } = useRoute();
 
 	useEffect(() => {
 		if (initialCourt) {

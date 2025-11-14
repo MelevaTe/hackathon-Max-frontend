@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { routeSchema } from "../type/routeSchema.ts";
 
 const initialState: routeSchema = {
@@ -12,50 +12,60 @@ export const routeSlice = createSlice({
 	name: "route",
 	initialState,
 	reducers: {
-		setRouteDestination: (state, action) => {
+		setRouteDestination: (
+			state,
+			action: PayloadAction<[number, number]>
+		) => {
 			console.log("[ROUTE SLICE] setRouteDestination:", action.payload);
 			state.destinationCoords = action.payload;
-			state.showRoute = true;
-			console.log("[ROUTE SLICE] Updated state:", {
-				destinationCoords: state.destinationCoords,
-				showRoute: state.showRoute,
-			});
+			console.log(
+				"[ROUTE SLICE] Updated destinationCoords:",
+				state.destinationCoords
+			);
 		},
-		setShowRoute: (state, action) => {
+		setShowRoute: (state, action: PayloadAction<boolean>) => {
 			console.log("[ROUTE SLICE] setShowRoute:", action.payload);
 			state.showRoute = action.payload;
-			console.log("[ROUTE SLICE] Updated showRoute:", state.showRoute);
+
+			if (!action.payload) {
+				state.destinationCoords = null;
+				state.userPosition = null;
+				state.routeType = null;
+				console.log("[ROUTE SLICE] Cleared route data on hide");
+			}
+
+			console.log("[ROUTE SLICE] Updated state:", state);
 		},
 		clearRoute: (state) => {
 			console.log("[ROUTE SLICE] clearRoute called");
-			const oldState = { ...state };
 			state.destinationCoords = null;
 			state.showRoute = false;
 			state.userPosition = null;
 			state.routeType = null;
-			console.log("[ROUTE SLICE] Cleared route, old state:", oldState);
+			console.log("[ROUTE SLICE] Route cleared");
 		},
-		setUserPosition: (state, action) => {
+		setUserPosition: (state, action: PayloadAction<[number, number]>) => {
 			console.log("[ROUTE SLICE] setUserPosition:", action.payload);
 			state.userPosition = action.payload;
-			console.log(
-				"[ROUTE SLICE] Updated userPosition:",
-				state.userPosition
-			);
 		},
-		setRouteType: (state, action) => {
+		setRouteType: (state, action: PayloadAction<"car" | "pedestrian">) => {
 			console.log("[ROUTE SLICE] setRouteType:", action.payload);
 			state.routeType = action.payload;
-			console.log("[ROUTE SLICE] Updated routeType:", state.routeType);
 		},
-		resetRouteState: (state) => {
-			console.log("[ROUTE SLICE] resetRouteState called");
-			const oldState = { ...state };
-			state.destinationCoords = null;
-			state.showRoute = false;
-			state.userPosition = null;
-			state.routeType = null;
-			console.log("[ROUTE SLICE] Reset state, old state:", oldState);
+		initializeRoute: (
+			state,
+			action: PayloadAction<{
+				destinationCoords: [number, number];
+				userPosition?: [number, number];
+				routeType?: "car" | "pedestrian";
+			}>
+		) => {
+			console.log("[ROUTE SLICE] initializeRoute:", action.payload);
+			state.destinationCoords = action.payload.destinationCoords;
+			state.userPosition =
+				action.payload.userPosition || state.userPosition;
+			state.routeType = action.payload.routeType || state.routeType;
+			console.log("[ROUTE SLICE] Route initialized:", state);
 		},
 	},
 });

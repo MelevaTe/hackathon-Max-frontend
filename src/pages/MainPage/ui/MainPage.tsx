@@ -57,13 +57,21 @@ const MainPage = () => {
 	const hasMore = useSelector(getCourtPageHasMore);
 	const isLoadingCourt = useSelector(getCourtPageIsLoading);
 	const courtsCords = useSelector(getCourtsCords);
-	const { userPosition, destinationCoords, routeType, showRoute } =
-		useRoute();
+	const {
+		clearRoute,
+		showRoute,
+		userPosition,
+		destinationCoords,
+		routeType,
+	} = useRoute();
 	const [selectedCourtId, setSelectedCourtId] = useState<string | null>(null);
 	const triggerRef = useRef<HTMLDivElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		console.log("[MAIN_PAGE] Sport changed to:", currentSport);
+		clearRoute();
+
 		if (userLocation?.id) {
 			dispatch(
 				fetchCourts({
@@ -72,7 +80,7 @@ const MainPage = () => {
 				})
 			);
 		}
-	}, [dispatch, currentSport, userLocation?.id]);
+	}, [dispatch, currentSport, userLocation?.id, clearRoute]);
 
 	useEffect(() => {
 		if (userLocation?.id) {

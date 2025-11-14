@@ -1,54 +1,67 @@
+import { useCallback } from "react";
 import { useSelector } from "react-redux";
-import {
-	getRouteDestinationCoords,
-	getRouteShow,
-	getRouteUserPosition,
-	getRouteType,
-	routeActions,
-} from "@/features/route";
+import type { StateSchema } from "@/app/providers/StoreProvider";
+import { routeActions } from "@/features/route";
 import { useAppDispatch } from "@/shared/lib/hooks/useAppDispatch.ts";
 
 export const useRoute = () => {
 	const dispatch = useAppDispatch();
-	const destinationCoords = useSelector(getRouteDestinationCoords);
-	const showRoute = useSelector(getRouteShow);
-	const userPosition = useSelector(getRouteUserPosition);
-	const routeType = useSelector(getRouteType);
 
-	console.log("[USE_ROUTE HOOK] Current state:", {
-		destinationCoords,
-		showRoute,
-		userPosition,
-		routeType,
-	});
+	const destinationCoords = useSelector(
+		(state: StateSchema) => state.route?.destinationCoords
+	);
+	const showRoute = useSelector(
+		(state: StateSchema) => state.route?.showRoute
+	);
+	const userPosition = useSelector(
+		(state: StateSchema) => state.route?.userPosition
+	);
+	const routeType = useSelector(
+		(state: StateSchema) => state.route?.routeType
+	);
 
-	const setRoute = (coords: [number, number]) => {
-		console.log("[USE_ROUTE HOOK] setRoute called with coords:", coords);
-		dispatch(routeActions.setRouteDestination(coords));
-	};
+	const setRoute = useCallback(
+		(coords: [number, number]) => {
+			dispatch(routeActions.setRouteDestination(coords));
+		},
+		[dispatch]
+	);
 
-	const clearCurrentRoute = () => {
-		console.log("[USE_ROUTE HOOK] clearCurrentRoute called");
+	const setShowRoute = useCallback(
+		(show: boolean) => {
+			dispatch(routeActions.setShowRoute(show));
+		},
+		[dispatch]
+	);
+
+	const clearRoute = useCallback(() => {
 		dispatch(routeActions.clearRoute());
-	};
+	}, [dispatch]);
 
-	const updateUserPosition = (coords: [number, number]) => {
-		console.log(
-			"[USE_ROUTE HOOK] updateUserPosition called with coords:",
-			coords
-		);
-		dispatch(routeActions.setUserPosition(coords));
-	};
+	const updateUserPosition = useCallback(
+		(coords: [number, number]) => {
+			dispatch(routeActions.setUserPosition(coords));
+		},
+		[dispatch]
+	);
 
-	const setRouteType = (type: "car" | "pedestrian") => {
-		console.log("[USE_ROUTE HOOK] setRouteType called with type:", type);
-		dispatch(routeActions.setRouteType(type));
-	};
+	const setRouteType = useCallback(
+		(type: "car" | "pedestrian") => {
+			dispatch(routeActions.setRouteType(type));
+		},
+		[dispatch]
+	);
 
-	const setShowRoute = (show: boolean) => {
-		console.log("[USE_ROUTE HOOK] setShowRoute called with show:", show);
-		dispatch(routeActions.setShowRoute(show));
-	};
+	const initializeRoute = useCallback(
+		(data: {
+			destinationCoords: [number, number];
+			userPosition?: [number, number];
+			routeType?: "car" | "pedestrian";
+		}) => {
+			dispatch(routeActions.initializeRoute(data));
+		},
+		[dispatch]
+	);
 
 	return {
 		destinationCoords,
@@ -56,9 +69,10 @@ export const useRoute = () => {
 		userPosition,
 		routeType,
 		setRoute,
-		clearCurrentRoute,
+		setShowRoute,
+		clearRoute,
 		updateUserPosition,
 		setRouteType,
-		setShowRoute,
+		initializeRoute,
 	};
 };

@@ -24,7 +24,7 @@ interface CourtDetailsProps {
 	onlineEntries?: OnlineEntryFormatted[];
 	isOnlineLoading?: boolean;
 	isOnlineError?: boolean;
-	onRoute?: (coords: [number, number]) => void;
+	onRoute: (coords: [number, number]) => void;
 }
 
 export const CourtDetails = memo((props: CourtDetailsProps) => {
@@ -40,12 +40,10 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 		onRoute,
 	} = props;
 
-	const handleBuildRoute = () => {
-		if (court.lat !== undefined && court.lon !== undefined) {
+	const handleRoute = () => {
+		if (court?.lon && court?.lat) {
 			const coords: [number, number] = [court.lon, court.lat];
-			if (onRoute) {
-				onRoute(coords);
-			}
+			onRoute(coords);
 		}
 	};
 
@@ -189,7 +187,7 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 						mode="primary"
 						size="medium"
 						className={cls.actionButton}
-						onClick={handleBuildRoute}
+						onClick={handleRoute}
 						iconBefore={<MapPinned />}
 					>
 						Маршрут
