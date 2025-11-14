@@ -123,6 +123,11 @@ export const RouteList = memo((props: RouteListProps) => {
 				</IconButton>
 			</div>
 			<div className={cls.content}>
+				<div style={{fontSize: '12px', marginBottom: '10px'}}>
+					User: {userPosition ? `[${userPosition.join(', ')}]` : 'не определено'}<br/>
+					Dest: {destinationCoords ? `[${destinationCoords.join(', ')}]` : 'не определено'}<br/>
+					Type: {routeType || 'не выбран'}
+				</div>
 				<div className={cls.addressInput}>
 					<Input
 						value={userAddress}
@@ -142,7 +147,7 @@ export const RouteList = memo((props: RouteListProps) => {
 									onClick={handleAddressClear}
 									title="Очистить"
 								>
-									<X />
+									<X/>
 								</IconButton>
 							) : (
 								<IconButton
@@ -151,7 +156,7 @@ export const RouteList = memo((props: RouteListProps) => {
 									size="medium"
 									disabled
 								>
-									<Search />
+									<Search/>
 								</IconButton>
 							)
 						}
@@ -168,7 +173,7 @@ export const RouteList = memo((props: RouteListProps) => {
 						size="medium"
 						className={cls.actionButton}
 						onClick={() => handleSetRouteType("car")}
-						iconBefore={<Car />}
+						iconBefore={<Car/>}
 					>
 						На машине
 					</Button>
@@ -180,7 +185,7 @@ export const RouteList = memo((props: RouteListProps) => {
 						size="medium"
 						className={cls.actionButton}
 						onClick={() => handleSetRouteType("pedestrian")}
-						iconBefore={<User />}
+						iconBefore={<User/>}
 					>
 						пешком
 					</Button>
