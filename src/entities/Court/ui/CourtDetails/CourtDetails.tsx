@@ -25,7 +25,7 @@ interface CourtDetailsProps {
 	onlineEntries?: OnlineEntryFormatted[];
 	isOnlineLoading?: boolean;
 	isOnlineError?: boolean;
-	onRoute?: () => void;
+	onRoute?: (coords: [number, number]) => void;
 }
 
 export const CourtDetails = memo((props: CourtDetailsProps) => {
@@ -43,14 +43,23 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 
 	const { setRoute } = useRoute();
 
+	// const handleBuildRoute = () => {
+	// 	if (court.lat !== undefined && court.lon !== undefined) {
+	// 		console.log("координаты", [court.lon, court.lat]);
+	// 		// const mock = [39.712619, 47.23683]
+	// 		setRoute([37.6184, 55.4312]);
+	// 	}
+	// 	if (onRoute) {
+	// 		onRoute();
+	// 	}
+	// };
+
 	const handleBuildRoute = () => {
 		if (court.lat !== undefined && court.lon !== undefined) {
-			console.log("координаты", [court.lon, court.lat]);
-			// const mock = [39.712619, 47.23683]
-			setRoute([39.712619, 47.23683]);
-		}
-		if (onRoute) {
-			onRoute();
+			const coords: [number, number] = [37.6184, 55.4312];
+			if (onRoute) {
+				onRoute(coords);
+			}
 		}
 	};
 

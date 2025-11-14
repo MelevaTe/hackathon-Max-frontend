@@ -40,7 +40,7 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 	const [view, setView] = useState<MobileSheetView>(initialView);
 	const [selectedRouteId, setSelectedRouteId] = useState<number | null>(null);
 
-	const { userPosition, destinationCoords } = useRoute();
+	const { userPosition, destinationCoords, setRoute } = useRoute();
 
 	const isEnabled = userPosition && destinationCoords;
 
@@ -118,11 +118,8 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		// setView("routeDetails");
 	};
 
-	const handleOpenRouteList = () => {
-		if (!isEnabled) {
-			return;
-		}
-		refetchRoutes();
+	const handleOpenRouteList = (coords: [number, number]) => {
+		setRoute(coords);
 		setView("routeList");
 	};
 

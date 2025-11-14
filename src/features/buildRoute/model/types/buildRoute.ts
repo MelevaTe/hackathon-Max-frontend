@@ -54,3 +54,22 @@ export interface RouteRequest {
 	max_result_count?: number;
 	start_time?: number;
 }
+
+export interface GeocodeItem {
+	address_name: string;
+	full_name: string;
+	point: {
+		lat: number;
+		lon: number;
+	};
+}
+
+export interface GeocodeResponse {
+	meta: {
+		code: number;
+	};
+	result: {
+		items: GeocodeItem[];
+		total: number;
+	};
+}
