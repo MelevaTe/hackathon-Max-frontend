@@ -1,6 +1,7 @@
 import { Button, CellSimple, IconButton } from "@maxhub/max-ui";
 import { Sun, Trash2 } from "lucide-react";
 import { memo } from "react";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
@@ -15,16 +16,18 @@ export interface CourtListItemProps {
 
 export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 	const { className, bookingActive, deleteBooking } = props;
-	const { setRoute } = useRoute();
+	const { setRoute, clearRoute } = useRoute();
 	const navigate = useNavigate();
 	const { t } = useTranslation();
 
 	const handleShowRoute = () => {
+		clearRoute();
 		const destinationCoords: [number, number] = [
 			bookingActive.lon,
 			bookingActive.lat,
 		];
 		setRoute(destinationCoords);
+		toast.success(`Маршрут до "${bookingActive.title}"`);
 		navigate("/");
 	};
 

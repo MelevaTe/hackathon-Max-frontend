@@ -38,7 +38,7 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		initialCourt
 	);
 	const [view, setView] = useState<MobileSheetView>(initialView);
-	const { setRoute } = useRoute();
+	const { setRoute, destinationCoords } = useRoute();
 
 	useEffect(() => {
 		if (initialCourt) {
@@ -47,6 +47,20 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 			setMobileSheetOpen(true);
 		}
 	}, [initialCourt]);
+
+	// useEffect(() => {
+	// 	if (destinationCoords && !mobileSheetOpen) {
+	// 		setMobileSheetOpen(true);
+	// 		setView("routeList");
+	// 	}
+	// }, [destinationCoords, mobileSheetOpen]);
+
+	useEffect(() => {
+		if (destinationCoords) {
+			setMobileSheetOpen(true);
+			setView("routeList");
+		}
+	}, [destinationCoords?.[0], destinationCoords?.[1]]);
 
 	const handleOpenDetails = (court: Court) => {
 		setSelectedCourt(court);
