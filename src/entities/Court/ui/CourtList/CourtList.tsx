@@ -1,6 +1,6 @@
 import { Typography } from "@maxhub/max-ui";
 import { IconButton } from "@maxhub/max-ui";
-import { X } from "lucide-react";
+import { X, HeartCrack } from "lucide-react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { CourtListItem } from "@/entities/Court/ui/CourtListItem/CourtListItem.tsx";
@@ -33,9 +33,27 @@ export const CourtList = memo((props: CourtListProps) => {
 	if (!isLoading && !courts.length) {
 		return (
 			<div className={classNames(cls.CourtList, {}, [className])}>
-				<Typography.Body variant="large">
-					Поля не найдены
-				</Typography.Body>
+				<div className={cls.header}>
+					<Typography.Headline>Доступные поля</Typography.Headline>
+					<IconButton
+						appearance="neutral"
+						aria-label="Закрыть"
+						mode="tertiary"
+						size="medium"
+						onClick={onClose}
+					>
+						<X />
+					</IconButton>
+				</div>
+				<div className={cls.contentError}>
+					<Typography.Headline>
+						Нет доступных полей
+					</Typography.Headline>
+					<HeartCrack
+						size={90}
+						color={"#f56565"}
+					/>
+				</div>
 			</div>
 		);
 	}

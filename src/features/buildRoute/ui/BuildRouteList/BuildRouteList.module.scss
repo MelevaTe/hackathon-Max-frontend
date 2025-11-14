@@ -16,5 +16,12 @@
 	display: flex;
 	flex: 1;
 	flex-direction: column;
+	gap: 0.625rem;
 	overflow-y: auto;
+	padding-block: 0.625rem;
+}
+
+.routeTypeButtons {
+	display: flex;
+	flex-direction: row;
 }

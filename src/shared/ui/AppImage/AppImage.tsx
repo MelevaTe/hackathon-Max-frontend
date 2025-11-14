@@ -36,11 +36,19 @@ export const AppImage = (props: AppImageProps) => {
 	}, [src]);
 
 	if (isLoading && fallback) {
-		return fallback;
+		return (
+			<div className={classNames(cls.fallback, {}, [className])}>
+				fallback
+			</div>
+		);
 	}
 
 	if (hasError && errorFallback) {
-		return errorFallback;
+		return (
+			<div className={classNames(cls.errorFallback, {}, [className])}>
+				errorFallback
+			</div>
+		);
 	}
 
 	return (

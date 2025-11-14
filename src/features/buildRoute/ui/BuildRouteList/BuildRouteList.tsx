@@ -1,5 +1,5 @@
 import { Typography, IconButton, Input, Button } from "@maxhub/max-ui";
-import { X, Car, User, Search } from "lucide-react";
+import { X, Car, User, Search, Calendar1 } from "lucide-react";
 import { memo, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -161,24 +161,28 @@ export const RouteList = memo((props: RouteListProps) => {
 				</div>
 
 				<div className={cls.routeTypeButtons}>
-					<IconButton
+					<Button
 						appearance={routeType === "car" ? "themed" : "neutral"}
 						mode="primary"
 						size="medium"
+						className={cls.actionButton}
 						onClick={() => handleSetRouteType("car")}
+						iconBefore={<Car />}
 					>
-						<Car />
-					</IconButton>
-					<IconButton
+						На машине
+					</Button>
+					<Button
 						appearance={
 							routeType === "pedestrian" ? "themed" : "neutral"
 						}
 						mode="primary"
 						size="medium"
+						className={cls.actionButton}
 						onClick={() => handleSetRouteType("pedestrian")}
+						iconBefore={<User />}
 					>
-						<User />
-					</IconButton>
+						пешком
+					</Button>
 				</div>
 
 				<Button
