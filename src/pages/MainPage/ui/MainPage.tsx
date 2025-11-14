@@ -100,12 +100,6 @@ const MainPage = () => {
 		wrapperRef,
 	});
 
-	useEffect(() => {
-		if (showRoute) {
-			clearCurrentRoute();
-			console.log('отчистили маршрут')
-		}
-	}, [currentSport, clearCurrentRoute, showRoute]);
 
 	useEffect(() => {
 		if (showRoute && !userPosition) {
