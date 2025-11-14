@@ -57,7 +57,8 @@ const MainPage = () => {
 	const hasMore = useSelector(getCourtPageHasMore);
 	const isLoadingCourt = useSelector(getCourtPageIsLoading);
 	const courtsCords = useSelector(getCourtsCords);
-	const { showRoute, userPosition, updateUserPosition } = useRoute();
+	const { showRoute, userPosition, updateUserPosition, clearCurrentRoute } =
+		useRoute();
 	const [selectedCourtId, setSelectedCourtId] = useState<string | null>(null);
 	const triggerRef = useRef<HTMLDivElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
@@ -98,6 +99,12 @@ const MainPage = () => {
 		triggerRef,
 		wrapperRef,
 	});
+
+	useEffect(() => {
+		if (showRoute) {
+			clearCurrentRoute();
+		}
+	}, [currentSport, clearCurrentRoute, showRoute]);
 
 	useEffect(() => {
 		if (showRoute && !userPosition) {

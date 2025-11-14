@@ -2,10 +2,10 @@ import { Button, CellSimple, IconButton } from "@maxhub/max-ui";
 import { Sun, Trash2 } from "lucide-react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 import cls from "./BookingActiveListItem.module.scss";
 import type { UIBookingActive } from "../../model/types/bookingActive.ts";
-import {useNavigate} from "react-router-dom";
 
 export interface CourtListItemProps {
 	className?: string;
