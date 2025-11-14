@@ -21,9 +21,7 @@ const onlineStatusApi = rtkApi.injectEndpoints({
 			}) => {
 				return response.onlines;
 			},
-			providesTags: (result, error, { courtId }) => [
-				{ type: "CourtOnline", id: courtId },
-			],
+			keepUnusedDataFor: 0,
 		}),
 	}),
 	overrideExisting: false,
