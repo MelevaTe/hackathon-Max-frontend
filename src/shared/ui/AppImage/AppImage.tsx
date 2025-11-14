@@ -38,7 +38,7 @@ export const AppImage = (props: AppImageProps) => {
 	if (isLoading && fallback) {
 		return (
 			<div className={classNames(cls.fallback, {}, [className])}>
-				fallback
+				{fallback}
 			</div>
 		);
 	}
@@ -46,7 +46,7 @@ export const AppImage = (props: AppImageProps) => {
 	if (hasError && errorFallback) {
 		return (
 			<div className={classNames(cls.errorFallback, {}, [className])}>
-				errorFallback
+				{errorFallback}
 			</div>
 		);
 	}
