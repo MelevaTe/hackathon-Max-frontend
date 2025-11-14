@@ -2,6 +2,7 @@ import type { Reducer, ReducersMapObject } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
 import type { CombinedState } from "@reduxjs/toolkit/query";
 import { userLocationReducer } from "@/entities/UserLocation";
+import { routeReducer } from "@/features/route";
 import { sportFilterReducer } from "@/features/sportFilter";
 import { $api } from "@/shared/api/api";
 import { rtkApi } from "@/shared/api/rtkApi";
@@ -16,6 +17,7 @@ export function createReduxStore(
 		...asyncReducers,
 		sportFilter: sportFilterReducer,
 		userLocations: userLocationReducer,
+		route: routeReducer,
 		[rtkApi.reducerPath]: rtkApi.reducer,
 	};
 

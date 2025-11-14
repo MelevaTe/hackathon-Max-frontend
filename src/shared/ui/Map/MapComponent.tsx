@@ -1,10 +1,9 @@
 import { load } from "@2gis/mapgl";
 import { useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
-import { useUserLocation } from "@/shared/lib/hooks/useUserLocation";
 import { MapWrapper } from "./MapWrapper";
 import "./Map.scss";
 import { Theme } from "@/app/providers/ThemeProvider";
+import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 
 export interface MarkerData {
 	id: string;
@@ -22,8 +21,6 @@ interface MapProps {
 	markers?: MarkerData[];
 	theme: Theme;
 	onMarkerClick?: (courtInfoId: string) => void;
-	destinationCoords?: [number, number];
-	showRoute?: boolean;
 }
 
 export const MapComponent = ({
@@ -31,17 +28,15 @@ export const MapComponent = ({
 	markers = [],
 	theme,
 	onMarkerClick,
-	destinationCoords,
-	showRoute = false,
 }: MapProps) => {
-	const [searchParams] = useSearchParams();
-	const { getUserLocation } = useUserLocation();
+	const { showRoute, userPosition, destinationCoords } = useRoute();
 
 	const mapRef = useRef<mapgl.Map | null>(null);
 	const mapglRef = useRef<any>(null);
 	const markersRef = useRef<mapgl.Marker[]>([]);
 	const circleRef = useRef<mapgl.CircleMarker | null>(null);
 	const destinationMarkerRef = useRef<mapgl.Marker | null>(null);
+	const userMarkerRef = useRef<mapgl.Marker | null>(null);
 
 	useEffect(() => {
 		let map: mapgl.Map | null = null;
@@ -61,48 +56,17 @@ export const MapComponent = ({
 			destinationMarkerRef.current = marker;
 		};
 
-		const success = (pos: GeolocationPosition) => {
-			const mapglAPI = mapglRef.current;
-			const currentMap = mapRef.current;
+		const addUserMarker = (coords: [number, number]) => {
+			if (!mapRef.current || !mapglRef.current) return;
 
-			if (!mapglAPI || !currentMap) return;
-
-			const center: [number, number] = [
-				pos.coords.longitude,
-				pos.coords.latitude,
-			];
-
-			if (circleRef.current) {
-				circleRef.current.destroy();
+			if (userMarkerRef.current) {
+				userMarkerRef.current.destroy();
 			}
 
-			const newCircle = new mapglAPI.CircleMarker(currentMap, {
-				coordinates: center,
-				radius: 14,
-				color: "#4fb848",
-				strokeWidth: 4,
-				strokeColor: "#ffffff",
+			const marker = new mapglRef.current.Marker(mapRef.current, {
+				coordinates: coords,
 			});
-
-			circleRef.current = newCircle;
-
-			if (destinationCoords) {
-				const bounds = {
-					southWest: [
-						Math.min(center[0], destinationCoords[0]),
-						Math.min(center[1], destinationCoords[1]),
-					] as [number, number],
-					northEast: [
-						Math.max(center[0], destinationCoords[0]),
-						Math.max(center[1], destinationCoords[1]),
-					] as [number, number],
-				};
-				currentMap.fitBounds(bounds);
-				addDestinationMarker(destinationCoords);
-			} else {
-				currentMap.setCenter(center);
-				currentMap.setZoom(16);
-			}
+			userMarkerRef.current = marker;
 		};
 
 		const geoFindMe = () => {
@@ -110,21 +74,51 @@ export const MapComponent = ({
 				alert("Геолокация не поддерживается в этом браузере.");
 				return;
 			}
-			navigator.geolocation.getCurrentPosition(success, (error) => {
-				switch (error.code) {
-					case error.PERMISSION_DENIED:
-						alert("Доступ к местоположению запрещён.");
-						break;
-					case error.POSITION_UNAVAILABLE:
-						alert("Невозможно определить местоположение.");
-						break;
-					case error.TIMEOUT:
-						alert("Превышено время ожидания.");
-						break;
-					default:
-						alert("Неизвестная ошибка геолокации.");
+			navigator.geolocation.getCurrentPosition(
+				(pos) => {
+					const mapglAPI = mapglRef.current;
+					const currentMap = mapRef.current;
+
+					if (!mapglAPI || !currentMap) return;
+
+					const center: [number, number] = [
+						pos.coords.longitude,
+						pos.coords.latitude,
+					];
+
+					if (circleRef.current) {
+						circleRef.current.destroy();
+					}
+
+					const newCircle = new mapglAPI.CircleMarker(currentMap, {
+						coordinates: center,
+						radius: 14,
+						color: "#4fb848",
+						strokeWidth: 4,
+						strokeColor: "#ffffff",
+					});
+
+					circleRef.current = newCircle;
+
+					currentMap.setCenter(center);
+					currentMap.setZoom(16);
+				},
+				(error) => {
+					switch (error.code) {
+						case error.PERMISSION_DENIED:
+							alert("Доступ к местоположению запрещён.");
+							break;
+						case error.POSITION_UNAVAILABLE:
+							alert("Невозможно определить местоположение.");
+							break;
+						case error.TIMEOUT:
+							alert("Превышено время ожидания.");
+							break;
+						default:
+							alert("Неизвестная ошибка геолокации.");
+					}
 				}
-			});
+			);
 		};
 
 		const start = async () => {
@@ -169,45 +163,64 @@ export const MapComponent = ({
 				button.addEventListener("click", geoFindMe);
 			}
 
-			markers.forEach((markerData) => {
-				if (map) {
-					const marker = new mapglAPI.Marker(map, {
-						coordinates: markerData.coordinates,
-					});
-
-					if (onMarkerClick) {
-						marker.on("click", (e) => {
-							onMarkerClick(markerData.courtInfoId);
+			if (!showRoute) {
+				markers.forEach((markerData) => {
+					if (map) {
+						const marker = new mapglAPI.Marker(map, {
+							coordinates: markerData.coordinates,
 						});
+
+						if (onMarkerClick) {
+							marker.on("click", (e) => {
+								onMarkerClick(markerData.courtInfoId);
+							});
+						}
+
+						markersRef.current.push(marker);
 					}
+				});
 
-					markersRef.current.push(marker);
-				}
-			});
+				if (markers.length > 0) {
+					const lats = markers.map((m) => m.coordinates[0]);
+					const lons = markers.map((m) => m.coordinates[1]);
 
-			if (markers.length > 0 && !destinationCoords) {
-				const lats = markers.map((m) => m.coordinates[0]);
-				const lons = markers.map((m) => m.coordinates[1]);
+					const validLats = lats.filter(
+						(lat) => typeof lat === "number" && !isNaN(lat)
+					);
+					const validLons = lons.filter(
+						(lon) => typeof lon === "number" && !isNaN(lon)
+					);
 
-				const validLats = lats.filter(
-					(lat) => typeof lat === "number" && !isNaN(lat)
-				);
-				const validLons = lons.filter(
-					(lon) => typeof lon === "number" && !isNaN(lon)
-				);
-
-				if (validLats.length > 0 && validLons.length > 0) {
-					const centerLat =
-						validLats.reduce((a, b) => a + b, 0) / validLats.length;
-					const centerLon =
-						validLons.reduce((a, b) => a + b, 0) / validLons.length;
-					map.setCenter([centerLat, centerLon]);
-					map.setZoom(markers.length === 1 ? 16 : 14);
+					if (validLats.length > 0 && validLons.length > 0) {
+						const centerLat =
+							validLats.reduce((a, b) => a + b, 0) /
+							validLats.length;
+						const centerLon =
+							validLons.reduce((a, b) => a + b, 0) /
+							validLons.length;
+						map.setCenter([centerLat, centerLon]);
+						map.setZoom(markers.length === 1 ? 16 : 14);
+					}
 				}
 			}
 
-			if (destinationCoords) {
-				geoFindMe();
+			if (showRoute && userPosition) {
+				addUserMarker(userPosition);
+
+				if (destinationCoords) {
+					const bounds = {
+						southWest: [
+							Math.min(userPosition[0], destinationCoords[0]),
+							Math.min(userPosition[1], destinationCoords[1]),
+						] as [number, number],
+						northEast: [
+							Math.max(userPosition[0], destinationCoords[0]),
+							Math.max(userPosition[1], destinationCoords[1]),
+						] as [number, number],
+					};
+					map.fitBounds(bounds);
+					addDestinationMarker(destinationCoords);
+				}
 			}
 		};
 
@@ -227,6 +240,11 @@ export const MapComponent = ({
 				destinationMarkerRef.current = null;
 			}
 
+			if (userMarkerRef.current) {
+				userMarkerRef.current.destroy();
+				userMarkerRef.current = null;
+			}
+
 			if (button) {
 				button.removeEventListener("click", geoFindMe);
 			}
@@ -238,7 +256,14 @@ export const MapComponent = ({
 				mapRef.current = null;
 			}
 		};
-	}, [markers, theme, destinationCoords, onMarkerClick]);
+	}, [
+		markers,
+		theme,
+		onMarkerClick,
+		showRoute,
+		userPosition,
+		destinationCoords,
+	]);
 
 	return (
 		<MapWrapper

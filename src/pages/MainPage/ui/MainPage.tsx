@@ -30,6 +30,7 @@ import {
 import { useAppDispatch } from "@/shared/lib/hooks/useAppDispatch.ts";
 import { useInfiniteScroll } from "@/shared/lib/hooks/useInfiniteScroll.ts";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
+import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 import { ClickableAvatar } from "@/shared/ui/ClickableAvatar/ClickableAvatar.tsx";
 import {
 	MapComponent,
@@ -47,7 +48,6 @@ const reducers: ReducersList = {
 
 const MainPage = () => {
 	const { user } = useMax();
-	const [searchParams] = useSearchParams();
 	const { t } = useTranslation();
 	const { theme } = useTheme();
 	const dispatch = useAppDispatch();
@@ -57,12 +57,12 @@ const MainPage = () => {
 	const hasMore = useSelector(getCourtPageHasMore);
 	const isLoadingCourt = useSelector(getCourtPageIsLoading);
 	const courtsCords = useSelector(getCourtsCords);
+	const { showRoute, userPosition, updateUserPosition } = useRoute();
 	const [selectedCourtId, setSelectedCourtId] = useState<string | null>(null);
 	const triggerRef = useRef<HTMLDivElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		console.log("MainPage userLocation:", userLocation);
 		if (userLocation?.id) {
 			dispatch(
 				fetchCourts({
@@ -99,13 +99,24 @@ const MainPage = () => {
 		wrapperRef,
 	});
 
-	const destinationParam = searchParams.get("destination");
-	const destinationCoords = destinationParam
-		? (destinationParam.split(",").map(Number) as [number, number])
-		: undefined;
-
-	console.log("Дестинейшен:", destinationCoords);
-	console.log("searchParams:", `/?route=1${searchParams}`);
+	useEffect(() => {
+		if (showRoute && !userPosition) {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					(position) => {
+						const coords: [number, number] = [
+							position.coords.longitude,
+							position.coords.latitude,
+						];
+						updateUserPosition(coords);
+					},
+					(error) => {
+						console.error("Ошибка получения геопозиции:", error);
+					}
+				);
+			}
+		}
+	}, [showRoute, userPosition, updateUserPosition]);
 
 	const {
 		data: selectedCourt,
@@ -137,11 +148,9 @@ const MainPage = () => {
 				<LocationSelectorModal />
 				<MapComponent
 					className={cls.map}
-					markers={markersData}
+					markers={showRoute ? [] : markersData}
 					theme={theme}
 					onMarkerClick={handleMarkerClick}
-					destinationCoords={destinationCoords}
-					showRoute={!!destinationCoords}
 				/>
 				<div className={cls.avatar}>
 					<ClickableAvatar

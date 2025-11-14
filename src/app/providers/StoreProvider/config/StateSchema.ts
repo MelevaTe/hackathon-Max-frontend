@@ -10,12 +10,14 @@ import type { CourtSchema } from "@/entities/Court";
 import type { CourtsCordsSchema } from "@/entities/CourtCord";
 import type { userLocationSchema } from "@/entities/UserLocation";
 import type { courtBookingSchema } from "@/features/courtBooking";
+import type { routeSchema } from "@/features/route";
 import type { sportFilterSchema } from "@/features/sportFilter";
 import type { rtkApi } from "@/shared/api/rtkApi";
 
 export interface StateSchema {
 	sportFilter: sportFilterSchema;
 	userLocations: userLocationSchema;
+	route: routeSchema;
 	[rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>;
 
 	// Асинхронные редюсеры
