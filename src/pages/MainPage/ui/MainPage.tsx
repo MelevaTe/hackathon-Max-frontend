@@ -69,7 +69,6 @@ const MainPage = () => {
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		console.log("[MAIN_PAGE] Sport changed to:", currentSport);
 		clearRoute();
 
 		if (userLocation?.id) {
@@ -131,14 +130,6 @@ const MainPage = () => {
 	};
 
 	const markersData = transformCourtsCordsToMarkers(courtsCords || []);
-
-	console.log("[PARENT_COMPONENT] Map props:", {
-		markers: markersData,
-		showRoute,
-		userPosition,
-		destinationCoords,
-		routeType,
-	});
 
 	return (
 		<DynamicModuleLoader reducers={reducers}>

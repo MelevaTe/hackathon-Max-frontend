@@ -32,21 +32,14 @@ export const CourtBooking = (props: CourtBookingProps) => {
 	};
 
 	const handleBooking = async () => {
-		console.log("handleBooking запустился");
-		console.log("courtId:", courtId);
-		console.log("selectedDate:", selectedDate);
-		console.log("selectedTime:", selectedTime);
 		if (!courtId) {
-			console.error("ID корта не указан");
 			return;
 		}
 		if (!selectedDate) {
-			console.error("Дата не выбрана");
 			toast.error("Пожалуйста, выберите дату");
 			return;
 		}
 		if (!selectedTime) {
-			console.error("Время не выбрано");
 			toast.error("Пожалуйста, выберите время");
 			return;
 		}

@@ -1,6 +1,6 @@
 import { Typography, IconButton, Input, Button } from "@maxhub/max-ui";
 import { X, Car, User, Search } from "lucide-react";
-import { memo, useState, useEffect, useCallback } from "react";
+import { memo, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useGeocodeQuery } from "@/features/buildRoute/api/buildRouteApi.ts";
@@ -28,7 +28,7 @@ export const RouteList = memo((props: RouteListProps) => {
 
 	const [userAddress, setUserAddress] = useState("");
 	const [debouncedUserAddress, setDebouncedUserAddress] = useState("");
-	const [isGeoLocationAttempted, setIsGeoLocationAttempted] = useState(false);
+	const [isGeoLocation, setIsGeoLocation] = useState(false);
 
 	const debouncedSetAddress = useDebounce((value: string) => {
 		setDebouncedUserAddress(value);
@@ -39,35 +39,29 @@ export const RouteList = memo((props: RouteListProps) => {
 	}, [userAddress, debouncedSetAddress]);
 
 	useEffect(() => {
-		if (userPosition || isGeoLocationAttempted) return;
+		if (userPosition || isGeoLocation) return;
 
 		if (navigator.geolocation) {
-			console.log("[ROUTE_LIST] Requesting geolocation...");
-			setIsGeoLocationAttempted(true);
+			setIsGeoLocation(true);
 
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
-					console.log(
-						"[ROUTE_LIST] Geolocation success:",
-						position.coords
-					);
 					const coords: [number, number] = [
 						position.coords.longitude,
 						position.coords.latitude,
 					];
+					console.log("Координаты определены: ", coords);
 					updateUserPosition(coords);
 					toast.success("Местоположение определено");
 				},
 				(error) => {
-					console.error("[ROUTE_LIST] Geolocation error:", error);
 					toast.error(
 						"Не удалось определить местоположение. Введите адрес вручную"
 					);
 				}
 			);
 		} else {
-			console.log("[ROUTE_LIST] Geolocation not supported");
-			setIsGeoLocationAttempted(true);
+			setIsGeoLocation(true);
 		}
 	}, []);
 
@@ -84,37 +78,26 @@ export const RouteList = memo((props: RouteListProps) => {
 
 	useEffect(() => {
 		if (userGeocodeItems?.[0]) {
-			console.log("[ROUTE_LIST] Geocoding result:", userGeocodeItems[0]);
 			const { lat, lon } = userGeocodeItems[0].point;
 			const coords: [number, number] = [lon, lat];
-			console.log(
-				"[ROUTE_LIST] Setting user position from geocoding:",
-				coords
-			);
+			console.log("Координаты: ", coords);
 			updateUserPosition(coords);
 		}
 	}, [userGeocodeItems, updateUserPosition]);
 
 	const handleSetRouteType = (type: "car" | "pedestrian") => {
-		console.log("[ROUTE_LIST] Setting route type:", type);
 		setRouteType(type);
 	};
 
 	const handleBuildRoute = () => {
-		console.log("[ROUTE_LIST] Building route with:", {
-			userPosition,
-			destinationCoords,
-			routeType,
-		});
-
 		if (userPosition && destinationCoords && routeType) {
 			setShowRoute(true);
 			onBack();
 		} else {
 			if (!userPosition) {
-				alert("Укажите ваше местоположение");
+				toast.error("Местоположение определено");
 			} else if (!routeType) {
-				alert("Выберите тип маршрута");
+				toast.error("Выберите тип маршрута");
 			}
 		}
 	};
