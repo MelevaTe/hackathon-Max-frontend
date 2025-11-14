@@ -20,7 +20,7 @@ export interface SelectProps {
 	options: SelectOption[];
 	value: SelectOption;
 	onChange: (value: SelectOption) => void;
-	largeWidth?: boolean; // Новый пропс
+	largeWidth?: boolean;
 }
 
 export const Select: FC<SelectProps> = memo((props) => {
@@ -42,7 +42,7 @@ export const Select: FC<SelectProps> = memo((props) => {
 				className={classNames(
 					cls.SelectOptions,
 					{
-						[cls.SelectOptions_large]: largeWidth, // Условный класс
+						[cls.SelectOptions_large]: largeWidth,
 					},
 					[]
 				)}

@@ -10,6 +10,8 @@ import { getDateRange } from "@/shared/lib/utils/dateRange.ts";
 import { formatDateTime } from "@/shared/lib/utils/formatDate.ts";
 import cls from "./CourtListAndDetails.module.scss";
 import type { MobileSheetView } from "../model/types/types.ts";
+import {useRoute} from "@/shared/lib/hooks/useRoute.ts";
+import {RouteList, useBuildRouteQuery} from "@/features/buildRoute";
 
 interface CourtListAndDetailsProps {
 	className?: string;
@@ -36,6 +38,43 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		initialCourt
 	);
 	const [view, setView] = useState<MobileSheetView>(initialView);
+	const [selectedRouteId, setSelectedRouteId] = useState<number | null>(null);
+
+	const { userPosition, destinationCoords } = useRoute();
+
+	const isEnabled = userPosition && destinationCoords;
+
+	const queryArgs = useMemo(() => {
+		if (!isEnabled) return undefined;
+
+		return {
+			key: import.meta.env.VITE_2GIS_API_KEY,
+			source: {
+				type: "point" as const,
+				point: {
+					lon: userPosition![0],
+					lat: userPosition![1],
+				},
+			},
+			target: {
+				type: "point" as const,
+				point: {
+					lon: destinationCoords![0],
+					lat: destinationCoords![1],
+				},
+			},
+			transport: ["bus", "metro", "pedestrian"],
+		};
+	}, [userPosition, destinationCoords, isEnabled]);
+
+	const {
+		data: routes = [],
+		isLoading: isRouteLoading,
+		isError: isRouteError,
+		refetch: refetchRoutes,
+	} = useBuildRouteQuery(queryArgs!, {
+		skip: !queryArgs,
+	});
 
 	useEffect(() => {
 		if (initialCourt) {
@@ -72,6 +111,19 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 	const handleCloseSheet = () => {
 		setMobileSheetOpen(false);
 		setView("list");
+	};
+
+	const handleSelectRoute = (route: any) => {
+		setSelectedRouteId(route.id);
+		// setView("routeDetails");
+	};
+
+	const handleOpenRouteList = () => {
+		if (!isEnabled) {
+			return;
+		}
+		refetchRoutes();
+		setView("routeList");
 	};
 
 	const dateRange = useMemo(() => getDateRange(7), []);
@@ -133,6 +185,7 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 				onBack={handleBackToList}
 				onClose={handleCloseSheet}
 				onBooking={handleOpenBooking}
+				onRoute={handleOpenRouteList}
 				onlineEntries={formattedOnlineEntries}
 				isOnlineLoading={isOnlineLoading}
 				isOnlineError={isOnlineError}
@@ -146,6 +199,15 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 				courtTitle={selectedCourt?.title}
 				onBack={handleBackToDetails}
 				onClose={handleCloseSheet}
+				className={cls.MobileSheetContent}
+			/>
+		),
+		routeList: (
+			<RouteList
+				routes={routes}
+				isLoading={isRouteLoading}
+				onSelect={handleSelectRoute}
+				onBack={handleBackToList}
 				className={cls.MobileSheetContent}
 			/>
 		),

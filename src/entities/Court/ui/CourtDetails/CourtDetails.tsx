@@ -24,6 +24,7 @@ interface CourtDetailsProps {
 	onlineEntries?: OnlineEntryFormatted[];
 	isOnlineLoading?: boolean;
 	isOnlineError?: boolean;
+	onRoute?: () => void;
 }
 
 export const CourtDetails = memo((props: CourtDetailsProps) => {
@@ -36,6 +37,7 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 		onlineEntries,
 		isOnlineError,
 		isOnlineLoading,
+		onRoute
 	} = props;
 
 	return (
@@ -178,7 +180,7 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 						mode="primary"
 						size="medium"
 						className={cls.actionButton}
-						// onClick={onGetRouteClick}
+						onClick={onRoute}
 						iconBefore={<MapPinned />}
 					>
 						Маршрут
