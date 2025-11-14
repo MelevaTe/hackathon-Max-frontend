@@ -166,7 +166,8 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		),
 		routeList: (
 			<BuildRouteList
-				onBack={handleBackToList}
+				onBack={handleBackToDetails}
+				onClose={handleCloseSheet}
 				className={cls.MobileSheetContent}
 			/>
 		),

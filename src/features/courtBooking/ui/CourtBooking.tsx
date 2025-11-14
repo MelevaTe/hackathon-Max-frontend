@@ -89,7 +89,7 @@ export const CourtBooking = (props: CourtBookingProps) => {
 				</IconButton>
 			</div>
 			<div className={cls.header}>
-				<Typography.Body>{courtTitle}</Typography.Body>
+				<Typography.Headline>{courtTitle}</Typography.Headline>
 			</div>
 			<div className={cls.content}>
 				<DatePicker

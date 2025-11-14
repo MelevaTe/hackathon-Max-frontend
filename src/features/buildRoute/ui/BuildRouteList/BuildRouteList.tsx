@@ -1,5 +1,5 @@
 import { Typography, IconButton, Input, Button } from "@maxhub/max-ui";
-import { X, Car, User, Search, Calendar1 } from "lucide-react";
+import { X, Car, User, Search, Calendar1, CircleArrowLeft } from "lucide-react";
 import { memo, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -12,10 +12,11 @@ import cls from "./BuildRouteList.module.scss";
 interface RouteListProps {
 	className?: string;
 	onBack: () => void;
+	onClose: () => void;
 }
 
 export const BuildRouteList = memo((props: RouteListProps) => {
-	const { className, onBack } = props;
+	const { className, onBack, onClose } = props;
 	const { t } = useTranslation();
 	const {
 		setShowRoute,
@@ -110,16 +111,27 @@ export const BuildRouteList = memo((props: RouteListProps) => {
 	return (
 		<div className={classNames(cls.RouteList, {}, [className])}>
 			<div className={cls.header}>
-				<Typography.Headline>Построить маршрут</Typography.Headline>
+				<Button
+					onClick={onBack}
+					appearance="themed"
+					mode="secondary"
+					size="medium"
+					iconBefore={<CircleArrowLeft />}
+				>
+					Назад
+				</Button>
 				<IconButton
 					appearance="neutral"
 					aria-label="Закрыть"
 					mode="tertiary"
 					size="medium"
-					onClick={onBack}
+					onClick={onClose}
 				>
 					<X />
 				</IconButton>
+			</div>
+			<div className={cls.header}>
+				<Typography.Headline>Построить маршрут</Typography.Headline>
 			</div>
 			<div className={cls.content}>
 				<div className={cls.addressInput}>
