@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { MapWrapper } from "./MapWrapper";
 import "./Map.scss";
 import { Theme } from "@/app/providers/ThemeProvider";
-import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
+import { Directions } from "@2gis/mapgl-directions";
 
 export interface MarkerData {
 	id: string;
@@ -21,6 +21,10 @@ interface MapProps {
 	markers?: MarkerData[];
 	theme: Theme;
 	onMarkerClick?: (courtInfoId: string) => void;
+	showRoute: boolean;
+	userPosition: [number, number] | null;
+	destinationCoords: [number, number] | null;
+	routeType: "car" | "pedestrian" | null;
 }
 
 export const MapComponent = ({
@@ -28,25 +32,56 @@ export const MapComponent = ({
 	markers = [],
 	theme,
 	onMarkerClick,
+	showRoute,
+	userPosition,
+	destinationCoords,
+	routeType,
 }: MapProps) => {
-	const { showRoute, userPosition, destinationCoords } = useRoute();
-
-	const mapRef = useRef<mapgl.Map | null>(null);
+	const mapRef = useRef<any>(null);
 	const mapglRef = useRef<any>(null);
-	const markersRef = useRef<mapgl.Marker[]>([]);
-	const circleRef = useRef<mapgl.CircleMarker | null>(null);
-	const destinationMarkerRef = useRef<mapgl.Marker | null>(null);
-	const userMarkerRef = useRef<mapgl.Marker | null>(null);
+	const markersRef = useRef<any[]>([]);
+	const circleRef = useRef<any>(null);
+	const destinationMarkerRef = useRef<any>(null);
+	const userMarkerRef = useRef<any>(null);
+	const directionsRef = useRef<any>(null);
+
+	console.log("[MAP_COMPONENT] Component rendered with props:", {
+		showRoute,
+		userPosition,
+		destinationCoords,
+		routeType,
+		markersCount: markers.length,
+	});
 
 	useEffect(() => {
-		let map: mapgl.Map | null = null;
-		let control: mapgl.Control | null = null;
+		console.log("[MAP_COMPONENT] useEffect started with dependencies:", {
+			showRoute,
+			userPosition,
+			destinationCoords,
+			routeType,
+			markersCount: markers.length,
+		});
+
+		let map: any = null;
+		let control: any = null;
 		let button: HTMLElement | null = null;
 
 		const addDestinationMarker = (coords: [number, number]) => {
-			if (!mapRef.current || !mapglRef.current) return;
+			console.log(
+				"[MAP_COMPONENT] addDestinationMarker called with coords:",
+				coords
+			);
+			if (!mapRef.current || !mapglRef.current) {
+				console.log(
+					"[MAP_COMPONENT] Cannot add destination marker - map not ready"
+				);
+				return;
+			}
 
 			if (destinationMarkerRef.current) {
+				console.log(
+					"[MAP_COMPONENT] Destroying old destination marker"
+				);
 				destinationMarkerRef.current.destroy();
 			}
 
@@ -54,12 +89,23 @@ export const MapComponent = ({
 				coordinates: coords,
 			});
 			destinationMarkerRef.current = marker;
+			console.log("[MAP_COMPONENT] Destination marker created");
 		};
 
 		const addUserMarker = (coords: [number, number]) => {
-			if (!mapRef.current || !mapglRef.current) return;
+			console.log(
+				"[MAP_COMPONENT] addUserMarker called with coords:",
+				coords
+			);
+			if (!mapRef.current || !mapglRef.current) {
+				console.log(
+					"[MAP_COMPONENT] Cannot add user marker - map not ready"
+				);
+				return;
+			}
 
 			if (userMarkerRef.current) {
+				console.log("[MAP_COMPONENT] Destroying old user marker");
 				userMarkerRef.current.destroy();
 			}
 
@@ -67,19 +113,31 @@ export const MapComponent = ({
 				coordinates: coords,
 			});
 			userMarkerRef.current = marker;
+			console.log("[MAP_COMPONENT] User marker created");
 		};
 
 		const geoFindMe = () => {
+			console.log("[MAP_COMPONENT] geoFindMe called");
 			if (!navigator.geolocation) {
+				console.log("[MAP_COMPONENT] Geolocation not supported");
 				alert("Геолокация не поддерживается в этом браузере.");
 				return;
 			}
 			navigator.geolocation.getCurrentPosition(
 				(pos) => {
+					console.log(
+						"[MAP_COMPONENT] Geolocation success:",
+						pos.coords
+					);
 					const mapglAPI = mapglRef.current;
 					const currentMap = mapRef.current;
 
-					if (!mapglAPI || !currentMap) return;
+					if (!mapglAPI || !currentMap) {
+						console.log(
+							"[MAP_COMPONENT] Map not ready for geolocation"
+						);
+						return;
+					}
 
 					const center: [number, number] = [
 						pos.coords.longitude,
@@ -87,6 +145,9 @@ export const MapComponent = ({
 					];
 
 					if (circleRef.current) {
+						console.log(
+							"[MAP_COMPONENT] Destroying old circle marker"
+						);
 						circleRef.current.destroy();
 					}
 
@@ -99,11 +160,15 @@ export const MapComponent = ({
 					});
 
 					circleRef.current = newCircle;
+					console.log(
+						"[MAP_COMPONENT] Circle marker created for geolocation"
+					);
 
 					currentMap.setCenter(center);
 					currentMap.setZoom(16);
 				},
 				(error) => {
+					console.error("[MAP_COMPONENT] Geolocation error:", error);
 					switch (error.code) {
 						case error.PERMISSION_DENIED:
 							alert("Доступ к местоположению запрещён.");
@@ -122,8 +187,10 @@ export const MapComponent = ({
 		};
 
 		const start = async () => {
+			console.log("[MAP_COMPONENT] Loading mapgl...");
 			const mapglAPI = await load();
 			mapglRef.current = mapglAPI;
+			console.log("[MAP_COMPONENT] Mapgl loaded successfully");
 
 			const initialCenter: [number, number] = [39.712619, 47.23683];
 
@@ -136,9 +203,11 @@ export const MapComponent = ({
 			});
 
 			mapRef.current = map;
+			console.log("[MAP_COMPONENT] Map initialized");
 
 			if (THEME_TO_STYLE_ID[theme]) {
 				map.setStyleById(THEME_TO_STYLE_ID[theme]);
+				console.log("[MAP_COMPONENT] Theme applied:", theme);
 			}
 
 			const controlContent = `
@@ -161,10 +230,25 @@ export const MapComponent = ({
 
 			if (button) {
 				button.addEventListener("click", geoFindMe);
+				console.log(
+					"[MAP_COMPONENT] Geolocation button event listener added"
+				);
 			}
 
+			console.log("[MAP_COMPONENT] showRoute state:", showRoute);
+
 			if (!showRoute) {
-				markers.forEach((markerData) => {
+				console.log(
+					"[MAP_COMPONENT] Adding field markers, count:",
+					markers.length
+				);
+				markers.forEach((markerData, index) => {
+					console.log(
+						"[MAP_COMPONENT] Adding marker",
+						index,
+						":",
+						markerData
+					);
 					if (map) {
 						const marker = new mapglAPI.Marker(map, {
 							coordinates: markerData.coordinates,
@@ -172,6 +256,10 @@ export const MapComponent = ({
 
 						if (onMarkerClick) {
 							marker.on("click", (e) => {
+								console.log(
+									"[MAP_COMPONENT] Marker clicked, courtInfoId:",
+									markerData.courtInfoId
+								);
 								onMarkerClick(markerData.courtInfoId);
 							});
 						}
@@ -181,6 +269,7 @@ export const MapComponent = ({
 				});
 
 				if (markers.length > 0) {
+					console.log("[MAP_COMPONENT] Centering map on markers");
 					const lats = markers.map((m) => m.coordinates[0]);
 					const lons = markers.map((m) => m.coordinates[1]);
 
@@ -204,57 +293,129 @@ export const MapComponent = ({
 				}
 			}
 
-			if (showRoute && userPosition) {
-				addUserMarker(userPosition);
+			if (showRoute && userPosition && destinationCoords) {
+				console.log("[MAP_COMPONENT] Building route with data:", {
+					userPosition,
+					destinationCoords,
+					routeType,
+				});
 
-				if (destinationCoords) {
-					const bounds = {
-						southWest: [
-							Math.min(userPosition[0], destinationCoords[0]),
-							Math.min(userPosition[1], destinationCoords[1]),
-						] as [number, number],
-						northEast: [
-							Math.max(userPosition[0], destinationCoords[0]),
-							Math.max(userPosition[1], destinationCoords[1]),
-						] as [number, number],
-					};
-					map.fitBounds(bounds);
-					addDestinationMarker(destinationCoords);
+				addUserMarker(userPosition);
+				addDestinationMarker(destinationCoords);
+
+				const bounds = {
+					southWest: [
+						Math.min(userPosition[0], destinationCoords[0]),
+						Math.min(userPosition[1], destinationCoords[1]),
+					] as [number, number],
+					northEast: [
+						Math.max(userPosition[0], destinationCoords[0]),
+						Math.max(userPosition[1], destinationCoords[1]),
+					] as [number, number],
+				};
+				map.fitBounds(bounds);
+				console.log(
+					"[MAP_COMPONENT] Map fitted to route bounds:",
+					bounds
+				);
+
+				if (routeType) {
+					if (!directionsRef.current) {
+						console.log(
+							"[MAP_COMPONENT] Creating directions instance"
+						);
+						directionsRef.current = new Directions(map, {
+							directionsApiKey: import.meta.env.VITE_2GIS_API_KEY,
+						});
+					}
+
+					const points = [userPosition, destinationCoords];
+					console.log(
+						"[MAP_COMPONENT] Building route with points:",
+						points
+					);
+
+					if (routeType === "car") {
+						console.log("[MAP_COMPONENT] Building car route");
+						directionsRef.current.carRoute({
+							points: points,
+						});
+					} else if (routeType === "pedestrian") {
+						console.log(
+							"[MAP_COMPONENT] Building pedestrian route"
+						);
+						directionsRef.current.pedestrianRoute({
+							points: points,
+						});
+					}
 				}
+			} else if (showRoute) {
+				console.log(
+					"[MAP_COMPONENT] Cannot build route, missing data:",
+					{
+						showRoute,
+						hasUserPosition: !!userPosition,
+						hasDestinationCoords: !!destinationCoords,
+						hasRouteType: !!routeType,
+					}
+				);
 			}
 		};
 
 		start();
 
 		return () => {
-			markersRef.current.forEach((m) => m.destroy());
+			console.log("[MAP_COMPONENT] Cleanup started");
+
+			markersRef.current.forEach((m, index) => {
+				console.log("[MAP_COMPONENT] Destroying marker", index);
+				m.destroy();
+			});
 			markersRef.current = [];
 
 			if (circleRef.current) {
+				console.log("[MAP_COMPONENT] Destroying circle marker");
 				circleRef.current.destroy();
 				circleRef.current = null;
 			}
 
 			if (destinationMarkerRef.current) {
+				console.log("[MAP_COMPONENT] Destroying destination marker");
 				destinationMarkerRef.current.destroy();
 				destinationMarkerRef.current = null;
 			}
 
 			if (userMarkerRef.current) {
+				console.log("[MAP_COMPONENT] Destroying user marker");
 				userMarkerRef.current.destroy();
 				userMarkerRef.current = null;
 			}
 
+			if (directionsRef.current) {
+				console.log("[MAP_COMPONENT] Destroying directions");
+				directionsRef.current.destroy();
+				directionsRef.current = null;
+			}
+
 			if (button) {
+				console.log(
+					"[MAP_COMPONENT] Removing geolocation button event listener"
+				);
 				button.removeEventListener("click", geoFindMe);
 			}
 
-			if (control) control.destroy();
+			if (control) {
+				console.log("[MAP_COMPONENT] Destroying control");
+				control.destroy();
+			}
 
 			if (mapRef.current) {
+				console.log("[MAP_COMPONENT] Destroying map");
 				mapRef.current.destroy();
 				mapRef.current = null;
 			}
+
+			console.log("[MAP_COMPONENT] Cleanup completed");
 		};
 	}, [
 		markers,
@@ -263,6 +424,7 @@ export const MapComponent = ({
 		showRoute,
 		userPosition,
 		destinationCoords,
+		routeType,
 	]);
 
 	return (

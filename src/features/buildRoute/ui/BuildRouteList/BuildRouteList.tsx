@@ -1,37 +1,54 @@
-import { Typography, IconButton, Input } from "@maxhub/max-ui";
-import { X, Search } from "lucide-react";
-import { memo, useState, useEffect, useMemo } from "react";
+import { Typography, IconButton, Input, Button } from "@maxhub/max-ui";
+import { X, Car, User, Search } from "lucide-react";
+import { memo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import {
-	useBuildRouteQuery,
-	useGeocodeQuery,
-} from "@/features/buildRoute/api/buildRouteApi.ts";
+import { useGeocodeQuery } from "@/features/buildRoute/api/buildRouteApi.ts";
 import { classNames } from "@/shared/lib/classNames/classNames";
+import { useDebounce } from "@/shared/lib/hooks/useDebounce";
 import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 import cls from "./BuildRouteList.module.scss";
-import type { RouteResponseItem } from "../../model/types/buildRoute.ts";
-import { RouteListItem } from "../BuildRouteListItem/BuildRouteListItem.tsx";
-import {skipToken} from "@reduxjs/toolkit/query";
 
 interface RouteListProps {
 	className?: string;
-	onSelect: (route: RouteResponseItem) => void;
 	onBack: () => void;
 }
 
 export const RouteList = memo((props: RouteListProps) => {
-	const { className, onSelect, onBack } = props;
+	const { className, onBack } = props;
 	const { t } = useTranslation();
-	const { userPosition, destinationCoords, updateUserPosition } = useRoute();
+	const {
+		setShowRoute,
+		setRoute,
+		destinationCoords,
+		userPosition,
+		updateUserPosition,
+		routeType,
+		setRouteType,
+	} = useRoute();
 
-	const [address, setAddress] = useState("");
-	const [userCoords, setUserCoords] = useState<[number, number] | null>(null);
+	const [userAddress, setUserAddress] = useState("");
+	const [debouncedUserAddress, setDebouncedUserAddress] = useState("");
+
+	console.log("[ROUTE_LIST] Component rendered with props:", {
+		userPosition,
+		destinationCoords,
+		routeType,
+	});
 
 	useEffect(() => {
+		console.log(
+			"[ROUTE_LIST] useEffect for geolocation, userPosition:",
+			userPosition
+		);
 		if (!userPosition) {
 			if (navigator.geolocation) {
+				console.log("[ROUTE_LIST] Requesting geolocation...");
 				navigator.geolocation.getCurrentPosition(
 					(position) => {
+						console.log(
+							"[ROUTE_LIST] Geolocation success:",
+							position.coords
+						);
 						const coords: [number, number] = [
 							position.coords.longitude,
 							position.coords.latitude,
@@ -40,118 +57,73 @@ export const RouteList = memo((props: RouteListProps) => {
 					},
 					(error) => {
 						console.error(
-							"Ошибка получения геолокации:",
+							"[ROUTE_LIST] Error getting geolocation:",
 							error.message
 						);
 					}
 				);
+			} else {
+				console.log("[ROUTE_LIST] Geolocation not supported");
 			}
 		}
 	}, [userPosition, updateUserPosition]);
 
-	const { data: geocodeItems, isLoading: isGeocodeLoading } = useGeocodeQuery(
-		{ q: address, key: import.meta.env.VITE_2GIS_API_KEY },
-		{ skip: !address }
-	);
+	const debouncedSetUserAddress = useDebounce((value: string) => {
+		console.log("[ROUTE_LIST] Debounced address set:", value);
+		setDebouncedUserAddress(value);
+	}, 500);
 
-	const handleSearch = () => {
-		if (geocodeItems?.[0]) {
-			const { lat, lon } = geocodeItems[0].point;
-			setUserCoords([lon, lat]);
+	useEffect(() => {
+		debouncedSetUserAddress(userAddress);
+	}, [userAddress, debouncedSetUserAddress]);
+
+	const { data: userGeocodeItems, isLoading: isUserGeocodeLoading } =
+		useGeocodeQuery(
+			{ q: debouncedUserAddress, key: import.meta.env.VITE_2GIS_API_KEY },
+			{ skip: !debouncedUserAddress }
+		);
+
+	useEffect(() => {
+		if (userGeocodeItems?.[0]) {
+			console.log("[ROUTE_LIST] Geocoding result:", userGeocodeItems[0]);
+			const { lat, lon } = userGeocodeItems[0].point;
+			const coords: [number, number] = [lon, lat];
+			console.log(
+				"[ROUTE_LIST] Updating user position from geocoding:",
+				coords
+			);
+			updateUserPosition(coords);
+		}
+	}, [userGeocodeItems, updateUserPosition]);
+
+	const handleSetRouteType = (type: "car" | "pedestrian") => {
+		console.log("[ROUTE_LIST] handleSetRouteType:", type);
+		setRouteType(type);
+	};
+
+	const handleBuildRoute = () => {
+		console.log("[ROUTE_LIST] handleBuildRoute called with:", {
+			userPosition,
+			destinationCoords,
+			routeType,
+		});
+
+		if (userPosition && destinationCoords && routeType) {
+			console.log("[ROUTE_LIST] Setting showRoute to true");
+			setShowRoute(true);
+		} else {
+			console.log("[ROUTE_LIST] Cannot build route, missing data:", {
+				hasUserPosition: !!userPosition,
+				hasDestinationCoords: !!destinationCoords,
+				hasRouteType: !!routeType,
+			});
 		}
 	};
-	const finalUserCoords = userCoords || userPosition;
-
-	const queryArgs = useMemo(() => {
-		if (!finalUserCoords || !destinationCoords) return undefined;
-
-		return {
-			key: import.meta.env.VITE_2GIS_API_KEY,
-			source: {
-				type: "point" as const,
-				point: {
-					lon: finalUserCoords[0],
-					lat: finalUserCoords[1],
-				},
-			},
-			target: {
-				type: "point" as const,
-				point: {
-					lon: destinationCoords[0],
-					lat: destinationCoords[1],
-				},
-			},
-			transport: ["bus", "metro", "pedestrian"],
-		};
-	}, [finalUserCoords, destinationCoords]);
-
-	const {
-		data: routes = [],
-		isLoading: isRouteLoading,
-		isError: isRouteError,
-		refetch: refetchRoutes,
-	} = useBuildRouteQuery(
-		queryArgs || skipToken,
-		{
-		}
-	);
-
-	if (!finalUserCoords || !destinationCoords) {
-		return (
-			<div className={classNames(cls.RouteList, {}, [className])}>
-				<div className={cls.header}>
-					<Typography.Headline>Введите ваш адрес</Typography.Headline>
-					<IconButton
-						appearance="neutral"
-						aria-label="Закрыть"
-						mode="tertiary"
-						size="medium"
-						onClick={onBack}
-					>
-						<X />
-					</IconButton>
-				</div>
-				<div className={cls.content}>
-					<Input
-						value={address}
-						onChange={(e) => setAddress(e.target.value)}
-						placeholder="Введите адрес"
-						iconAfter={
-							<Search
-								onClick={handleSearch}
-								style={{ cursor: "pointer" }}
-							/>
-						}
-					/>
-				</div>
-			</div>
-		);
-	}
-
-	if (isRouteLoading) {
-		return (
-			<div className={classNames(cls.RouteList, {}, [className])}>
-				<Typography.Body variant="large">
-					Загрузка маршрутов...
-				</Typography.Body>
-			</div>
-		);
-	}
-
-	if (!routes.length) {
-		return (
-			<div className={classNames(cls.RouteList, {}, [className])}>
-				<Typography.Body variant="large">
-					Маршруты не найдены
-				</Typography.Body>
-			</div>
-		);
-	}
 
 	return (
 		<div className={classNames(cls.RouteList, {}, [className])}>
 			<div className={cls.header}>
-				<Typography.Headline>Варианты маршрутов</Typography.Headline>
+				<Typography.Headline>Построить маршрут</Typography.Headline>
 				<IconButton
 					appearance="neutral"
 					aria-label="Закрыть"
@@ -163,13 +135,58 @@ export const RouteList = memo((props: RouteListProps) => {
 				</IconButton>
 			</div>
 			<div className={cls.content}>
-				{routes.map((route: RouteResponseItem) => (
-					<RouteListItem
-						key={route.id}
-						route={route}
-						onClick={() => onSelect(route)}
-					/>
-				))}
+				<Input
+					value={userAddress}
+					onChange={(e) => {
+						setUserAddress(e.target.value);
+						console.log(
+							"[ROUTE_LIST] User address input changed:",
+							e.target.value
+						);
+					}}
+					placeholder="Ваш адрес"
+					iconAfter={
+						<IconButton
+							appearance="neutral"
+							mode="tertiary"
+							size="medium"
+						>
+							<Search />
+						</IconButton>
+					}
+				/>
+
+				<div className={cls.routeTypeButtons}>
+					<IconButton
+						appearance={routeType === "car" ? "themed" : "neutral"}
+						mode="primary"
+						size="medium"
+						onClick={() => handleSetRouteType("car")}
+					>
+						<Car />
+					</IconButton>
+					<IconButton
+						appearance={
+							routeType === "pedestrian" ? "themed" : "neutral"
+						}
+						mode="primary"
+						size="medium"
+						onClick={() => handleSetRouteType("pedestrian")}
+					>
+						<User />
+					</IconButton>
+				</div>
+
+				<Button
+					appearance="themed"
+					mode="primary"
+					size="large"
+					onClick={handleBuildRoute}
+					disabled={!userPosition || !destinationCoords || !routeType}
+					className={cls.buildButton}
+				>
+					Построить маршрут
+				</Button>
 			</div>
 		</div>
 	);

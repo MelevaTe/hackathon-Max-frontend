@@ -38,7 +38,9 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		initialCourt
 	);
 	const [view, setView] = useState<MobileSheetView>(initialView);
-	const { setRoute } = useRoute();
+	const {
+		setRoute,
+	} = useRoute();
 
 	useEffect(() => {
 		if (initialCourt) {
@@ -75,11 +77,6 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 	const handleCloseSheet = () => {
 		setMobileSheetOpen(false);
 		setView("list");
-	};
-
-	const handleSelectRoute = (route: any) => {
-		// setSelectedRouteId(route.id);
-		// setView("routeDetails");
 	};
 
 	const handleOpenRouteList = (coords: [number, number]) => {
@@ -165,7 +162,6 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		),
 		routeList: (
 			<RouteList
-				onSelect={handleSelectRoute}
 				onBack={handleBackToList}
 				className={cls.MobileSheetContent}
 			/>

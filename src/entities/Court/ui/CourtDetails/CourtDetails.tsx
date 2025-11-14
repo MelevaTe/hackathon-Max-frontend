@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { memo } from "react";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
-import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 import type { OnlineEntryFormatted } from "@/shared/types/formatedDate.ts";
 import { OnlineEntryItem } from "@/shared/ui/OnlineEntryItem/OnlineEntryItem.tsx";
 import { StarRating } from "@/shared/ui/StartRaiting/StartRaiting.tsx";

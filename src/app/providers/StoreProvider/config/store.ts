@@ -10,18 +10,18 @@ import { createReducerManager } from "./reducerManager";
 import type { StateSchema, ThunkExtraArg } from "./StateSchema";
 
 export function createReduxStore(
-		initialState?: StateSchema,
-		asyncReducers?: ReducersMapObject<StateSchema>
-	) {
-		const rootReducers: ReducersMapObject<StateSchema> = {
-			...asyncReducers,
-			sportFilter: sportFilterReducer,
-			userLocations: userLocationReducer,
-			route: routeReducer,
-			[rtkApi.reducerPath]: rtkApi.reducer,
-		};
+	initialState?: StateSchema,
+	asyncReducers?: ReducersMapObject<StateSchema>
+) {
+	const rootReducers: ReducersMapObject<StateSchema> = {
+		...asyncReducers,
+		sportFilter: sportFilterReducer,
+		userLocations: userLocationReducer,
+		route: routeReducer,
+		[rtkApi.reducerPath]: rtkApi.reducer,
+	};
 
-		const reducerManager = createReducerManager(rootReducers);
+	const reducerManager = createReducerManager(rootReducers);
 
 	const extraArg: ThunkExtraArg = {
 		api: $api,

@@ -29,11 +29,11 @@ export const createCourtBooking = createAsyncThunk<
 		if (e.isAxiosError && e.response) {
 			const { status } = e.response;
 			if (status === 409) {
-				return rejectWithValue("Вы уже записан на это время.");
+				return rejectWithValue("Вы уже записаны на это время.");
 			}
 		}
 		const errorMessage =
-			e.response?.data?.message || "Не удалось создать бронирование";
+			e.response?.data?.message || "Не удалось записаться";
 		return rejectWithValue(errorMessage);
 	}
 });

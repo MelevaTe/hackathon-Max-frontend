@@ -4,4 +4,5 @@ export {
 	getRouteDestinationCoords,
 	getRouteShow,
 	getRouteUserPosition,
+	getRouteType,
 } from "./model/selectors/routeSelectors.ts";

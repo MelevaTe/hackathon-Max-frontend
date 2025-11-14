@@ -7,3 +7,5 @@ export const getRouteShow = (state: StateSchema) => state.route?.showRoute;
 
 export const getRouteUserPosition = (state: StateSchema) =>
 	state.route?.userPosition;
+
+export const getRouteType = (state: StateSchema) => state.route?.routeType;

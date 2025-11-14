@@ -57,7 +57,7 @@ const MainPage = () => {
 	const hasMore = useSelector(getCourtPageHasMore);
 	const isLoadingCourt = useSelector(getCourtPageIsLoading);
 	const courtsCords = useSelector(getCourtsCords);
-	const { showRoute, userPosition, updateUserPosition, clearCurrentRoute } =
+	const { userPosition, destinationCoords, routeType, showRoute } =
 		useRoute();
 	const [selectedCourtId, setSelectedCourtId] = useState<string | null>(null);
 	const triggerRef = useRef<HTMLDivElement>(null);
@@ -100,26 +100,6 @@ const MainPage = () => {
 		wrapperRef,
 	});
 
-
-	useEffect(() => {
-		if (showRoute && !userPosition) {
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(
-					(position) => {
-						const coords: [number, number] = [
-							position.coords.longitude,
-							position.coords.latitude,
-						];
-						updateUserPosition(coords);
-					},
-					(error) => {
-						console.error("Ошибка получения геопозиции:", error);
-					}
-				);
-			}
-		}
-	}, [showRoute, userPosition, updateUserPosition]);
-
 	const {
 		data: selectedCourt,
 		isLoading,
@@ -144,6 +124,14 @@ const MainPage = () => {
 
 	const markersData = transformCourtsCordsToMarkers(courtsCords || []);
 
+	console.log("[PARENT_COMPONENT] Map props:", {
+		markers: markersData,
+		showRoute,
+		userPosition,
+		destinationCoords,
+		routeType,
+	});
+
 	return (
 		<DynamicModuleLoader reducers={reducers}>
 			<div className={cls["main-page"]}>
@@ -151,6 +139,10 @@ const MainPage = () => {
 				<MapComponent
 					className={cls.map}
 					markers={showRoute ? [] : markersData}
+					userPosition={userPosition}
+					destinationCoords={destinationCoords}
+					routeType={routeType}
+					showRoute={showRoute}
 					theme={theme}
 					onMarkerClick={handleMarkerClick}
 				/>

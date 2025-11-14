@@ -65,10 +65,10 @@ export const CourtBooking = (props: CourtBookingProps) => {
 
 		try {
 			await dispatch(createCourtBooking(bookingData)).unwrap();
-			toast.success("Бронирование успешно создано!");
+			toast.success("Вы успешно записались!");
 		} catch (e: any) {
 			console.error("Ошибка при бронировании:", e);
-			const errorMessage = e || "Не удалось создать бронирование";
+			const errorMessage = e || "Не удалось записаться";
 			toast.error(errorMessage);
 		}
 	};
