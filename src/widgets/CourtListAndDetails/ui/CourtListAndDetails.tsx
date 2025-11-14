@@ -3,7 +3,7 @@ import { List } from "lucide-react";
 import { memo, useEffect, useMemo, useState } from "react";
 import { CourtDetails, CourtList } from "@/entities/Court";
 import type { Court } from "@/entities/Court/model/types/court.ts";
-import { RouteList, useBuildRouteQuery } from "@/features/buildRoute";
+import { RouteList } from "@/features/buildRoute";
 import { CourtBooking } from "@/features/courtBooking";
 import { useGetCourtOnlineStatusQuery } from "@/features/onlineCourtStatus";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
