@@ -21,7 +21,6 @@ import {
 	selectUserLocation,
 	selectUserLocationCoords,
 } from "@/entities/UserLocation";
-import { WeatherForecast } from "@/entities/weather/ui/WeatherListIco.tsx";
 import { courtBookingReducer } from "@/features/courtBooking";
 import { getSport, SportFilter } from "@/features/sportFilter";
 import {
@@ -163,7 +162,6 @@ const MainPage = () => {
 					/>
 				</div>
 				<SportFilter className={cls.filter} />
-				<WeatherForecast className={cls.weather} />
 				<CourtListAndDetails
 					wrapperRef={wrapperRef}
 					courts={courts}
