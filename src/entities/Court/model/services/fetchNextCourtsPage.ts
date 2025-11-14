@@ -25,12 +25,15 @@ export const fetchNextCourtsPage = createAsyncThunk<
 	const isLoading = getCourtPageIsLoading(getState());
 
 	if (hasMore && !isLoading) {
-		dispatch(courtActions.setPage(page + 1));
-		dispatch(
+		const nextPage = page + 1;
+		dispatch(courtActions.setPage(nextPage));
+
+		await dispatch(
 			fetchCourts({
 				...params,
 				replace: false,
+				page: nextPage,
 			})
-		);
+		).unwrap();
 	}
 });

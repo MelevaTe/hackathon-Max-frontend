@@ -31,21 +31,11 @@ export const courtSlice = createSlice({
 		setPageSize: (state, action: PayloadAction<number>) => {
 			state.pageSize = action.payload;
 		},
-		appendCourts: (state, action: PayloadAction<Court[]>) => {
-			if (!state.data) {
-				state.data = action.payload;
-			} else {
-				state.data = [...state.data, ...action.payload];
-			}
-			state.isEmpty = !state.data || state.data.length === 0;
-		},
 	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(fetchCourts.pending, (state) => {
-				if (state.currentPage === 0) {
-					state.error = undefined;
-				}
+				state.error = undefined;
 				state.isLoading = true;
 			})
 			.addCase(
@@ -59,12 +49,14 @@ export const courtSlice = createSlice({
 					if (state.currentPage === 0) {
 						state.data = courts;
 					} else {
-						state.data = [...(state.data || []), ...courts];
+						const existingIds = new Set(state.data?.map(c => c.id) || []);
+						const newCourts = courts.filter(c => !existingIds.has(c.id));
+						state.data = [...(state.data || []), ...newCourts];
 					}
 
 					state.isLoading = false;
 					state.hasNextPage = hasNextPage;
-					state.isEmpty = isEmpty;
+					state.isEmpty = state.currentPage === 0 ? isEmpty : false;
 				}
 			)
 			.addCase(fetchCourts.rejected, (state, action) => {

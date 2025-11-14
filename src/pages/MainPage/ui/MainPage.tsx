@@ -21,6 +21,7 @@ import {
 	selectUserLocation,
 	selectUserLocationCoords,
 } from "@/entities/UserLocation";
+import { WeatherForecast } from "@/entities/weather/ui/WeatherListIco.tsx";
 import { courtBookingReducer } from "@/features/courtBooking";
 import { getSport, SportFilter } from "@/features/sportFilter";
 import {
@@ -39,6 +40,7 @@ import {
 import { CourtListAndDetails } from "@/widgets/CourtListAndDetails";
 import { LocationSelectorModal } from "@/widgets/LocationSelectorModal";
 import cls from "./MainPage.module.scss";
+import {courtActions} from "@/entities/Court/model/slice/courtSchemaSlice.ts";
 
 const reducers: ReducersList = {
 	court: courtReducer,
@@ -72,11 +74,14 @@ const MainPage = () => {
 	useEffect(() => {
 		resetForNewRoute();
 
+		dispatch(courtActions.clearCourts());
+
 		if (userLocation?.id) {
 			dispatch(
 				fetchCourts({
 					cityId: userLocation.id,
 					sports: [currentSport],
+					page: 0,
 				})
 			);
 		}
@@ -95,7 +100,9 @@ const MainPage = () => {
 
 	useInfiniteScroll({
 		callback: () => {
+			console.log('InfiniteScroll triggered', { hasMore, isLoadingCourt });
 			if (hasMore && !isLoadingCourt && userLocation?.id) {
+				console.log('Dispatching fetchNextCourtsPage');
 				dispatch(
 					fetchNextCourtsPage({
 						cityId: userLocation.id,
@@ -156,6 +163,7 @@ const MainPage = () => {
 					/>
 				</div>
 				<SportFilter className={cls.filter} />
+				<WeatherForecast className={cls.weather} />
 				<CourtListAndDetails
 					wrapperRef={wrapperRef}
 					courts={courts}
