@@ -40,7 +40,6 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 					</IconButton>
 					<Button
 						appearance="themed"
-						asChild
 						mode="primary"
 						size="medium"
 						onClick={handleShowRoute}
