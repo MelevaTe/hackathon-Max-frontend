@@ -13,14 +13,12 @@ import type { courtBookingSchema } from "@/features/courtBooking";
 import type { routeSchema } from "@/features/route";
 import type { sportFilterSchema } from "@/features/sportFilter";
 import type { rtkApi } from "@/shared/api/rtkApi";
-import {geolocationApi} from "@/shared/api/rtkApi2gis.ts";
 
 export interface StateSchema {
 	sportFilter: sportFilterSchema;
 	userLocations: userLocationSchema;
 	route: routeSchema;
 	[rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>;
-	[geolocationApi.reducerPath]: ReturnType<typeof geolocationApi.reducer>;
 
 	// Асинхронные редюсеры
 	court?: CourtSchema;

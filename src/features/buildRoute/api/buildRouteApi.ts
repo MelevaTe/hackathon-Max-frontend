@@ -4,9 +4,9 @@ import type {
 	GeocodeResponse,
 	GeocodeItem,
 } from "@/features/buildRoute/model/types/buildRoute.ts";
-import {geolocationApi} from "@/shared/api/rtkApi2gis.ts";
+import {rtkApi} from "@/shared/api/rtkApi.ts";
 
-const buildRouteApi = geolocationApi.injectEndpoints({
+const buildRouteApi = rtkApi.injectEndpoints({
 	endpoints: (build) => ({
 		buildRoute: build.query<RouteResponseItem[], Omit<RouteRequest, "key"> & { key: string }>({
 			query: ({ key, ...body }) => ({
