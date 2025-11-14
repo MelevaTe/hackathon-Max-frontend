@@ -97,6 +97,8 @@ export const RouteList = memo((props: RouteListProps) => {
 				toast.error("Местоположение определено");
 			} else if (!routeType) {
 				toast.error("Выберите тип маршрута");
+			} else if (!destinationCoords) {
+				toast.error("Не указан пункт назначения");
 			}
 		}
 	};

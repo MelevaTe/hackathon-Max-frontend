@@ -21,7 +21,12 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 	const { t } = useTranslation();
 
 	const handleShowRoute = () => {
-		clearRoute();
+		console.log("[BookingActiveListItem] Setting route with coords:", {
+			lon: bookingActive.lon,
+			lat: bookingActive.lat,
+			coords: [bookingActive.lon, bookingActive.lat]
+		});
+		// clearRoute();
 		const destinationCoords: [number, number] = [
 			bookingActive.lon,
 			bookingActive.lat,
