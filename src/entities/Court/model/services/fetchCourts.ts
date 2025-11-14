@@ -23,12 +23,14 @@ export const fetchCourts = createAsyncThunk<
 	const limit = getCourtPageLimit(getState());
 	const page = getCourtPageNum(getState());
 
+	const testSports: CourtType[] = ["FOOTBALL", "BASKETBALL", "TENNIS"];
+
 	try {
 		const response = await extra.api.post<Court[]>(
 			"/courts-service/v1/courts/info/search/locations",
 			{
 				cityId,
-				sports,
+				sports: testSports,
 			},
 			{
 				params: {

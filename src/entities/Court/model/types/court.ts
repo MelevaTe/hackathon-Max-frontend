@@ -1,4 +1,11 @@
-export type CourtType = "FOOTBALL" | "BASKETBALL" | "TENNIS" | "VOLLEYBALL";
+export type CourtType =
+	| "FOOTBALL"
+	| "BASKETBALL"
+	| "TENNIS"
+	| "VOLLEYBALL"
+	| "HOCKEY"
+	| "SKATE_PARK"
+	| "WORKOUT";
 
 export interface Court {
 	id: string;
