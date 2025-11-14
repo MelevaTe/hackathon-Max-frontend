@@ -4,14 +4,11 @@ import type {
 	GeocodeResponse,
 	GeocodeItem,
 } from "@/features/buildRoute/model/types/buildRoute.ts";
-import { rtkApi } from "@/shared/api/rtkApi.ts";
+import {geolocationApi} from "@/shared/api/rtkApi2gis.ts";
 
-const buildRouteApi = rtkApi.injectEndpoints({
+const buildRouteApi = geolocationApi.injectEndpoints({
 	endpoints: (build) => ({
-		buildRoute: build.query<
-			RouteResponseItem[],
-			Omit<RouteRequest, "key"> & { key: string }
-		>({
+		buildRoute: build.query<RouteResponseItem[], Omit<RouteRequest, "key"> & { key: string }>({
 			query: ({ key, ...body }) => ({
 				url: `https://routing.api.2gis.com/public_transport/2.0?key=${key}`,
 				method: "POST",
@@ -22,12 +19,9 @@ const buildRouteApi = rtkApi.injectEndpoints({
 			keepUnusedDataFor: 0,
 			providesTags: ["Route"],
 		}),
-
 		geocode: build.query<GeocodeItem[], { q: string; key: string }>({
 			query: ({ q, key }) => {
-				const url = new URL(
-					"https://catalog.api.2gis.com/3.0/items/geocode"
-				);
+				const url = new URL("https://catalog.api.2gis.com/3.0/items/geocode");
 				url.searchParams.set("q", q);
 				url.searchParams.set("fields", "items.point");
 				url.searchParams.set("key", key);
