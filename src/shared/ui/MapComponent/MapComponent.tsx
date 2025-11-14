@@ -21,7 +21,7 @@ interface MapProps {
 	userPosition: [number, number] | null;
 	destinationCoords: [number, number] | null;
 	routeType: "car" | "pedestrian" | null;
-	centerCoords?: [number, number];
+	centerCoords?: [number, number] | null;
 }
 
 const THEME_TO_STYLE_ID: Record<Theme, string> = {

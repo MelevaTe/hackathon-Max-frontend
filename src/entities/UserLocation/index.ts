@@ -5,3 +5,4 @@ export {
 } from "./model/slice/userLocationSchemaSlice.ts";
 export { selectUserLocation } from "./model/selectors/userLocationSlector.ts";
 export type { userLocation } from "./model/types/userLocation.ts";
+export { selectUserLocationCoords } from "./model/selectors/selectUserLocationCoords.ts";

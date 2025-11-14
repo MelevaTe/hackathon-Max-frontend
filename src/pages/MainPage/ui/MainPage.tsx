@@ -17,7 +17,10 @@ import {
 	fetchCourtsCord,
 	getCourtsCords,
 } from "@/entities/CourtCord";
-import { selectUserLocation } from "@/entities/UserLocation";
+import {
+	selectUserLocation,
+	selectUserLocationCoords,
+} from "@/entities/UserLocation";
 import { courtBookingReducer } from "@/features/courtBooking";
 import { getSport, SportFilter } from "@/features/sportFilter";
 import {
@@ -53,6 +56,7 @@ const MainPage = () => {
 	const courts = useSelector(getCourtPageData);
 	const hasMore = useSelector(getCourtPageHasMore);
 	const isLoadingCourt = useSelector(getCourtPageIsLoading);
+	const userLocationCoords = useSelector(selectUserLocationCoords);
 	const courtsCords = useSelector(getCourtsCords);
 	const {
 		resetForNewRoute,
@@ -141,6 +145,7 @@ const MainPage = () => {
 					showRoute={showRoute}
 					theme={theme}
 					onMarkerClick={handleMarkerClick}
+					centerCoords={userLocationCoords}
 				/>
 				<div className={cls.avatar}>
 					<ClickableAvatar
