@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 import cls from "./BookingActiveListItem.module.scss";
 import type { UIBookingActive } from "../../model/types/bookingActive.ts";
+import {useNavigate} from "react-router-dom";
 
 export interface CourtListItemProps {
 	className?: string;
@@ -15,6 +16,7 @@ export interface CourtListItemProps {
 export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 	const { className, bookingActive, deleteBooking } = props;
 	const { setRoute } = useRoute();
+	const navigate = useNavigate();
 	const { t } = useTranslation();
 
 	const handleShowRoute = () => {
@@ -23,6 +25,7 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 			bookingActive.lat,
 		];
 		setRoute(destinationCoords);
+		navigate("/");
 	};
 
 	return (
