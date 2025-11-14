@@ -1,8 +1,9 @@
-import { IconButton, Typography } from "@maxhub/max-ui";
-import { RussianRuble } from "lucide-react";
+import { IconButton, Spinner, Typography } from "@maxhub/max-ui";
+import { ImageOff, RussianRuble } from "lucide-react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { classNames } from "@/shared/lib/classNames/classNames";
+import { AppImage } from "@/shared/ui/AppImage/AppImage.tsx";
 import { Card } from "@/shared/ui/Card/Card.tsx";
 import { StarRating } from "@/shared/ui/StartRaiting/StartRaiting.tsx";
 import cls from "./CourtListItem.module.scss";
@@ -29,10 +30,12 @@ export const CourtListItem = memo((props: CourtListItemProps) => {
 			className={classNames(cls.FieldCard, {}, [className])}
 			onClick={handleClick}
 		>
-			<img
+			<AppImage
 				src={court.photoUrl}
 				alt={court.title}
 				className={cls.image}
+				fallback={<Spinner size={30} />}
+				errorFallback={<ImageOff size={24} />}
 			/>
 			<div className={cls.content}>
 				<Typography.Body

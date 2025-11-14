@@ -6,10 +6,12 @@ import {
 	X,
 	MapPinned,
 	RussianRuble,
+	ImageOff,
 } from "lucide-react";
 import { memo } from "react";
 import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import type { OnlineEntryFormatted } from "@/shared/types/formatedDate.ts";
+import { AppImage } from "@/shared/ui/AppImage/AppImage.tsx";
 import { OnlineEntryItem } from "@/shared/ui/OnlineEntryItem/OnlineEntryItem.tsx";
 import { StarRating } from "@/shared/ui/StartRaiting/StartRaiting.tsx";
 import cls from "./CourtDetails.module.scss";
@@ -71,12 +73,13 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 			</div>
 
 			<div className={cls.content}>
-				<img
+				<AppImage
 					src={court.photoUrl}
 					alt={court.title}
 					className={cls.image}
+					fallback={<Spinner size={30} />}
+					errorFallback={<ImageOff size={24} />}
 				/>
-
 				<Typography.Headline
 					variant={"large-strong"}
 					className={cls.name}
