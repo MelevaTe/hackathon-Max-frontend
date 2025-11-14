@@ -1,8 +1,11 @@
 import { Typography, IconButton, Input } from "@maxhub/max-ui";
 import { X, Search } from "lucide-react";
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useGeocodeQuery } from "@/features/buildRoute/api/buildRouteApi.ts";
+import {
+	useBuildRouteQuery,
+	useGeocodeQuery,
+} from "@/features/buildRoute/api/buildRouteApi.ts";
 import { classNames } from "@/shared/lib/classNames/classNames";
 import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 import cls from "./BuildRouteList.module.scss";
@@ -11,14 +14,12 @@ import { RouteListItem } from "../BuildRouteListItem/BuildRouteListItem.tsx";
 
 interface RouteListProps {
 	className?: string;
-	routes: RouteResponseItem[];
-	isLoading?: boolean;
 	onSelect: (route: RouteResponseItem) => void;
 	onBack: () => void;
 }
 
 export const RouteList = memo((props: RouteListProps) => {
-	const { className, routes, isLoading, onSelect, onBack } = props;
+	const { className, onSelect, onBack } = props;
 	const { t } = useTranslation();
 	const { userPosition, destinationCoords, updateUserPosition } = useRoute();
 
@@ -60,6 +61,38 @@ export const RouteList = memo((props: RouteListProps) => {
 	};
 	const finalUserCoords = userCoords || userPosition;
 
+	const queryArgs = useMemo(() => {
+		if (!finalUserCoords || !destinationCoords) return undefined;
+
+		return {
+			key: import.meta.env.VITE_2GIS_API_KEY,
+			source: {
+				type: "point" as const,
+				point: {
+					lon: finalUserCoords[0],
+					lat: finalUserCoords[1],
+				},
+			},
+			target: {
+				type: "point" as const,
+				point: {
+					lon: destinationCoords[0],
+					lat: destinationCoords[1],
+				},
+			},
+			transport: ["bus", "metro", "pedestrian"],
+		};
+	}, [finalUserCoords, destinationCoords]);
+
+	const {
+		data: routes = [],
+		isLoading: isRouteLoading,
+		isError: isRouteError,
+		refetch: refetchRoutes,
+	} = useBuildRouteQuery(queryArgs!, {
+		skip: !queryArgs,
+	});
+
 	if (!finalUserCoords || !destinationCoords) {
 		return (
 			<div className={classNames(cls.RouteList, {}, [className])}>
@@ -92,7 +125,17 @@ export const RouteList = memo((props: RouteListProps) => {
 		);
 	}
 
-	if (!isLoading && !routes.length) {
+	if (isRouteLoading) {
+		return (
+			<div className={classNames(cls.RouteList, {}, [className])}>
+				<Typography.Body variant="large">
+					Загрузка маршрутов...
+				</Typography.Body>
+			</div>
+		);
+	}
+
+	if (!routes.length) {
 		return (
 			<div className={classNames(cls.RouteList, {}, [className])}>
 				<Typography.Body variant="large">
@@ -117,7 +160,7 @@ export const RouteList = memo((props: RouteListProps) => {
 				</IconButton>
 			</div>
 			<div className={cls.content}>
-				{routes.map((route) => (
+				{routes.map((route: RouteResponseItem) => (
 					<RouteListItem
 						key={route.id}
 						route={route}

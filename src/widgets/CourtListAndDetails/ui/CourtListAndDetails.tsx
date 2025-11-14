@@ -38,43 +38,7 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		initialCourt
 	);
 	const [view, setView] = useState<MobileSheetView>(initialView);
-	const [selectedRouteId, setSelectedRouteId] = useState<number | null>(null);
-
-	const { userPosition, destinationCoords, setRoute } = useRoute();
-
-	const isEnabled = userPosition && destinationCoords;
-
-	const queryArgs = useMemo(() => {
-		if (!isEnabled) return undefined;
-
-		return {
-			key: import.meta.env.VITE_2GIS_API_KEY,
-			source: {
-				type: "point" as const,
-				point: {
-					lon: userPosition![0],
-					lat: userPosition![1],
-				},
-			},
-			target: {
-				type: "point" as const,
-				point: {
-					lon: destinationCoords![0],
-					lat: destinationCoords![1],
-				},
-			},
-			transport: ["bus", "metro", "pedestrian"],
-		};
-	}, [userPosition, destinationCoords, isEnabled]);
-
-	const {
-		data: routes = [],
-		isLoading: isRouteLoading,
-		isError: isRouteError,
-		refetch: refetchRoutes,
-	} = useBuildRouteQuery(queryArgs!, {
-		skip: !queryArgs,
-	});
+	const { setRoute } = useRoute();
 
 	useEffect(() => {
 		if (initialCourt) {
@@ -114,7 +78,7 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 	};
 
 	const handleSelectRoute = (route: any) => {
-		setSelectedRouteId(route.id);
+		// setSelectedRouteId(route.id);
 		// setView("routeDetails");
 	};
 
@@ -201,8 +165,6 @@ export const CourtListAndDetails = memo((props: CourtListAndDetailsProps) => {
 		),
 		routeList: (
 			<RouteList
-				routes={routes}
-				isLoading={isRouteLoading}
 				onSelect={handleSelectRoute}
 				onBack={handleBackToList}
 				className={cls.MobileSheetContent}

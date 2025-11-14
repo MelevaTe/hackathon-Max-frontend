@@ -41,22 +41,9 @@ export const CourtDetails = memo((props: CourtDetailsProps) => {
 		onRoute,
 	} = props;
 
-	const { setRoute } = useRoute();
-
-	// const handleBuildRoute = () => {
-	// 	if (court.lat !== undefined && court.lon !== undefined) {
-	// 		console.log("координаты", [court.lon, court.lat]);
-	// 		// const mock = [39.712619, 47.23683]
-	// 		setRoute([37.6184, 55.4312]);
-	// 	}
-	// 	if (onRoute) {
-	// 		onRoute();
-	// 	}
-	// };
-
 	const handleBuildRoute = () => {
 		if (court.lat !== undefined && court.lon !== undefined) {
-			const coords: [number, number] = [37.6184, 55.4312];
+			const coords: [number, number] = [court.lon, court.lat];
 			if (onRoute) {
 				onRoute(coords);
 			}
