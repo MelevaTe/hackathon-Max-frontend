@@ -23,7 +23,7 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 	const { className, bookingActive, deleteBooking } = props;
 	const { setRoute, clearRoute } = useRoute();
 	const navigate = useNavigate();
-	const { t } = useTranslation();
+	const { t } = useTranslation("profile");
 
 	const { data: forecast, isLoading } = useGetForecastQuery({
 		lat: bookingActive.lat,
@@ -64,7 +64,7 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 						size="medium"
 						onClick={handleShowRoute}
 					>
-						Маршрут
+						{t("Маршрут")}
 					</Button>
 				</div>
 			}

@@ -10,7 +10,7 @@ export interface CourtListItemProps {
 
 export const BookingHistoryListItem = memo((props: CourtListItemProps) => {
 	const { className, bookingHistory } = props;
-	const { t } = useTranslation();
+	const { t } = useTranslation("profile");
 
 	return (
 		<CellSimple

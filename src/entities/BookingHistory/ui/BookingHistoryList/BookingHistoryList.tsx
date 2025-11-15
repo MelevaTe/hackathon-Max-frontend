@@ -28,15 +28,15 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 		hasNextPage = false,
 		isNextLoading = false,
 	} = props;
-	const { t } = useTranslation();
+	const { t } = useTranslation("profile");
 
 	if (error) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
-				<CellHeader>История записей</CellHeader>
+				<CellHeader>{t("История записей")}</CellHeader>
 				<div className={cls.errorAndLoadingContainer}>
 					<Typography.Body variant="large">
-						Ошибка при загрузке записей
+						{t("Ошибка при загрузке записей")}
 					</Typography.Body>
 				</div>
 			</div>
@@ -46,7 +46,7 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 	if (isLoading) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
-				<CellHeader>История записей</CellHeader>
+				<CellHeader>{t("История записей")}</CellHeader>
 				<div className={cls.errorAndLoadingContainer}>
 					<Spinner
 						appearance="themed"
@@ -67,7 +67,7 @@ export const BookingHistoryList = memo((props: BookingHistoryListProps) => {
 				{!bookingHistories.length ? (
 					<div className={cls.errorAndLoadingContainer}>
 						<Typography.Body variant="large">
-							У вас нет истории записей
+							{t("У вас нет истории записей")}
 						</Typography.Body>
 					</div>
 				) : (

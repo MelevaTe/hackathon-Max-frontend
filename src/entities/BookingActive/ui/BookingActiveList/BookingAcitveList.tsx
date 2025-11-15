@@ -30,7 +30,7 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 		hasNextPage = false,
 		isNextLoading = false,
 	} = props;
-	const { t } = useTranslation();
+	const { t } = useTranslation("profile");
 
 	if (error) {
 		return (
@@ -38,7 +38,7 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 				<CellHeader>Активные записи</CellHeader>
 				<div className={cls.errorAndLoadingContainer}>
 					<Typography.Body variant="large">
-						Ошибка при загрузке записей
+						{t("Ошибка при загрузке записей")}
 					</Typography.Body>
 				</div>
 			</div>
@@ -48,7 +48,7 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 	if (isLoading) {
 		return (
 			<div className={classNames(cls.BookingActiveList, {}, [className])}>
-				<CellHeader>Активные записи</CellHeader>
+				<CellHeader>{t("Активные записи")}</CellHeader>
 				<div className={cls.errorAndLoadingContainer}>
 					<Spinner
 						appearance="themed"
@@ -61,7 +61,7 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 
 	return (
 		<div className={classNames(cls.BookingActiveList, {}, [className])}>
-			<CellHeader>Активные записи</CellHeader>
+			<CellHeader>{t("Активные записи")}</CellHeader>
 			<div
 				ref={wrapperRef}
 				className={cls.scrollContainer}
@@ -69,7 +69,7 @@ export const BookingActiveList = memo((props: BookingActiveListProps) => {
 				{!bookingActives.length ? (
 					<div className={cls.errorAndLoadingContainer}>
 						<Typography.Body variant="large">
-							У вас нет активных записей
+							{t("У вас нет активных записей")}
 						</Typography.Body>
 					</div>
 				) : (

@@ -6,6 +6,7 @@ import {
 } from "@headlessui/react";
 import { Button } from "@maxhub/max-ui";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import {
 	selectUserLocation,
@@ -17,6 +18,7 @@ import { Select, type SelectOption } from "@/shared/ui/Select/Select.tsx";
 
 export const LocationSelectorModal = () => {
 	const dispatch = useAppDispatch();
+	const { t } = useTranslation();
 	const userLocation = useSelector(selectUserLocation);
 
 	const [isOpen, setIsOpen] = useState(true);
@@ -104,7 +106,7 @@ export const LocationSelectorModal = () => {
 							color: "var(--text-color)",
 						}}
 					>
-						Выберите город
+						{t("Выберите город")}
 					</DialogTitle>
 					<div>
 						<Select
@@ -127,7 +129,7 @@ export const LocationSelectorModal = () => {
 							mode="primary"
 							size="medium"
 						>
-							Подтвердить
+							{t("Подтвердить")}
 						</Button>
 					</div>
 				</DialogPanel>

@@ -9,14 +9,17 @@ import {
 } from "@maxhub/max-ui";
 import { CircleArrowLeft } from "lucide-react";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { InfiniteBookingList } from "@/features/infiniteBookingList/ui/InfiniteBookitList.tsx";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
+import LangSwitcher from "@/widgets/LangSwitcher/LangSwitcher.tsx";
 import cls from "./ProfilePage.module.scss";
 
 const ProfilePage = () => {
 	const { user, onClose } = useMax();
 	const navigate = useNavigate();
+	const { t } = useTranslation("profile");
 	const handleBackClick = () => {
 		navigate("/");
 	};
@@ -29,7 +32,6 @@ const ProfilePage = () => {
 			<div className={cls.iconButtonWrapper}>
 				<IconButton
 					appearance="themed"
-					aria-label="Название кнопки"
 					asChild
 					mode="secondary"
 					size="medium"
@@ -37,6 +39,7 @@ const ProfilePage = () => {
 				>
 					<CircleArrowLeft />
 				</IconButton>
+				<LangSwitcher />
 			</div>
 			<Flex
 				direction="column"
@@ -88,7 +91,7 @@ const ProfilePage = () => {
 							appearance="neutral"
 							stretched
 						>
-							Выйти из приложения
+							{t("Выйти из приложения")}
 						</Button>
 					</Flex>
 				</Container>
