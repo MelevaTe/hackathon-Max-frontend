@@ -8,6 +8,6 @@ export const getCourtPageHasMore = (state: StateSchema) =>
 export const getCourtPageNum = (state: StateSchema) =>
 	state.court?.currentPage || 0;
 export const getCourtPageLimit = (state: StateSchema) =>
-	state.court?.pageSize || 10;
+	state.court?.pageSize || 50;
 export const getCourtPageData = (state: StateSchema): Court[] | undefined =>
 	state.court?.data;

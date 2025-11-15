@@ -11,7 +11,7 @@ const initialState: CourtSchema = {
 	hasNextPage: false,
 	isEmpty: true,
 	currentPage: 0,
-	pageSize: 10,
+	pageSize: 50,
 };
 
 export const courtSlice = createSlice({
@@ -44,32 +44,24 @@ export const courtSlice = createSlice({
 					const courts = action.payload;
 					const size = state.pageSize;
 
-					console.log('fetchCourts.fulfilled:', {
-						receivedCount: courts.length,
-						pageSize: size,
-						willHaveMore: courts.length === size
-					});
-
-					// Если пришло меньше элементов, чем размер страницы - больше нет данных
 					const hasNextPage = courts.length === size;
 
 					if (state.currentPage === 0) {
 						state.data = courts;
 					} else {
-						const existingIds = new Set(state.data?.map(c => c.id) || []);
-						const newCourts = courts.filter(c => !existingIds.has(c.id));
+						const existingIds = new Set(
+							state.data?.map((c) => c.id) || []
+						);
+						const newCourts = courts.filter(
+							(c) => !existingIds.has(c.id)
+						);
 						state.data = [...(state.data || []), ...newCourts];
 					}
 
 					state.isLoading = false;
 					state.hasNextPage = hasNextPage;
-					state.isEmpty = state.currentPage === 0 && courts.length === 0;
-
-					console.log('New state:', {
-						totalCourts: state.data?.length,
-						hasNextPage: state.hasNextPage,
-						currentPage: state.currentPage
-					});
+					state.isEmpty =
+						state.currentPage === 0 && courts.length === 0;
 				}
 			)
 			.addCase(fetchCourts.rejected, (state, action) => {

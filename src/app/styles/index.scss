@@ -7,7 +7,7 @@
 html {
 	font-size: 16px;
 
-	--main-font: "Inter", "Helvetica Neue", "Arial";
+	--main-font: -apple-system, system-ui, "Helvetica Neue", roboto, sans-serif;
 }
 
 body {
@@ -23,6 +23,7 @@ body {
 	height: 100vh;
 	background-color: var(--background-color);
 	color: var(--text-color);
+	font-family: var(--main-font);
 }
 
 .content-page {

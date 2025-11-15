@@ -24,3 +24,12 @@
 	height: 3.125rem;
 	align-items: center;
 }
+
+.weatherForecast {
+	position: absolute;
+	z-index: 9;
+	top: 50%;
+	left: 1.25rem;
+	width: auto;
+	transform: translateY(-50%);
+}

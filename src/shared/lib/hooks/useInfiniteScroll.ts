@@ -8,43 +8,33 @@ export interface UseInfiniteScrollOptions {
 }
 
 export function useInfiniteScroll({
-									  callback,
-									  wrapperRef,
-									  triggerRef,
-								  }: UseInfiniteScrollOptions) {
+	callback,
+	wrapperRef,
+	triggerRef,
+}: UseInfiniteScrollOptions) {
 	const observer = useRef<IntersectionObserver | null>(null);
 
 	useEffect(() => {
 		const wrapperElement = wrapperRef?.current || null;
 		const triggerElement = triggerRef.current;
 
-		console.log('useInfiniteScroll setup:', {
-			hasWrapper: !!wrapperElement,
-			hasTrigger: !!triggerElement,
-			hasCallback: !!callback
-		});
-
 		if (callback && triggerElement) {
 			const options = {
 				root: wrapperElement,
-				rootMargin: "20px", // Добавьте rootMargin для более раннего срабатывания
-				threshold: 0.1, // Увеличьте threshold
+				rootMargin: "20px",
+				threshold: 0.1,
 			};
 
 			observer.current = new IntersectionObserver(([entry]) => {
-				console.log('Intersection observed:', {
-					isIntersecting: entry.isIntersecting,
-					intersectionRatio: entry.intersectionRatio,
-					boundingClientRect: entry.boundingClientRect
-				});
-
 				if (entry.isIntersecting) {
-					console.log('Calling callback from IntersectionObserver');
 					callback();
+				} else {
+					console.log(" Trigger element out of view");
 				}
 			}, options);
 
 			observer.current.observe(triggerElement);
+		} else {
 		}
 
 		return () => {

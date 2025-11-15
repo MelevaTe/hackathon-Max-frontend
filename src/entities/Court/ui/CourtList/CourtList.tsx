@@ -1,7 +1,7 @@
 import { Typography } from "@maxhub/max-ui";
 import { IconButton } from "@maxhub/max-ui";
 import { X, HeartCrack } from "lucide-react";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CourtListItem } from "@/entities/Court/ui/CourtListItem/CourtListItem.tsx";
 import { classNames } from "@/shared/lib/classNames/classNames";
@@ -85,7 +85,10 @@ export const CourtList = memo((props: CourtListProps) => {
 				))}
 				<div
 					ref={triggerRef}
-					style={{ height: "20px", minHeight: "20px", backgroundColor: "rgba(255, 0, 0, 0.3)" }}
+					style={{
+						height: "20px",
+						minHeight: "20px",
+					}}
 				/>
 			</div>
 		</div>

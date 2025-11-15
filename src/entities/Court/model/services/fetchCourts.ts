@@ -25,16 +25,12 @@ export const fetchCourts = createAsyncThunk<
 	const page =
 		explicitPage !== undefined ? explicitPage : getCourtPageNum(getState());
 
-	const testSports: CourtType[] = ["FOOTBALL", "BASKETBALL", "TENNIS"];
-
 	try {
-		console.log("Fetching courts with page:", page, "limit:", limit);
-
 		const response = await extra.api.post<Court[]>(
 			"/courts-service/v1/courts/info/search/locations",
 			{
 				cityId,
-				sports: testSports,
+				sports,
 			},
 			{
 				params: {
@@ -47,8 +43,6 @@ export const fetchCourts = createAsyncThunk<
 		if (!response.data) {
 			throw new Error("No data received");
 		}
-
-		console.log("Received courts:", response.data.length);
 
 		return response.data;
 	} catch (e) {

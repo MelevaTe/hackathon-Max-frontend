@@ -1,9 +1,14 @@
 import { Button, CellSimple, IconButton } from "@maxhub/max-ui";
-import { Sun, Trash2 } from "lucide-react";
-import { memo } from "react";
+import { Trash2 } from "lucide-react";
+import { memo, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import {
+	selectCurrentWeather,
+	useGetForecastQuery,
+	WeatherIcon,
+} from "@/entities/weather";
 import { useRoute } from "@/shared/lib/hooks/useRoute.ts";
 import cls from "./BookingActiveListItem.module.scss";
 import type { UIBookingActive } from "../../model/types/bookingActive.ts";
@@ -19,6 +24,16 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 	const { setRoute, clearRoute } = useRoute();
 	const navigate = useNavigate();
 	const { t } = useTranslation();
+
+	const { data: forecast, isLoading } = useGetForecastQuery({
+		lat: bookingActive.lat,
+		lon: bookingActive.lon,
+	});
+
+	const currentWeather = useMemo(
+		() => selectCurrentWeather(forecast),
+		[forecast]
+	);
 
 	const handleShowRoute = () => {
 		const destinationCoords: [number, number] = [
@@ -53,7 +68,12 @@ export const BookingActiveListItem = memo((props: CourtListItemProps) => {
 					</Button>
 				</div>
 			}
-			before={<Sun color="#007bff" />}
+			before={
+				<WeatherIcon
+					iconCode={currentWeather?.iconCode || "01d"}
+					size={24}
+				/>
+			}
 			height="normal"
 			overline=""
 			subtitle={`${bookingActive.formattedEntryDate} • ${bookingActive.formattedEntryTime}`}

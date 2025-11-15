@@ -1,4 +1,12 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import { skipToken } from "@reduxjs/toolkit/query";
+import React, {
+	memo,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useTheme } from "@/app/providers/ThemeProvider";
@@ -8,9 +16,10 @@ import {
 	fetchNextCourtsPage,
 	getCourtPageData,
 	getCourtPageHasMore,
-	getCourtPageIsLoading, getCourtPageNum,
+	getCourtPageIsLoading,
 	useGetCourtByIdQuery,
 } from "@/entities/Court";
+import { courtActions } from "@/entities/Court/model/slice/courtSchemaSlice.ts";
 import {
 	type CourtsCords,
 	courtsCordsReducer,
@@ -21,6 +30,11 @@ import {
 	selectUserLocation,
 	selectUserLocationCoords,
 } from "@/entities/UserLocation";
+import {
+	selectDailyForecast,
+	useGetForecastQuery,
+	WeatherForecast,
+} from "@/entities/weather";
 import { courtBookingReducer } from "@/features/courtBooking";
 import { getSport, SportFilter } from "@/features/sportFilter";
 import {
@@ -39,7 +53,6 @@ import {
 import { CourtListAndDetails } from "@/widgets/CourtListAndDetails";
 import { LocationSelectorModal } from "@/widgets/LocationSelectorModal";
 import cls from "./MainPage.module.scss";
-import {courtActions} from "@/entities/Court/model/slice/courtSchemaSlice.ts";
 
 const reducers: ReducersList = {
 	court: courtReducer,
@@ -70,13 +83,20 @@ const MainPage = () => {
 	const triggerRef = useRef<HTMLDivElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		console.log('Courts state:', {
-			courtsLength: courts?.length,
-			hasMore,
-			isLoadingCourt,
-		});
-	}, [courts, hasMore, isLoadingCourt]);
+	const {
+		data: forecast,
+		isLoading: isLoadingForecast,
+		error: forecastError,
+	} = useGetForecastQuery(
+		userLocationCoords
+			? { lat: userLocationCoords[1], lon: userLocationCoords[0] }
+			: skipToken
+	);
+
+	const dailyForecast = useMemo(
+		() => selectDailyForecast(forecast),
+		[forecast]
+	);
 
 	useEffect(() => {
 		resetForNewRoute();
@@ -106,15 +126,7 @@ const MainPage = () => {
 	}, [dispatch, currentSport, userLocation?.id]);
 
 	const handleLoadMore = useCallback(() => {
-		console.log('handleLoadMore called:', {
-			hasMore,
-			isLoadingCourt,
-			userLocationId: userLocation?.id,
-			courtsLength: courts?.length
-		});
-
 		if (hasMore && !isLoadingCourt && userLocation?.id) {
-			console.log('Dispatching fetchNextCourtsPage');
 			dispatch(
 				fetchNextCourtsPage({
 					cityId: userLocation.id,
@@ -122,7 +134,14 @@ const MainPage = () => {
 				})
 			);
 		}
-	}, [hasMore, isLoadingCourt, userLocation?.id, dispatch, currentSport, courts?.length]);
+	}, [
+		hasMore,
+		isLoadingCourt,
+		userLocation?.id,
+		dispatch,
+		currentSport,
+		courts?.length,
+	]);
 
 	useInfiniteScroll({
 		callback: handleLoadMore,
@@ -178,6 +197,11 @@ const MainPage = () => {
 					/>
 				</div>
 				<SportFilter className={cls.filter} />
+				<WeatherForecast
+					forecast={dailyForecast}
+					isLoading={isLoading}
+					className={cls.weatherForecast}
+				/>
 				<CourtListAndDetails
 					wrapperRef={wrapperRef}
 					courts={courts}
