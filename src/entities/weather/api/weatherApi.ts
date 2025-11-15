@@ -37,6 +37,7 @@ const weatherApi = rtkApi.injectEndpoints({
 					units: "metric",
 					lang: "ru",
 				},
+				headers: {},
 			}),
 			transformResponse: (response: OpenWeatherMapResponse) =>
 				transformToCurrentWeather(response),

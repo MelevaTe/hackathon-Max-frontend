@@ -5,11 +5,18 @@ export const rtkApi = createApi({
 	reducerPath: "api",
 	baseQuery: fetchBaseQuery({
 		baseUrl: __API__,
-		prepareHeaders: (headers) => {
-			const token = localStorage.getItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY);
-			if (token) {
-				headers.set("Authorization", `Bearer ${token}`);
+		prepareHeaders: (headers, { endpoint }) => {
+			const publicEndpoints = ["getForecast"];
+
+			if (!publicEndpoints.includes(endpoint)) {
+				const token = localStorage.getItem(
+					ACCESS_TOKEN_LOCAL_STORAGE_KEY
+				);
+				if (token) {
+					headers.set("Authorization", `Bearer ${token}`);
+				}
 			}
+
 			return headers;
 		},
 	}),
