@@ -53,9 +53,7 @@ export const WeatherForecast = (props: WeatherForecastProps) => {
 
 	if (!forecast || forecast.length === 0) {
 		return (
-			<div className={classNames(cls.WeatherForecast, {}, [className])}>
-				<div className={cls.Empty}>Нет данных о погоде</div>
-			</div>
+			<div className={classNames(cls.WeatherForecast, {}, [className])}/>
 		);
 	}
 
