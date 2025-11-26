@@ -8,17 +8,7 @@ import { classNames } from "@/shared/lib/classNames/classNames.ts";
 import { useMax } from "@/shared/lib/hooks/useMax.ts";
 
 function App() {
-	const { max, user, initData } = useMax();
-	const { i18n } = useTranslation();
-
-	useEffect(() => {
-		if (user?.language_code) {
-			const lang = user.language_code.startsWith("ru") ? "ru" : "en";
-			if (i18n.language !== lang) {
-				i18n.changeLanguage(lang);
-			}
-		}
-	}, [user?.language_code, i18n]);
+	const { max, initData } = useMax();
 
 	useEffect(() => {
 		if (max) {
